@@ -1,18 +1,22 @@
 import React, { Component } from "react";
-import { View, Text } from "react-native";
-import { connect } from "react-redux";
+import { Provider } from "react-redux";
+import { connect } from "./src/redux";
+import { View } from "react-native";
+import store from "./src/redux/store";
+import { O_MenuBar_Main } from "./src/Organisms";
+import AppNavigator from "./src/AppNavigator";
 
 class App extends Component {
   render() {
     return (
-      <View>
-        <Text>sss</Text>
-      </View>
+      <Provider store={store}>
+        <View style={{ flex: 1 }}>
+          <AppNavigator />
+          <O_MenuBar_Main />
+        </View>
+      </Provider>
     );
   }
 }
-const mapStateToProps = state => ({
-  loading: true, // state.LOADING_STATES.isLoading(loading_types.INITIALIZING_APP)
-  is_authenticated: state.user.is_authenticated
-});
-export default connect(mapStateToProps)(App);
+
+export default App;

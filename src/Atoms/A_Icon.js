@@ -9,5 +9,11 @@ const A_Icon_Search = () => (
 const A_Icon_Favorites = () => (
   <A_Icon source={require("../assets/favorites_icon.png")} />
 );
+const A_Icon_List = () => (
+  <A_Icon source={require("../assets/list_icon.png")} />
+);
+const A_Icon_Profile = () => (
+  <A_Icon source={require("../assets/profile_icon.png")} />
+);
 
-export { A_Icon, A_Icon_Search, A_Icon_Favorites };
+export { A_Icon, A_Icon_Search, A_Icon_Favorites, A_Icon_List, A_Icon_Profile };

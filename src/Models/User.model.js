@@ -8,6 +8,15 @@ export class User extends BaseUser {
     device_token: {
       type: String,
       default: ""
+    },
+    favorites: {
+      type: Array,
+      default: () => [
+        {
+          title: "Cizerros",
+          desc: "Pizza pizza read all about it"
+        }
+      ]
     }
   };
 
