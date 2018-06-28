@@ -1,0 +1,10 @@
+{
+  "logger": {
+    "suppress": {
+      "warnings": false,
+      "logs": false,
+      "errors": false
+    }
+  },
+  "production": false
+}

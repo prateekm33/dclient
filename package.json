@@ -1,0 +1,42 @@
+{
+  "name": "dclient",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest",
+    "init": "node ./scripts/init.js"
+  },
+  "dependencies": {
+    "lodash.clonedeep": "4.5.0",
+    "lodash.debounce": "4.0.8",
+    "lodash.defaultsdeep": "4.6.0",
+    "lodash.find": "4.6.0",
+    "lodash.findindex": "4.6.0",
+    "lodash.flattendeep": "^4.4.0",
+    "lodash.get": "4.4.2",
+    "lodash.reduce": "4.6.0",
+    "lodash.remove": "4.7.0",
+    "moment": "2.22.2",
+    "phone": "2.0.0-rc.1",
+    "react": "16.3.1",
+    "react-native": "0.55.4",
+    "react-native-maps": "0.21.0",
+    "react-native-push-notification": "3.0.2",
+    "react-navigation": "1.4.0",
+    "react-redux": "5.0.7",
+    "redux": "3.7.2",
+    "redux-logger": "3.0.6",
+    "redux-thunk": "2.2.0",
+    "uuid": "3.2.1"
+  },
+  "devDependencies": {
+    "babel-jest": "23.2.0",
+    "babel-preset-react-native": "4.0.0",
+    "jest": "23.2.0",
+    "react-test-renderer": "16.3.1"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
