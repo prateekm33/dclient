@@ -19,7 +19,7 @@ const M_Header = props => {
 
 const M_Header_Main = props => (
   <View style={style.headerMainContainerStyle}>
-    <StatusBar barStyle="light-content" />
+    <StatusBar barStyle="dark-content" />
     <A_Text strong style={style.headerMainTitleTextStyle}>
       {props.title}
     </A_Text>
@@ -38,6 +38,6 @@ const style = StyleSheet.create({
     borderBottomColor: "lightgrey"
   },
   headerMainTitleTextStyle: {
-    color: "white"
+    color: "black"
   }
 });

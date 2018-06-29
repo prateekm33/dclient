@@ -7,19 +7,26 @@ import navigation_types from "./redux/types/navigation_types";
 export const SCREEN_NAMES = {
   SplashScreen: "SplashScreen",
   Login: "Login",
-  Dashboard: "Dashboard",
-  Favorites: "Favorites"
+  DashboardMapPage: "DashboardMapPage",
+  FavoritesPage: "FavoritesPage",
+  VendorPage: "VendorPage",
+  CategoriesPage: "CategoriesPage",
+  ProfilePage: "ProfilePage"
 };
 
-export const INITIAL_ROUTE_NAME = SCREEN_NAMES.Dashboard;
+export const INITIAL_ROUTE_NAME = SCREEN_NAMES.FavoritesPage;
 export const BACKLESS_ROUTES = {
   SplashScreen: true,
   Login: true,
-  Dashboard: true
+  DashboardMapPage: true,
+  FavoritesPage: true,
+  VendorPage: true,
+  CategoriesPage: true,
+  ProfilePage: true
 };
 export const BURGERLESS = {};
 export const HEADERLESS_ROUTES = {
-  Dashboard: true,
+  DashboardMapPage: true,
   SplashScreen: true,
   Login: true
 };
@@ -31,8 +38,11 @@ export const UNAUTH_ROUTES = {
 const Screens = [
   [SCREEN_NAMES.SplashScreen, require("./Screens/SplashScreen")],
   [SCREEN_NAMES.Login, require("./Screens/Login")],
-  [SCREEN_NAMES.Dashboard, require("./Screens/Dashboard")],
-  [SCREEN_NAMES.Favorites, require("./Screens/Favorites")]
+  [SCREEN_NAMES.DashboardMapPage, require("./Screens/DashboardMapPage")],
+  [SCREEN_NAMES.FavoritesPage, require("./Screens/FavoritesPage")],
+  [SCREEN_NAMES.VendorPage, require("./Screens/VendorPage")],
+  [SCREEN_NAMES.CategoriesPage, require("./Screens/CategoriesPage")],
+  [SCREEN_NAMES.ProfilePage, require("./Screens/ProfilePage")]
 ];
 
 const SCREENS = Screens.reduce(
@@ -66,11 +76,7 @@ const SCREENS = Screens.reduce(
 
 const AppNavigator = StackNavigator(SCREENS, {
   navigationOptions: {
-    header: props => {
-      const routes = props.navigation.state.routes;
-      const curr_route = routes[routes.length - 1];
-      if (curr_route in HEADERLESS_ROUTES) return null;
-    }
+    header: null
   },
   initialRouteName: INITIAL_ROUTE_NAME
 });

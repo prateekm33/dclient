@@ -13,8 +13,16 @@ export class User extends BaseUser {
       type: Array,
       default: () => [
         {
-          title: "Cizerros",
-          desc: "Pizza pizza read all about it"
+          name: "Cizerros",
+          desc: "Pizza pizza read all about it",
+          address_locale: "21335 Bubb Rd, Cupertino, CA 95014",
+          deals: []
+        },
+        {
+          name: "Cizerros",
+          desc: "Pizza pizza read all about it",
+          address_locale: "21335 Bubb Rd, Cupertino, CA 95014",
+          deals: []
         }
       ]
     }

@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import { getResponsiveCSSFrom8 } from "../utils";
 
 const A_ListContainer = props => {
   return (
@@ -12,5 +13,7 @@ const A_ListContainer = props => {
 export { A_ListContainer };
 
 const style = StyleSheet.create({
-  listContainer: {}
+  listContainer: {
+    padding: getResponsiveCSSFrom8(10).width
+  }
 });

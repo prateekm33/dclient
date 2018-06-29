@@ -15,5 +15,13 @@ const A_Icon_List = () => (
 const A_Icon_Profile = () => (
   <A_Icon source={require("../assets/profile_icon.png")} />
 );
+const A_Icon_Map = () => <A_Icon source={require("../assets/map_icon.png")} />;
 
-export { A_Icon, A_Icon_Search, A_Icon_Favorites, A_Icon_List, A_Icon_Profile };
+export {
+  A_Icon,
+  A_Icon_Search,
+  A_Icon_Favorites,
+  A_Icon_List,
+  A_Icon_Profile,
+  A_Icon_Map
+};

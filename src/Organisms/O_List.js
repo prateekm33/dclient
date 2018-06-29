@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "../redux";
 import { View } from "react-native";
-import { M_ListItem_Restaurant } from "../Molecules";
+import { M_ListItem_Vendor_Favorite, M_ListItem } from "../Molecules";
 import { A_ListContainer } from "../Atoms";
 
 class O_List extends Component {
@@ -29,8 +29,12 @@ const O_List_Favorites_Pre = props => (
     {...props}
     renderListItems={items => (
       <A_ListContainer listContainerStyle={{}}>
-        {items.map(item => (
-          <M_ListItem_Restaurant {...item} listItemStyle={{}} />
+        {items.map((item, idx) => (
+          <M_ListItem_Vendor_Favorite
+            {...item}
+            vendor={item}
+            key={`favorites-list-item-${item.name}-${idx}`}
+          />
         ))}
       </A_ListContainer>
     )}

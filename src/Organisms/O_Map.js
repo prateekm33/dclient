@@ -9,8 +9,8 @@ class O_Map extends Component {
     super(props);
     this.state = {
       region: {
-        latitude: 37.328085,
-        longitude: -122.048135,
+        latitude: 0,
+        longitude: 0,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
       },
@@ -26,6 +26,24 @@ class O_Map extends Component {
       ]
     };
   }
+  componentWillMount = () => {
+    navigator.geolocation.getCurrentPosition(
+      a => {
+        const { latitude, longitude } = a.coords;
+        this.setState({
+          region: {
+            latitude,
+            longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+          }
+        });
+      },
+      () => {
+        console.warn("error");
+      }
+    );
+  };
 
   onRegionChange = region => {
     this.setState({ region });
@@ -35,6 +53,8 @@ class O_Map extends Component {
     return (
       <View>
         <MapView
+          showsUserLocation={true}
+          followsUserLocation={true}
           region={this.state.region}
           onRegionChange={this.onRegionChange}
           style={{
@@ -61,7 +81,7 @@ class O_Map extends Component {
   }
 }
 O_Map.propTypes = {
-  flavor: PropTypes.oneOf(["all", "restaurants"])
+  flavor: PropTypes.oneOf(["all", "saved", "favorites"])
 };
 
 export default O_Map;
