@@ -7,6 +7,9 @@ import {
   createLocalNotification
 } from "./Notifications.model";
 import { BaseUser } from "./BaseUser.model";
+import { createLocation, Location } from "./Location.model";
+import { createVendor, Vendor } from "./Vendor.model";
+import { createRating, Rating } from "./Rating.model";
 
 export {
   BaseUser,
@@ -17,5 +20,11 @@ export {
   Notification,
   createNotification,
   LocalNotification,
-  createLocalNotification
+  createLocalNotification,
+  Location,
+  createLocation,
+  createVendor,
+  Vendor,
+  createRating,
+  Rating
 };

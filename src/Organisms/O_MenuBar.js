@@ -3,19 +3,10 @@ import { connect } from "../redux";
 import PropTypes from "prop-types";
 import { StyleSheet, View } from "react-native";
 
-import { M_Searchbar_Main } from "../Molecules";
-import {
-  A_Button,
-  A_Icon_Map,
-  A_Icon_Favorites,
-  A_Icon_List,
-  A_Icon_Profile,
-  A_Button_Opacity
-} from "../Atoms";
+import { A_Button_Opacity } from "../Atoms";
 
 import { getResponsiveCSSFrom8 } from "../utils";
 import { SCREEN_NAMES, UNAUTH_ROUTES } from "../AppNavigator";
-<M_Searchbar_Main handleSearch={this.handleSearch} />;
 
 const O_MenuBar = props => {
   return (
@@ -46,43 +37,22 @@ class O_MenuBar_Main_Pre extends Component {
     super(props);
     this.state = {
       activeIdx: 0,
-      menuBar: true,
-      searchBar: false,
       items: this.getInitialItems()
     };
   }
 
-  getInitialItems = () => [
-    A_Icon_Map,
-    A_Icon_Favorites,
-    A_Icon_List,
-    A_Icon_Profile
-  ];
-  navigateToMap = () => {
-    this.setState({ activeIdx: 0 });
-    this.props.navigation.resetTo(SCREEN_NAMES.DashboardMapPage);
+  getInitialItems = () => [];
+  setActiveIdx = idx => {
+    if (this.state.activeIdx === idx) return;
+    this.setState({ activeIdx: idx });
   };
-
-  navigateToFavorites = () => {
-    this.setState({ activeIdx: 1 });
-    this.props.navigation.resetTo(SCREEN_NAMES.FavoritesPage);
-  };
-  navigateToAllCategories = () => {
-    this.setState({ activeIdx: 2 });
-    console.warn("-------todo...");
-    this.props.navigation.resetTo(SCREEN_NAMES.CategoriesPage);
-  };
-  navigateToProfile = () => {
-    this.setState({ activeIdx: 3 });
-    console.warn("-------todo...");
-    this.props.navigation.resetTo(SCREEN_NAMES.ProfilePage);
+  navigateToDashboard = () => {
+    this.setActiveIdx(0);
+    this.props.navigation.resetTo(SCREEN_NAMES.Dashboard);
   };
 
   onItemSelect = idx => {
-    if (idx === 0) return this.navigateToMap();
-    if (idx === 1) return this.navigateToFavorites();
-    if (idx === 2) return this.navigateToAllCategories();
-    if (idx === 3) return this.navigateToProfile();
+    if (idx === 0) return this.navigateToDashboard();
   };
   render() {
     const current_route = this.props.navigation.state.routeName;

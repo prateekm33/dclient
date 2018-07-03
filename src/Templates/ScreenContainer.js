@@ -5,8 +5,14 @@ import { M_Header_Main } from "../Molecules";
 import { O_MenuBar_Main } from "../Organisms";
 
 export default props => (
-  <View style={style.container}>
-    {props.noHeader ? null : <M_Header_Main title={props.title} />}
+  <View style={[style.container, props.containerStyle]}>
+    {props.noHeader ? null : (
+      <M_Header_Main
+        title={props.title}
+        leftHeaderComponent={props.leftHeaderComponent}
+        rightHeaderComponent={props.rightHeaderComponent}
+      />
+    )}
     {props.scrollView ? (
       <ScrollView>{props.children}</ScrollView>
     ) : (

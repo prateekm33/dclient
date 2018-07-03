@@ -3,6 +3,7 @@ import uuid from "uuid/v4";
 
 export default class DataModel {
   static validProperties = {
+    id: { type: Number, default: null },
     uuid: { type: String, default: () => uuid() }
   };
   constructor(props) {

@@ -28,3 +28,5 @@ export const getResponsiveCSSFrom8 = pixel => {
     width: (pixel / 375) * width
   };
 };
+
+export const generateQRCode = data => {};

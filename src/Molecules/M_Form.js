@@ -72,7 +72,7 @@ class M_Form extends Component {
     const inputs = this.wrappedInputs(this.props.inputs);
     return (
       <View>
-        <A_Text>Form Molecule</A_Text>
+        {this.props.title && <A_Text strong>{this.props.title}</A_Text>}
         {inputs.map((input, idx) => {
           return (
             <View key={`form-${this.props.label}-input-${input.name || idx}`}>
@@ -81,6 +81,7 @@ class M_Form extends Component {
             </View>
           );
         })}
+        {this.props.children}
         <A_Button onPress={this.handleSubmit}>
           <A_Text strong>Submit</A_Text>
         </A_Button>
@@ -94,4 +95,4 @@ M_Form.propTypes = {
   handleSubmit: PropTypes.func.isRequired
 };
 
-export default M_Form;
+export { M_Form };

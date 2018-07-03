@@ -10,6 +10,7 @@ import loading_types from "../redux/types/loading_types";
 class SplashScreen extends Component {
   componentWillMount = () => {
     // TODO...dispatch init action to fetch data
+    console.warn("dispatch init action to fetch data");
   };
 
   componentWillReceiveProps = nextProps => {

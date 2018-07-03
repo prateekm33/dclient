@@ -1,47 +1,31 @@
-import React, { Component } from "react";
-import { connect } from "../redux";
-import { View } from "react-native";
-import { M_ListItem_Vendor_Favorite, M_ListItem } from "../Molecules";
-import { A_ListContainer } from "../Atoms";
+import React from "react";
+import { FlatList } from "react-native";
+import { M_Card_Deal_Mini, M_Card_LoyaltyReward_Mini } from "../Molecules";
 
-class O_List extends Component {
-  constructor(props) {
-    super(props);
-  }
+const renderDealListItem = ({ item }) => {
+  return <M_Card_Deal_Mini deal={item} />;
+};
+const O_List_Deals = props => {
+  return (
+    <FlatList
+      data={props.deals}
+      renderItem={renderDealListItem}
+      keyExtractor={item => `deal-${item.code}-${item.vendor.id}`}
+    />
+  );
+};
 
-  renderListItems = () => {
-    if (this.props.renderListItems)
-      return this.props.renderListItems(this.props.items);
-    return (
-      <A_ListContainer>
-        {this.props.items.map(item => <M_ListItem {...item} />)}
-      </A_ListContainer>
-    );
-  };
+const renderRewardListItem = ({ item }) => {
+  return <M_Card_LoyaltyReward_Mini reward={item} />;
+};
+const O_List_Rewards = props => {
+  return (
+    <FlatList
+      data={props.deals}
+      renderItem={renderRewardListItem}
+      keyExtractor={item => `reward-${item.code}-${item.vendor.id}`}
+    />
+  );
+};
 
-  render() {
-    return <View>{this.renderListItems()}</View>;
-  }
-}
-
-const O_List_Favorites_Pre = props => (
-  <O_List
-    {...props}
-    renderListItems={items => (
-      <A_ListContainer listContainerStyle={{}}>
-        {items.map((item, idx) => (
-          <M_ListItem_Vendor_Favorite
-            {...item}
-            vendor={item}
-            key={`favorites-list-item-${item.name}-${idx}`}
-          />
-        ))}
-      </A_ListContainer>
-    )}
-  />
-);
-const O_List_Favorites = connect(state => ({
-  items: state.user.favorites
-}))(O_List_Favorites_Pre);
-
-export { O_List, O_List_Favorites };
+export { O_List_Deals, O_List_Rewards };

@@ -20,9 +20,21 @@ const M_Header = props => {
 const M_Header_Main = props => (
   <View style={style.headerMainContainerStyle}>
     <StatusBar barStyle="dark-content" />
-    <A_Text strong style={style.headerMainTitleTextStyle}>
-      {props.title}
-    </A_Text>
+    {props.leftHeaderComponent && (
+      <View style={style.leftHeaderComponentStyle}>
+        {props.leftHeaderComponent}
+      </View>
+    )}
+    <View style={style.headerMainTitleContainerStyle}>
+      <A_Text strong style={style.headerMainTitleTextStyle}>
+        {props.title}
+      </A_Text>
+    </View>
+    {props.rightHeaderComponent && (
+      <View style={style.rightHeaderComponentStyle}>
+        {props.rightHeaderComponent}
+      </View>
+    )}
   </View>
 );
 
@@ -35,9 +47,14 @@ const style = StyleSheet.create({
     height: getResponsiveCSSFrom8(70).height,
     backgroundColor: "white",
     borderBottomWidth: 1,
-    borderBottomColor: "lightgrey"
+    borderBottomColor: "lightgrey",
+    flexDirection: "row",
+    flexWrap: "nowrap"
   },
   headerMainTitleTextStyle: {
     color: "black"
-  }
+  },
+  leftHeaderComponentStyle: {},
+  rightHeaderComponentStyle: {},
+  headerMainTitleContainerStyle: {}
 });

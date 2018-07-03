@@ -6,43 +6,42 @@ import navigation_types from "./redux/types/navigation_types";
 
 export const SCREEN_NAMES = {
   SplashScreen: "SplashScreen",
-  Login: "Login",
-  DashboardMapPage: "DashboardMapPage",
-  FavoritesPage: "FavoritesPage",
-  VendorPage: "VendorPage",
-  CategoriesPage: "CategoriesPage",
-  ProfilePage: "ProfilePage"
+  LoginPage: "LoginPage",
+  DealPage: "DealPage",
+  DealsPage: "DealsPage",
+  ProfilePage: "ProfilePage",
+  RedeemPage: "RedeemPage",
+  RestaurantPage: "RestaurantPage",
+  RestaurantsPage: "RestaurantsPage",
+  RewardPage: "RewardPage",
+  RewardsPage: "RewardsPage"
 };
 
-export const INITIAL_ROUTE_NAME = SCREEN_NAMES.FavoritesPage;
+export const INITIAL_ROUTE_NAME = SCREEN_NAMES.RedeemPage;
 export const BACKLESS_ROUTES = {
   SplashScreen: true,
-  Login: true,
-  DashboardMapPage: true,
-  FavoritesPage: true,
-  VendorPage: true,
-  CategoriesPage: true,
-  ProfilePage: true
+  LoginPage: true
 };
 export const BURGERLESS = {};
 export const HEADERLESS_ROUTES = {
-  DashboardMapPage: true,
   SplashScreen: true,
-  Login: true
+  LoginPage: true
 };
 export const UNAUTH_ROUTES = {
-  Login: true,
+  LoginPage: true,
   SplashScreen: true
 };
 
 const Screens = [
   [SCREEN_NAMES.SplashScreen, require("./Screens/SplashScreen")],
-  [SCREEN_NAMES.Login, require("./Screens/Login")],
-  [SCREEN_NAMES.DashboardMapPage, require("./Screens/DashboardMapPage")],
-  [SCREEN_NAMES.FavoritesPage, require("./Screens/FavoritesPage")],
-  [SCREEN_NAMES.VendorPage, require("./Screens/VendorPage")],
-  [SCREEN_NAMES.CategoriesPage, require("./Screens/CategoriesPage")],
-  [SCREEN_NAMES.ProfilePage, require("./Screens/ProfilePage")]
+  [SCREEN_NAMES.LoginPage, require("./Screens/LoginPage")],
+  [SCREEN_NAMES.DealPage, require("./Screens/DealPage")],
+  [SCREEN_NAMES.DealsPage, require("./Screens/DealsPage")],
+  [SCREEN_NAMES.ProfilePage, require("./Screens/ProfilePage")],
+  [SCREEN_NAMES.RedeemPage, require("./Screens/RedeemPage")],
+  [SCREEN_NAMES.RestaurantPage, require("./Screens/RestaurantPage")],
+  [SCREEN_NAMES.RewardPage, require("./Screens/RewardPage")],
+  [SCREEN_NAMES.RewardsPage, require("./Screens/RewardsPage")]
 ];
 
 const SCREENS = Screens.reduce(

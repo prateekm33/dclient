@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Provider } from "react-redux";
-import { connect } from "./src/redux";
 import { View } from "react-native";
 import store from "./src/redux/store";
 import { O_MenuBar_Main } from "./src/Organisms";

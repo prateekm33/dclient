@@ -10,4 +10,4 @@ A_Input.propTypes = {
   name: PropTypes.string,
   inputRef: PropTypes.func
 };
-export default A_Input;
+export { A_Input };
