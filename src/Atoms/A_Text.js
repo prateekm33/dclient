@@ -26,7 +26,11 @@ const A_Text_Vendor_Name_Pre = props => {
     });
   return (
     <A_Button_Opacity onPress={onPress} disabled={props.disabled}>
-      <A_Text {...props} strong style={style.vendorNameText}>
+      <A_Text
+        {...props}
+        strong
+        style={[style.vendorNameText, props.vendorNameTextStyle]}
+      >
         {props.vendor.name}
       </A_Text>
     </A_Button_Opacity>

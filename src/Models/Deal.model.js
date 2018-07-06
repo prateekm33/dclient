@@ -1,13 +1,42 @@
 import DataModel from "./Data.model";
-import { Vendor } from "./Vendor.model";
+import { Vendor, createVendor } from "./Vendor.model";
+import uuid from "uuid/v1";
 
 export class Deal extends DataModel {
   static validProperties = {
-    title: { type: String, default: "" },
+    name: { type: String, default: "" },
     short_desc: { type: String, default: "" },
     long_desc: { type: String, default: "" },
-    vendor: { type: Vendor, default: () => new Vendor() },
-    vendor_id: { type: Number, default: null }
+    vendor: {
+      type: Vendor,
+      default: () => new Vendor()
+    },
+    vendor_uuid: { type: String, default: () => uuid() },
+    code: {
+      type: String,
+      default: ""
+    }
   };
+  constructor(params) {
+    if (params && params.vendor) {
+      params.vendor =
+        params.vendor instanceof Vendor
+          ? params.vendor
+          : createVendor(params.vendor);
+    }
+    super(params);
+  }
 }
 export const createDeal = params => new Deal(params);
+
+export class MyDeal extends Deal {
+  static validProperties = {
+    ...Deal.validProperties,
+    is_saved: { type: Boolean, default: true },
+    is_archived: { type: Boolean, default: false },
+    is_deleted: { type: Boolean, default: false },
+    is_used: { type: Boolean, default: false }
+  };
+}
+export const createMyDeal = params => new MyDeal(params);
+export const updateMyDeal = (my_deal, params) => my_deal.renew(params);

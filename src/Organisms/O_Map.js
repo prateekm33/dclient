@@ -3,12 +3,6 @@ import { connect } from "../redux";
 import { View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { M_MapMarkerCallout_Restaurant } from "../Molecules";
-import {
-  A_Icon_Favorites,
-  A_Icon_All,
-  A_Icon_Saved,
-  A_Button_Opacity
-} from "../Atoms";
 
 class O_Map extends Component {
   constructor(props) {
@@ -81,6 +75,12 @@ class O_Map extends Component {
   }
 }
 
+function getMapMarkerObj(address, title) {
+  console.warn("----TODO....getMapMarkerObj");
+  // TODO...figure out what this object is supposed to look like based off of GMaps API
+  return null;
+}
+
 class O_Map_Deals_Pre extends Component {
   constructor(props) {
     super(props);
@@ -92,9 +92,7 @@ class O_Map_Deals_Pre extends Component {
   getInitialMarkers = () => this.getDealMarkers(this.props.deals);
 
   getDealMarkers = deals =>
-    deals.map(deal =>
-      getMapMarkerObj(deal.vendor.location.coordinates, deal.vendor.name)
-    );
+    deals.map(deal => getMapMarkerObj(deal.vendor.address, deal.vendor.name));
 
   renderDealMarker = (marker, idx) => {
     return (
@@ -135,7 +133,7 @@ class O_Map_Rewards_Pre extends Component {
 
   getRewardMarkers = rewards =>
     rewards.map(reward =>
-      getMapMarkerObj(reward.vendor.location.coordinates, reward.vendor.name)
+      getMapMarkerObj(reward.vendor.address, reward.vendor.name)
     );
 
   renderRewardMarker = (marker, idx) => {

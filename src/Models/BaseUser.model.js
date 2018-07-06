@@ -2,9 +2,8 @@ import DataModel from "./Data.model";
 
 export class BaseUser extends DataModel {
   static validProperties = {
-    id: { type: Number, default: null },
     invite_type: { type: String, default: "" },
-    is_searchable: { type: Boolean, default: false },
+    is_searchable: { type: Boolean, default: true },
     username: { type: String, default: "" },
     first_name: { type: String, default: "" },
     last_name: { type: String, default: "" },
@@ -16,10 +15,6 @@ export class BaseUser extends DataModel {
     const copy = this.renew();
     return copy;
   }
-
-  getId = () => {
-    return this.id;
-  };
 
   getKey = () => this.key;
 

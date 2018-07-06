@@ -2,25 +2,24 @@ import DataModel from "./Data.model";
 import { Location } from "./Location.model";
 import { Rating } from "./Rating.model";
 import { Deal } from "./Deal.model";
+import phone from "phone";
 
 export class Vendor extends DataModel {
   static validProperties = {
     name: { type: String, default: "" },
     location: {
       type: Location,
-      default: () => new Location(),
-      verifyValue: value => {
-        return value instanceof Location ? value : new Location(value);
-      }
+      default: () => new Location()
     },
-    phone_number: { type: String, default: "" },
-    email: { type: String, default: "" },
+    business_phone: {
+      type: String,
+      default: "",
+      verifyValue: value => phone(value)[0]
+    },
+    business_email: { type: String, default: "" },
     rating: {
       type: Rating,
-      default: new Rating(),
-      verifyValue: value => {
-        return value instanceof Rating ? value : new Rating(value);
-      }
+      default: () => new Rating()
     },
     deals: {
       type: Array,
@@ -36,7 +35,9 @@ export class Vendor extends DataModel {
       type: Array,
       default: () => [],
       verifyValue: value => {
-        value.map(hour => (hour instanceof Hour ? hour : new Hour(hour)));
+        return value.map(
+          hour => (hour instanceof Hour ? hour : new Hour(hour))
+        );
       }
     }
   };

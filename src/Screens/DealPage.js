@@ -1,30 +1,68 @@
 import React, { Component } from "react";
+import { View } from "react-native";
 import { connect } from "../redux";
 import ScreenContainer from "../Templates/ScreenContainer";
-import { A_Text, A_Icon_Saved, A_Icon_Save, A_Button } from "../Atoms";
+import {
+  A_Text,
+  A_Icon_Saved,
+  A_Icon_Save,
+  A_Button,
+  A_Icon_Share
+} from "../Atoms";
 import { O_Vendor_Info } from "../Organisms";
 import { SCREEN_NAMES } from "../AppNavigator";
+import {
+  fetchDealDetailsAction,
+  unSaveDealAction,
+  saveDealAction,
+  fetchDealCustomerDetailsAction
+} from "../redux/actions/deals.actions";
 
 class DealPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deal_saved: false,
-      deal: props.navigation.state.params.deal
+      is_saved: false,
+      deal: props.navigation.state.params.deal,
+      vendor: props.navigation.state.params.deal.vendor
     };
   }
 
   componentDidMount = () => {
-    console.warn("-----TODO...dispatch action to fetch deal details");
-    // ie: whether or not deal was saved, the descriptions/details/restaurant info, etc
-    // ie: fetch vendor details from deal.vendor_id
+    const one = this.props.dispatch(
+      fetchDealDetailsAction(this.state.deal.vendor_uuid, this.state.deal.uuid)
+    );
+    const two = this.props.dispatch(
+      fetchDealCustomerDetailsAction(
+        this.state.deal.vendor_uuid,
+        this.state.deal.uuid
+      )
+    );
+
+    Promise.all([one, two]).then(results => {
+      let is_saved = false;
+      const deal = results[1] || results[0];
+      if (!deal) return;
+      if (results[1]) is_saved = deal.is_saved;
+      this.setState({ deal, vendor: deal.vendor, is_saved });
+    });
   };
 
   unsave = () => {
-    console.warn("----TODO...UNSAVE");
+    this.props
+      .dispatch(unSaveDealAction(this.state.deal.uuid, this.state.vendor.uuid))
+      .then(deal => {
+        if (!deal) return;
+        this.setState({ deal });
+      });
   };
   save = () => {
-    console.warn("----TODO...SAVE");
+    this.props
+      .dispatch(saveDealAction(this.state.deal.uuid, this.state.vendor.uuid))
+      .then(deal => {
+        if (!deal) return;
+        this.setState({ deal });
+      });
   };
 
   redeem = () => {
@@ -33,8 +71,12 @@ class DealPage extends Component {
     });
   };
 
+  share = () => {
+    console.warn("----TODO...share...");
+  };
+
   render() {
-    const { deal } = this.state.deal;
+    const { deal } = this.state;
     return (
       <ScreenContainer title={`Deal #${deal.code}`}>
         <View
@@ -46,16 +88,17 @@ class DealPage extends Component {
           }}
         >
           <A_Button onPress={this.redeem} value="Redeem" />
-          {this.state.deal_saved ? (
+          {this.state.is_saved ? (
             <A_Icon_Saved onPress={this.unsave} />
           ) : (
             <A_Icon_Save onPress={this.save} />
           )}
+          <A_Icon_Share onPress={this.share} />
         </View>
         {deal.image && <A_Image source={deal.image.source} />}
-        <A_Text strong>{deal.title}</A_Text>
+        <A_Text strong>{deal.name}</A_Text>
         <A_Text>{deal.long_desc}</A_Text>
-        <O_Vendor_Info vendor={deal.vendor} />
+        <O_Vendor_Info vendor={this.state.vendor} />
       </ScreenContainer>
     );
   }

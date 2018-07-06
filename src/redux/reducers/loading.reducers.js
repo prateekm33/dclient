@@ -1,11 +1,11 @@
-import loadingTypes from "../types/loading_types";
+import loading_types from "../types/loading.types";
 import { valExists } from "../../utils";
 
 export default {
   LOADING_STATES(state, action) {
-    for (let type in loadingTypes) {
-      if (action.type === loadingTypes[type]) {
-        return state.renew({ [loadingTypes[type]]: action.loading });
+    for (let type in loading_types) {
+      if (action.type === loading_types[type]) {
+        return state.renew({ [loading_types[type]]: action.loading });
       }
     }
     return state || new AppLoadingStates();
@@ -14,12 +14,12 @@ export default {
 
 const initial_loading_states = (() => {
   const obj = {};
-  for (let type in loadingTypes) {
-    obj[loadingTypes[type]] = false;
+  for (let type in loading_types) {
+    obj[loading_types[type]] = false;
   }
 
   // set any states that need to be initialized as true here
-  obj[loadingTypes.INITIALIZING_APP] = true;
+  obj[loading_types.INITIALIZING_APP] = true;
   return obj;
 })();
 class AppLoadingStates {

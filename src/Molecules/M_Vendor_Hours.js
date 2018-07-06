@@ -5,7 +5,7 @@ import moment from "moment";
 // TODO --- add in format string for moment parsing below
 const M_Vendor_Hours = props => {
   const hours = props.hours;
-  hours.map(day => {
+  return hours.map(day => {
     <View>
       <A_Text strong>{day.day}</A_Text>
       <A_Text>

@@ -4,11 +4,14 @@ import { connect } from "../redux";
 import ScreenContainer from "../Templates/ScreenContainer";
 import { M_Form } from "../Molecules";
 import { A_Text, A_Button_Opacity } from "../Atoms";
+import { loginAction, signupAction } from "../redux/actions/customer.actions";
+import { SCREEN_NAMES } from "../AppNavigator";
+import { customerIsAuthenticated } from "../utils";
 
 class LoginPage extends Component {
   constructor(props) {
     super(props);
-    this.login_inputs = [
+    this.inputs = [
       {
         placeholder: "username",
         required: true
@@ -16,7 +19,8 @@ class LoginPage extends Component {
       {
         placeholder: "password",
         required: true,
-        inputRef: el => (this.password_el = el)
+        inputRef: el => (this.password_el = el),
+        secureTextEntry: true
       },
       {
         placeholder: "confirm password",
@@ -29,7 +33,8 @@ class LoginPage extends Component {
               this.password_el._lastNativeText,
             message: "Passwords do not match."
           }
-        ]
+        ],
+        secureTextEntry: true
       }
     ];
     this.state = {
@@ -37,16 +42,37 @@ class LoginPage extends Component {
     };
   }
 
+  // componentWillMount = () => {
+  //   if (customerIsAuthenticated(this.props.user)) {
+  //     this.navigateToDashboard(this.props.customer);
+  //   }
+  // };
+
+  // componentWillReceiveProps = next_props => {
+  //   if (customerIsAuthenticated(next_props.user)) {
+  //     this.navigateToDashboard(next_props.customer);
+  //   }
+  // };
+
   login = inputs => {
-    const [username, password] = inputs.map(input => input._lastNativeText);
-    const credentials = { username, password };
-    console.warn("-----TODO LOGIN CUSTOMER...");
+    const [email, password] = inputs.map(input => input._lastNativeText);
+    const credentials = { email, password };
+    this.props
+      .dispatch(loginAction(credentials))
+      .then(customer => customer && this.navigateToDashboard(customer));
   };
 
   signup = inputs => {
-    const [username, password] = inputs.map(input => input._lastNativeText);
-    const credentials = { username, password };
-    console.warn("----TODO...SIGNUP CUSTOMER...");
+    const [email, password] = inputs.map(input => input._lastNativeText);
+    const credentials = { email, password };
+    this.props
+      .dispatch(signupAction(credentials))
+      .then(customer => customer && this.navigateToDashboard(customer));
+  };
+
+  navigateToDashboard = customer => {
+    if (!customer) return;
+    this.props.navigation.resetTo(SCREEN_NAMES.DealsPage);
   };
 
   toggleForm = () => this.setState({ login_form: !this.state.login_form });
@@ -58,15 +84,15 @@ class LoginPage extends Component {
           <M_Form
             title="Account Log In"
             label="login_form"
-            inputs={this.login_inputs}
-            onSubmit={this.login}
+            inputs={this.inputs.slice(0, 2)}
+            handleSubmit={this.login}
           />
         ) : (
           <M_Form
             title="New Account Form"
             label="signup_form"
-            inputs={this.signup_inputs}
-            onSubmit={this.signup}
+            inputs={this.inputs}
+            handleSubmit={this.signup}
           />
         )}
         <View>
@@ -85,4 +111,6 @@ class LoginPage extends Component {
   }
 }
 
-export default connect()(LoginPage);
+export default connect(state => ({
+  customer: state.customer
+}))(LoginPage);

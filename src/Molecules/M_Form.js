@@ -43,14 +43,17 @@ class M_Form extends Component {
   };
 
   wrappedInputs = inputs => {
-    return inputs.map((input, idx) => {
+    const _inputs = [];
+    const wrapped_inputs = inputs.map((input, idx) => {
       const copy = { ...input };
       copy.inputRef = el => {
         if (input.inputRef) input.inputRef(el);
-        this.inputs[idx] = el;
+        _inputs.push(el);
       };
       return copy;
     });
+    this.inputs = _inputs;
+    return wrapped_inputs;
   };
 
   renderInputErrors = (errors, idx) => {

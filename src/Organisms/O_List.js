@@ -10,7 +10,7 @@ const O_List_Deals = props => {
     <FlatList
       data={props.deals}
       renderItem={renderDealListItem}
-      keyExtractor={item => `deal-${item.code}-${item.vendor.id}`}
+      keyExtractor={item => `deal-${item.code}-${item.vendor_uuid}`}
     />
   );
 };
@@ -23,7 +23,7 @@ const O_List_Rewards = props => {
     <FlatList
       data={props.deals}
       renderItem={renderRewardListItem}
-      keyExtractor={item => `reward-${item.code}-${item.vendor.id}`}
+      keyExtractor={item => `reward-${item.code}-${item.vendor_uuid}`}
     />
   );
 };

@@ -6,6 +6,12 @@ import { O_Vendor_Info, O_RewardPurchaseHistory } from "../Organisms";
 import { A_Icon_Share, A_Text, A_Button, A_Icon_Save, A_Input } from "../Atoms";
 import { M_RewardPointsGraphic } from "../Molecules";
 import { SCREEN_NAMES } from "../AppNavigator";
+import {
+  unsubscribeFromRewardCardAction,
+  fetchRewardCustomerDetailsAction,
+  fetchRewardDetailsAction,
+  subscribeToRewardCardAction
+} from "../redux/actions/rewards.actions";
 
 class RewardPage extends Component {
   constructor(props) {
@@ -20,15 +26,54 @@ class RewardPage extends Component {
   }
 
   componentDidMount = () => {
-    console.warn("-----TODO...dispatch action to fetch reward details");
-    // ie: whether or not reward program was joined, the descriptions/details/restaurant info, etc
-    // ie: fetch vendor details from reward.vendor_id
+    const one = this.props.dispatch(
+      fetchRewardDetailsAction(
+        this.state.reward.vendor_uuid,
+        this.state.reward.uuid
+      )
+    );
+    const two = this.props.dispatch(
+      fetchRewardCustomerDetailsAction(
+        this.state.reward.vendor_uuid,
+        this.state.reward.uuid
+      )
+    );
+
+    Promise.all([one, two]).then(results => {
+      let reward_joined = false;
+      const reward = results[1] || results[0];
+      if (!reward) return;
+      if (results[1]) reward_joined = true;
+      this.setState({ reward, vendor: reward.vendor, reward_joined });
+    });
   };
+
   leave = () => {
-    console.warn("----TODO...LEAVE");
+    this.props
+      .dispatch(
+        unsubscribeFromRewardCardAction(
+          this.state.reward.vendor_uuid,
+          this.state.reward.uuid
+        )
+      )
+      .then(done => {
+        if (!done) return;
+        this.setState({ reward_joined: false });
+      });
   };
+
   join = () => {
-    console.warn("----TODO...JOIN");
+    this.props
+      .dispatch(
+        subscribeToRewardCardAction(
+          this.state.reward.vendor_uuid,
+          this.state.reward.uuid
+        )
+      )
+      .then(reward => {
+        if (!reward) return;
+        this.setState({ reward_joined: true, reward });
+      });
   };
 
   showRedeemModal = () => {
@@ -52,21 +97,17 @@ class RewardPage extends Component {
     });
   };
 
-  save = () => {
-    console.warn("-----SAVE REWARD");
-  };
-
-  unsave = () => {
-    console.warn("------UNSAVE REWARD");
-  };
-
   setNumPointsToRedeem = points_to_redeem =>
     this.setState({ points_to_redeem });
+
+  share = () => {
+    console.warn("----TODO...share...");
+  };
 
   render() {
     const reward = this.state.reward;
     return (
-      <ScreenContainer title={`${reward.title}`}>
+      <ScreenContainer title={`${reward.name}`}>
         <View
           style={{
             flexDirection: "row",
@@ -78,12 +119,7 @@ class RewardPage extends Component {
           {!this.state.reward_joined && (
             <A_Button onPress={this.join} value="JOIN" />
           )}
-          {this.state.reward_saved ? (
-            <A_Icon_Saved onPress={this.unsave} />
-          ) : (
-            <A_Icon_Save onPress={this.save} />
-          )}
-          <A_Icon_Share />
+          <A_Icon_Share onPress={this.share} />
         </View>
         {this.state.reward_joined && (
           <View>
@@ -104,7 +140,7 @@ class RewardPage extends Component {
         )}
         <View>
           <A_Text strong>PROGRAM DETAILS</A_Text>
-          <A_Text strong>{reward.title}</A_Text>
+          <A_Text strong>{reward.name}</A_Text>
           <A_Text>{reward.long_desc}</A_Text>
         </View>
         <View>

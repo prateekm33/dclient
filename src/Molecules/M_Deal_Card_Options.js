@@ -8,6 +8,7 @@ import {
   A_Button_Opacity
 } from "../Atoms";
 import { SCREEN_NAMES } from "../AppNavigator";
+import { getResponsiveCSSFrom8 } from "../utils";
 
 class M_Deal_Card_Options_Pre extends Component {
   constructor(props) {
@@ -28,10 +29,28 @@ class M_Deal_Card_Options_Pre extends Component {
 
   render() {
     return (
-      <View>
-        <A_Icon_View onPress={this.viewDeal} />
-        <A_Icon_Delete onPress={this.deleteDeal} />
-        <A_Icon_Pause onPress={this.pauseDeal} />
+      <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
+        <A_Icon_View
+          onPress={this.viewDeal}
+          style={{
+            width: getResponsiveCSSFrom8(10).width,
+            height: getResponsiveCSSFrom8(10).height
+          }}
+        />
+        <A_Icon_Delete
+          onPress={this.deleteDeal}
+          style={{
+            width: getResponsiveCSSFrom8(10).width,
+            height: getResponsiveCSSFrom8(10).height
+          }}
+        />
+        <A_Icon_Pause
+          onPress={this.pauseDeal}
+          style={{
+            width: getResponsiveCSSFrom8(10).width,
+            height: getResponsiveCSSFrom8(10).height
+          }}
+        />
       </View>
     );
   }

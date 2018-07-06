@@ -1,19 +1,14 @@
 import logger from "../utils/logger";
-import uuid from "uuid/v4";
+import uuid from "uuid/v1";
 
 export default class DataModel {
   static validProperties = {
-    id: { type: Number, default: null },
     uuid: { type: String, default: () => uuid() }
   };
   constructor(props) {
     initClassValidProps.call(this, this.constructor, props);
     this._data_type = this.constructor.name.toLowerCase();
   }
-
-  getId = () => {
-    return this.id || this.key;
-  };
 
   isValidProp = key => {
     return key in this.constructor.validProperties;
@@ -61,9 +56,10 @@ function initClassValidProps(Class, props = {}) {
         this[validProp] = verifiedValue;
       } else throw new Error("Incorrect type assignment");
     } catch (e) {
-      logger.suppress().warn(Class.name + " Model Init Errors");
+      const disable = Class.name === "MyDeal";
+      logger.suppress(disable).warn(Class.name + " Model Init Errors");
       logger
-        .suppress()
+        .suppress(disable)
         .warn("Incorrect type assignment for prop : ", validProp)
         .warn(
           "Got type : ",
@@ -72,13 +68,13 @@ function initClassValidProps(Class, props = {}) {
             : props[validProp]
         );
       logger
-        .suppress()
+        .suppress(disable)
         .warn(
           "Setting to default value : ",
           validProperties[validProp].default,
           { suppress: true }
         );
-      logger.suppress().warn(e);
+      logger.suppress(disable).warn(e);
       const defaultVal = validProperties[validProp].default;
       if (
         defaultVal &&

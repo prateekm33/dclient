@@ -1,4 +1,6 @@
 import { Dimensions } from "react-native";
+import logger from "./logger";
+export { logger };
 
 export const valExists = (...val) => {
   const arr = [].concat(val);
@@ -30,3 +32,6 @@ export const getResponsiveCSSFrom8 = pixel => {
 };
 
 export const generateQRCode = data => {};
+
+export const customerIsAuthenticated = customer =>
+  !!customer && customer.is_authenticated && !!customer.uuid;

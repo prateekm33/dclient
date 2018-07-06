@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { StackNavigator, NavigationActions } from "react-navigation";
 import store from "./redux/store";
-import navigation_types from "./redux/types/navigation_types";
+import navigation_types from "./redux/types/navigation.types";
 
 export const SCREEN_NAMES = {
   SplashScreen: "SplashScreen",
@@ -17,7 +17,7 @@ export const SCREEN_NAMES = {
   RewardsPage: "RewardsPage"
 };
 
-export const INITIAL_ROUTE_NAME = SCREEN_NAMES.RedeemPage;
+export const INITIAL_ROUTE_NAME = SCREEN_NAMES.SplashScreen;
 export const BACKLESS_ROUTES = {
   SplashScreen: true,
   LoginPage: true

@@ -5,7 +5,9 @@ import { A_Button_Opacity } from ".";
 const A_Icon = props => {
   if (props.onPress)
     return (
-      <A_Button_Opacity onPress={props.onPress}>{props.Icon}</A_Button_Opacity>
+      <A_Button_Opacity onPress={props.onPress} disabled={props.disabled}>
+        {props.Icon}
+      </A_Button_Opacity>
     );
   return props.Icon;
 };

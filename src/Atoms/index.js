@@ -1,5 +1,5 @@
 import A_Button, { A_Button_Opacity, A_Button_Location } from "./A_Button";
-import A_Text from "./A_Text";
+import A_Text, { A_Text_Vendor_Name } from "./A_Text";
 import { A_Input } from "./A_Input";
 import {
   A_Icon_Delete,
@@ -21,6 +21,7 @@ export {
   A_Button_Opacity,
   A_Button_Location,
   A_Text,
+  A_Text_Vendor_Name,
   A_Input,
   A_Icon_Delete,
   A_Icon_Pause,

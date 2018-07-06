@@ -5,6 +5,7 @@ import ScreenContainer from "../Templates/ScreenContainer";
 import { A_Icon_Close, A_Text } from "../Atoms";
 import QRCode from "react-native-qrcode-svg";
 import { getResponsiveCSSFrom8 } from "../utils";
+
 class RedeemPage extends Component {
   constructor(props) {
     super(props);
@@ -17,17 +18,17 @@ class RedeemPage extends Component {
      * customer_id: Number
      * points_to_redeem: Number (only if type === 'reward_redeem')
      */
-    const data = {
-      customer_id: this.props.user.getId()
+    let data = {
+      customer: this.props.customer.getScannableCustomer()
     };
     if (deal) {
-      data.type = "deal";
-      data.code = deal.code;
+      data = { type: "deal", ...deal };
     } else if (reward) {
       data.type = props.navigation.state.params.reward_type.toLowerCase();
       data.code = reward.code;
       if (data.type === "reward_redeem")
         data.points_to_redeem = props.navigation.state.params.points_to_redeem;
+      data = { ...data, ...reward };
     }
     this.data = data;
   }
