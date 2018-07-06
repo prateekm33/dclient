@@ -15,8 +15,10 @@ import {
   fetchDealDetailsAction,
   unSaveDealAction,
   saveDealAction,
-  fetchDealCustomerDetailsAction
+  fetchDealCustomerDetailsAction,
+  createMyDealAction
 } from "../redux/actions/deals.actions";
+import { MyDeal } from "../Models";
 
 class DealPage extends Component {
   constructor(props) {
@@ -58,7 +60,13 @@ class DealPage extends Component {
   };
   save = () => {
     this.props
-      .dispatch(saveDealAction(this.state.deal.uuid, this.state.vendor.uuid))
+      .dispatch(
+        saveDealAction(
+          this.state.deal.uuid,
+          this.state.vendor.uuid,
+          this.state.deal
+        )
+      )
       .then(deal => {
         if (!deal) return;
         this.setState({ deal });
@@ -66,8 +74,20 @@ class DealPage extends Component {
   };
 
   redeem = () => {
-    this.props.navigation.navigate(SCREEN_NAMES.RedeemPage, {
-      deal: this.state.deal
+    let promise = Promise.resolve(true);
+    if (!(this.state.deal instanceof MyDeal)) {
+      promise = this.props.dispatch(
+        createMyDealAction(this.state.deal.uuid, this.state.deal.vendor_uuid)
+      );
+    }
+    promise.then(done => {
+      if (!done) {
+        console.warn("--TODO: DISPLAY STATE ERROR : something went wrong");
+        return;
+      }
+      this.props.navigation.navigate(SCREEN_NAMES.RedeemPage, {
+        deal: this.state.deal
+      });
     });
   };
 

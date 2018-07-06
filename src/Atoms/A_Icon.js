@@ -89,6 +89,19 @@ const A_Icon_Close = props => (
   />
 );
 
+const A_Icon_Deal = props => (
+  <A_Icon
+    {...props}
+    Icon={<Image {...props} source={require("../assets/coupon_icon.png")} />}
+  />
+);
+const A_Icon_Reward = props => (
+  <A_Icon
+    {...props}
+    Icon={<Image {...props} source={require("../assets/reward_icon.png")} />}
+  />
+);
+
 export {
   A_Icon_View,
   A_Icon_Pause,
@@ -101,5 +114,7 @@ export {
   A_Icon_List,
   A_Icon_Phone,
   A_Icon_Share,
-  A_Icon_Close
+  A_Icon_Close,
+  A_Icon_Deal,
+  A_Icon_Reward
 };

@@ -4,6 +4,20 @@ import error_types from "../types/error.types";
 import deal_types from "../types/deal.types";
 import loading_types from "../types/loading.types";
 
+export const createMyDealAction = (deal_uuid, vendor_uuid) => dispatch => {
+  dispatch({ type: loading_types.CREATING_MY_DEAL, loading: true });
+  return Api.createMyDeal({ deal_uuid, vendor_uuid })
+    .then(deal => {
+      dispatch({ type: loading_types.CREATING_MY_DEAL, loading: false });
+      return deal;
+    })
+    .catch(error => {
+      dispatch({ type: loading_types.CREATING_MY_DEAL, loading: false });
+      dispatchErrorActionOfType(error_types.CREATING_MY_DEAL_ERROR)(error);
+      return false;
+    });
+};
+
 export const fetchDealDetailsAction = (vendor_uuid, deal_uuid) => dispatch => {
   dispatch({ type: loading_types.FETCHING_DEAL_DETAILS, loading: true });
   return Api.getVendorDeals({ vendor_uuid, deal_uuid })
@@ -75,13 +89,13 @@ export const fetchSavedDealsAction = (limit, offset) => dispatch => {
     });
 };
 
-export const saveDealAction = (deal_uuid, vendor_uuid) => dispatch => {
+export const saveDealAction = (deal_uuid, vendor_uuid, deal) => dispatch => {
   dispatch({ type: loading_types.SAVING_DEAL, loading: true });
-  return Api.saveDeal({ deal_uuid, vendor_uuid })
-    .then(deal => {
+  return Api.saveDeal({ deal_uuid, vendor_uuid, deal })
+    .then(res_deal => {
       dispatch({ type: loading_types.SAVING_DEAL, loading: false });
       dispatch({ type: deal_types.SAVED_DEAL, deal });
-      return deal;
+      return res_deal;
     })
     .catch(error => {
       dispatch({ type: loading_types.SAVING_DEAL, loading: false });

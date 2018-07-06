@@ -21,7 +21,7 @@ const renderRewardListItem = ({ item }) => {
 const O_List_Rewards = props => {
   return (
     <FlatList
-      data={props.deals}
+      data={props.rewards}
       renderItem={renderRewardListItem}
       keyExtractor={item => `reward-${item.code}-${item.vendor_uuid}`}
     />

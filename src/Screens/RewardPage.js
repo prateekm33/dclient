@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { View } from "react-native";
 import { connect } from "../redux";
+import { FeatureFlags } from "../../config/DebugConfig";
 import ScreenContainer from "../Templates/ScreenContainer";
-import { O_Vendor_Info, O_RewardPurchaseHistory } from "../Organisms";
-import { A_Icon_Share, A_Text, A_Button, A_Icon_Save, A_Input } from "../Atoms";
+import { O_Vendor_Info, O_RewardPurchaseHistory, O_Modal } from "../Organisms";
+import { A_Icon_Share, A_Text, A_Button, A_Input } from "../Atoms";
 import { M_RewardPointsGraphic } from "../Molecules";
 import { SCREEN_NAMES } from "../AppNavigator";
 import {
@@ -67,7 +68,8 @@ class RewardPage extends Component {
       .dispatch(
         subscribeToRewardCardAction(
           this.state.reward.vendor_uuid,
-          this.state.reward.uuid
+          this.state.reward.uuid,
+          this.state.reward
         )
       )
       .then(reward => {
@@ -124,7 +126,7 @@ class RewardPage extends Component {
         {this.state.reward_joined && (
           <View>
             <M_RewardPointsGraphic todo="TODOO...." />
-            <A_Text>Member since {"TODO..."}</A_Text>
+            <A_Text>Member since {this.state.reward.memberSince()}</A_Text>
             <View
               style={{
                 flexDirection: "row",
@@ -135,7 +137,9 @@ class RewardPage extends Component {
               <A_Button onPress={this.showRedeemModal} value="REDEEM" />
               <A_Button onPress={this.earn} value="EARN" />
             </View>
-            <O_RewardPurchaseHistory todo="TODO...figure out right props to send and finish component" />
+            {FeatureFlags.PurchaseHistory && (
+              <O_RewardPurchaseHistory todo="TODO...figure out right props to send and finish component" />
+            )}
           </View>
         )}
         <View>
@@ -147,19 +151,36 @@ class RewardPage extends Component {
           <A_Text strong>{reward.vendor.type.toUpperCase()} DETAILS</A_Text>
           <O_Vendor_Info vendor={reward.vendor} />
         </View>
-        <A_Button value="JOIN PROGRAM" onPress={this.join} />
-        {reward.customer && (
-          <Modal
+        <A_Button
+          value={this.state.reward_joined ? "LEAVE PROGRAM" : "JOIN PROGRAM"}
+          onPress={this.state.reward_joined ? this.leave : this.join}
+        />
+        {this.state.reward_joined && (
+          <O_Modal
             show={this.state.showRedeemModal}
             close={this.closeRedeemModal}
           >
             <View>
               <A_Text>How many points would you like to redeem?</A_Text>
-              <A_Text strong>MAX: {reward.customer.total_points}</A_Text>
-              <A_Input onChangeText={this.setNumPointsToRedeem} />
-              <A_Button onPress={this.redeem} value="REDEEM" />
+              <A_Text strong>MAX: {reward.points}</A_Text>
+              {!reward.points && (
+                <A_Text>
+                  You don't have enough points to redeem. Earn some by scanning
+                  your loyalty card with each purchase!
+                </A_Text>
+              )}
+              <A_Input
+                onChangeText={this.setNumPointsToRedeem}
+                placeholder="Num of points to redeem"
+                editable={!reward.points}
+              />
+              <A_Button
+                onPress={this.redeem}
+                disabled={!reward.points}
+                value="REDEEM"
+              />
             </View>
-          </Modal>
+          </O_Modal>
         )}
       </ScreenContainer>
     );

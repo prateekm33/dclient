@@ -3,7 +3,7 @@ import { connect } from "../redux";
 import PropTypes from "prop-types";
 import { StyleSheet, View } from "react-native";
 
-import { A_Button_Opacity } from "../Atoms";
+import { A_Button_Opacity, A_Icon_Deal, A_Icon_Reward } from "../Atoms";
 
 import { getResponsiveCSSFrom8 } from "../utils";
 import { SCREEN_NAMES, UNAUTH_ROUTES } from "../AppNavigator";
@@ -41,18 +41,24 @@ class O_MenuBar_Main_Pre extends Component {
     };
   }
 
-  getInitialItems = () => [];
+  getInitialItems = () => [A_Icon_Deal, A_Icon_Reward];
+
   setActiveIdx = idx => {
     if (this.state.activeIdx === idx) return;
     this.setState({ activeIdx: idx });
   };
-  navigateToDashboard = () => {
+  navigateToDealsPage = () => {
     this.setActiveIdx(0);
-    this.props.navigation.resetTo(SCREEN_NAMES.Dashboard);
+    this.props.navigation.resetTo(SCREEN_NAMES.DealsPage);
+  };
+  navigateToRewardsPage = () => {
+    this.setActiveIdx(1);
+    this.props.navigation.resetTo(SCREEN_NAMES.RewardsPage);
   };
 
   onItemSelect = idx => {
-    if (idx === 0) return this.navigateToDashboard();
+    if (idx === 0) return this.navigateToDealsPage();
+    if (idx === 1) return this.navigateToRewardsPage();
   };
   render() {
     const current_route = this.props.navigation.state.routeName;

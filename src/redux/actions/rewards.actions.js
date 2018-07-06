@@ -60,7 +60,7 @@ export const fetchRewardCustomerDetailsAction = (
     });
 };
 
-export const fetchAllRewardsCardsAction = (limit, offset) => dispatch => {
+export const fetchMyRewardsCardsAction = (limit, offset) => dispatch => {
   dispatch({ type: loading_types.FETCHING_MY_LOYALTY_REWARDS, loading: true });
   return Api.getLoyaltyRewards({ limit, offset })
     .then(res => {
@@ -69,7 +69,7 @@ export const fetchAllRewardsCardsAction = (limit, offset) => dispatch => {
         loading: false
       });
       dispatch({
-        type: reward_types.FETCHED_ALL_REWARDS,
+        type: reward_types.FETCHED_ALL_MY_REWARDS,
         loyalty_rewards: res.loyalty_rewards
       });
       return res;
@@ -86,7 +86,7 @@ export const fetchAllRewardsCardsAction = (limit, offset) => dispatch => {
     });
 };
 
-export const fetchMyRewardsCardsAction = () => dispatch => {
+export const fetchAllRewardsCardsAction = (limit, offset) => dispatch => {
   dispatch({ type: loading_types.FETCHING_ALL_LOYALTY_REWARDS, loading: true });
   return Api.getMyRewardsCards({ limit, offset })
     .then(res => {
@@ -94,7 +94,10 @@ export const fetchMyRewardsCardsAction = () => dispatch => {
         type: loading_types.FETCHING_ALL_LOYALTY_REWARDS,
         loading: false
       });
-      dispatch({ type: deal_types.FETCHED_ALL_DEALS, deals: res.deals });
+      dispatch({
+        type: reward_types.FETCHED_ALL_REWARDS,
+        loyalty_rewards: res.loyalty_rewards
+      });
       return res;
     })
     .catch(error => {
@@ -144,14 +147,19 @@ export const unsubscribeFromRewardCardAction = (
 
 export const subscribeToRewardCardAction = (
   vendor_uuid,
-  loyalty_reward_uuid
+  loyalty_reward_uuid,
+  loyalty_reward
 ) => dispatch => {
   dispatch({
     type: loading_types.SUBSCRIBING_TO_REWARD_CARD_PROGRAM,
     loading: true
   });
-  return Api.joinRewardsCard({ loyalty_reward_uuid, vendor_uuid })
-    .then(loyalty_reward => {
+  return Api.joinRewardsCard({
+    loyalty_reward,
+    loyalty_reward_uuid,
+    vendor_uuid
+  })
+    .then(res_loyalty_reward => {
       dispatch({
         type: loading_types.SUBSCRIBING_TO_REWARD_CARD_PROGRAM,
         loading: false
@@ -161,7 +169,7 @@ export const subscribeToRewardCardAction = (
         loyalty_reward_uuid,
         vendor_uuid
       });
-      return loyalty_reward;
+      return res_loyalty_reward;
     })
     .catch(error => {
       dispatch({

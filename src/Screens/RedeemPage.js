@@ -22,19 +22,40 @@ class RedeemPage extends Component {
       customer: this.props.customer.getScannableCustomer()
     };
     if (deal) {
-      data = { type: "deal", ...deal };
+      console.warn(deal);
+      const { code, uuid, vendor, is_used } = deal;
+      const vendor_uuid = vendor.uuid;
+      const customer_uuid = this.props.customer.uuid;
+      data = {
+        type: "deal",
+        code,
+        uuid,
+        is_used,
+        vendor_uuid,
+        customer_uuid
+      };
     } else if (reward) {
+      const { code, uuid, vendor, num_points_redeemed, points } = reward;
+      const vendor_uuid = vendor.uuid;
+      const customer_uuid = this.props.customer.uuid;
       data.type = props.navigation.state.params.reward_type.toLowerCase();
-      data.code = reward.code;
       if (data.type === "reward_redeem")
         data.points_to_redeem = props.navigation.state.params.points_to_redeem;
-      data = { ...data, ...reward };
+      data = {
+        ...data,
+        code,
+        uuid,
+        customer_uuid,
+        vendor_uuid,
+        num_points_redeemed,
+        points
+      };
     }
     this.data = data;
   }
 
   render() {
-    const { deal, reward } = props.navigation.state.params;
+    const { deal, reward } = this.props.navigation.state.params;
     let help_text = "Present this code to the restaurant.";
     let header_text = "COUPON CODE";
     if (deal) {
@@ -77,5 +98,5 @@ class RedeemPage extends Component {
 }
 
 export default connect(state => ({
-  user: state.user
+  customer: state.customer
 }))(RedeemPage);

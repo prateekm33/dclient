@@ -1,6 +1,7 @@
 import DataModel from "./Data.model";
 import { Vendor, createVendor } from "./Vendor.model";
 import uuid from "uuid/v1";
+import moment from "moment";
 
 export class Deal extends DataModel {
   static validProperties = {
@@ -15,6 +16,15 @@ export class Deal extends DataModel {
     code: {
       type: String,
       default: ""
+    },
+    created_at: {
+      type: moment,
+      default: val => {
+        if (!val) return null;
+        const date = moment(val);
+        if (date.isValid()) return date;
+        return null;
+      }
     }
   };
   constructor(params) {

@@ -18,18 +18,17 @@ import {
 class DealsPage extends Component {
   constructor(props) {
     super(props);
-    this.limit = 20;
+    this.limit = 50;
     this.state = {
       map_view: true,
       flavor: "all",
-      deals: props.deals,
+      deals: [],
       offset: 0,
       all_fetched: false
     };
   }
 
   componentWillMount = () => {
-    const limit = this.state.map_view ? 100 : this.limit;
     this.fetchDeals(fetchAllDealsAction);
   };
 
@@ -107,6 +106,7 @@ class DealsPage extends Component {
           <View>
             <O_List_Deals deals={this.state.deals} />
             <A_Button
+              disabled={this.state.all_fetched}
               onPress={this.loadMore}
               value={this.state.all_fetched ? "ALL LOADED" : "LOAD MORE"}
             />
@@ -130,7 +130,6 @@ class DealsPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  deals: state.deals,
   savedDeals: state.customer.getFavoriteDeals()
 });
 export default connect(mapStateToProps)(DealsPage);

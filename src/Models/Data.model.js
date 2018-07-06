@@ -80,7 +80,7 @@ function initClassValidProps(Class, props = {}) {
         defaultVal &&
         defaultVal.constructor.prototype === Function.prototype
       ) {
-        this[validProp] = defaultVal();
+        this[validProp] = defaultVal(props[validProp]);
       } else this[validProp] = defaultVal;
     }
   }

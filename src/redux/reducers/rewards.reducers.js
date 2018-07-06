@@ -4,7 +4,16 @@ export default {
   loyalty_rewards(state, action) {
     switch (action.type) {
       case reward_types.FETCHED_ALL_REWARDS:
-        return actio.loyalty_rewards;
+        return action.loyalty_rewards;
+      default:
+        return state || [];
+    }
+  },
+
+  my_loyalty_rewards(state, action) {
+    switch (action.type) {
+      case reward_types.FETCHED_ALL_MY_REWARDS:
+        return action.loyalty_rewards;
       default:
         return state || [];
     }

@@ -169,7 +169,7 @@ class Api {
       createMyDeal({ ...res.deal.data.deal, vendor: res.deal.data.vendor })
     );
 
-  saveDeal = ({ deal_uuid, vendor_uuid }) =>
+  saveDeal = ({ deal_uuid, vendor_uuid, deal }) =>
     this.post(
       config.api.customer.deals +
         "/" +
@@ -177,8 +177,11 @@ class Api {
         "/" +
         vendor_uuid +
         "/" +
-        deal_uuid
-    ).then(res => createMyDeal(res.deal));
+        deal_uuid,
+      {
+        deal: { is_saved: true }
+      }
+    ).then(res => createMyDeal({ ...deal, ...res.deal }));
 
   unSaveDeal = ({ deal_uuid, vendor_uuid }) =>
     this.put(
@@ -189,7 +192,7 @@ class Api {
         vendor_uuid +
         "/" +
         deal_uuid,
-      { is_saved: false }
+      { updates: { is_saved: false } }
     ).then(res => createMyDeal(res.deal));
 
   archiveDeal = ({ deal_uuid, vendor_uuid }) =>
@@ -201,7 +204,7 @@ class Api {
         vendor_uuid +
         "/" +
         deal_uuid,
-      { is_archived: true }
+      { updates: { is_archived: true } }
     ).then(res => createMyDeal(res));
 
   deleteDeal = ({ deal_uuid, vendor_uuid }) =>
@@ -213,7 +216,7 @@ class Api {
         vendor_uuid +
         "/" +
         deal_uuid,
-      { is_deleted: true }
+      { updates: { is_deleted: true } }
     ).then(res => createMyDeal(res));
 
   destroyDeal = ({ deal_uuid, vendor_uuid }) =>
@@ -230,7 +233,7 @@ class Api {
   getMyRewardsCards = ({ limit, offset }) => {
     limit = +limit || 20;
     offset = +offset || 0;
-    let url = `${config.api.customer.reward}/${
+    let url = `${config.api.customer.rewards}/${
       this.customer.uuid
     }?limit=${limit}&offset=${offset}`;
     return this.get(url).then(res => {
@@ -238,7 +241,7 @@ class Api {
         loyalty_rewards: res.loyalty_rewards.map(reward => {
           return createMyLoyaltyRewardCard({
             ...reward.data.loyalty_reward,
-            vendor: reward.data.loyalty_reward.vendor
+            vendor: reward.data.vendor
           });
         }),
         count: res.count,
@@ -259,11 +262,11 @@ class Api {
     ).then(res =>
       createMyLoyaltyRewardCard({
         ...res.loyalty_reward.data.loyalty_reward,
-        vendor: res.loyalty_reward.data.vendor
+        vendor: res.data.vendor
       })
     );
 
-  joinRewardsCard = ({ loyalty_reward_uuid, vendor_uuid }) =>
+  joinRewardsCard = ({ loyalty_reward, loyalty_reward_uuid, vendor_uuid }) =>
     this.post(
       config.api.customer.rewards +
         "/" +
@@ -274,8 +277,8 @@ class Api {
         loyalty_reward_uuid
     ).then(res =>
       createMyLoyaltyRewardCard({
-        ...res.loyalty_reward.data.loyalty_reward,
-        vendor: res.loyalty_reward.data.vendor
+        ...loyalty_reward,
+        ...res.loyalty_reward
       })
     );
 
@@ -394,6 +397,17 @@ class Api {
       };
     });
   };
+
+  createMyDeal = ({ deal_uuid, vendor_uuid }) =>
+    this.post(
+      config.api.customer.deals +
+        "/" +
+        this.customer.uuid +
+        "/" +
+        vendor_uuid +
+        "/" +
+        deal_uuid
+    );
 
   // TODO...put back in
   // sendFeedback = msg => {

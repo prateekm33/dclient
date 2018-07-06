@@ -13,7 +13,9 @@ import {
   A_Icon_Phone,
   A_Icon_Save,
   A_Icon_Share,
-  A_Icon_Close
+  A_Icon_Close,
+  A_Icon_Deal,
+  A_Icon_Reward
 } from "./A_Icon";
 import { A_ListContainer } from "./A_ListContainer";
 export {
@@ -35,5 +37,7 @@ export {
   A_Icon_List,
   A_Icon_Phone,
   A_Icon_Share,
-  A_Icon_Close
+  A_Icon_Close,
+  A_Icon_Deal,
+  A_Icon_Reward
 };

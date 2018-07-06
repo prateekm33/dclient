@@ -3,7 +3,13 @@ import { connect } from "../redux";
 import { View } from "react-native";
 import ScreenContainer from "../Templates/ScreenContainer";
 import { O_Map_Rewards, O_List_Rewards } from "../Organisms";
-import { A_Icon_All, A_Icon_Saved } from "../Atoms";
+import {
+  A_Icon_All,
+  A_Icon_Saved,
+  A_Icon_Map,
+  A_Icon_List,
+  A_Button
+} from "../Atoms";
 import {
   fetchAllRewardsCardsAction,
   fetchMyRewardsCardsAction
@@ -12,18 +18,17 @@ import {
 class RewardsPage extends Component {
   constructor(props) {
     super(props);
-    this.limit = 20;
+    this.limit = 50;
     this.state = {
       map_view: true,
       flavor: "all",
-      rewards: props.rewards,
+      rewards: [],
       offset: 0
     };
   }
 
   componentWillMount = () => {
-    const limit = this.state.map_view ? 100 : this.limit;
-    this.props.dispatch(fetchAllRewardsCardsAction(limit));
+    this.fetchRewardsCards(fetchAllRewardsCardsAction);
   };
 
   loadMore = () => {
@@ -56,8 +61,13 @@ class RewardsPage extends Component {
   };
 
   showFlavorAll = () => {
-    this.state.flavor !== "all" &&
-      this.setState({ flavor: "all", rewards: this.props.rewards });
+    if (this.state.flavor === "all") return;
+    this.setState({ all_fetched: false, offset: 0, rewards: [] }, () => {
+      this.fetchRewardsCards(fetchAllRewardsCardsAction).then(res => {
+        if (res.end) return;
+        this.setState({ flavor: "all" });
+      });
+    });
   };
   showFlavorMine = () => {
     if (this.state.flavor === "mine") return;
@@ -69,19 +79,46 @@ class RewardsPage extends Component {
     });
   };
 
+  showMapView = () => this.setState({ map_view: true });
+  showListView = () => this.setState({ map_view: false });
+  renderPageOptions = () => {
+    return (
+      <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
+        <A_Icon_Map onPress={this.showMapView} disabled={this.state.map_view} />
+        <A_Icon_List
+          onPress={this.showListView}
+          disabled={!this.state.map_view}
+        />
+      </View>
+    );
+  };
+
   render() {
     return (
-      <ScreenContainer title="Rewards">
+      <ScreenContainer
+        title="Rewards"
+        rightHeaderComponent={this.renderPageOptions()}
+      >
         {this.state.map_view ? (
           <O_Map_Rewards rewards={this.state.rewards} />
         ) : (
           <View>
             <O_List_Rewards rewards={this.state.rewards} />
-            <A_Button onPress={this.loadMore} value="Load More" />
+            <A_Button
+              disabled={this.state.all_fetched}
+              onPress={this.loadMore}
+              value={this.state.all_fetched ? "ALL LOADED" : "LOAD MORE"}
+            />
           </View>
         )}
         <View
-          style={{ position: "absolute", top: 30, backgroundColor: "white" }}
+          style={{
+            position: "absolute",
+            top: 30,
+            backgroundColor: "white",
+            flexDirection: "row",
+            flexWrap: "nowrap"
+          }}
         >
           <A_Icon_All onPress={this.showFlavorAll} />
           <A_Icon_Saved onPress={this.showFlavorMine} />
@@ -91,7 +128,5 @@ class RewardsPage extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  rewards: [] // TODO -- replace --> state.rewards
-});
+const mapStateToProps = state => ({});
 export default connect(mapStateToProps)(RewardsPage);

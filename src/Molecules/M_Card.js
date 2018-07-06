@@ -23,6 +23,7 @@ const M_Card_Deal_Mini = withNavigation(props => {
 
 const M_Card_LoyaltyReward_Mini = withNavigation(props => {
   const reward = props.reward;
+
   return (
     <A_Button
       onPress={() =>
