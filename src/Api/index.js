@@ -262,7 +262,7 @@ class Api {
     ).then(res =>
       createMyLoyaltyRewardCard({
         ...res.loyalty_reward.data.loyalty_reward,
-        vendor: res.data.vendor
+        vendor: res.loyalty_reward.data.vendor
       })
     );
 
