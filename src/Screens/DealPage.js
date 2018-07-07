@@ -115,7 +115,7 @@ class DealPage extends Component {
           )}
           <A_Icon_Share onPress={this.share} />
         </View>
-        {deal.image && <A_Image source={deal.image.source} />}
+        {deal.image && <A_Image source={deal.image} />}
         <A_Text strong>{deal.name}</A_Text>
         <A_Text>{deal.long_desc}</A_Text>
         <O_Vendor_Info vendor={this.state.vendor} />

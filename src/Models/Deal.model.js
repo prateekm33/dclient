@@ -25,6 +25,15 @@ export class Deal extends DataModel {
         if (date.isValid()) return date;
         return null;
       }
+    },
+    expiration: {
+      type: moment,
+      default: val => {
+        if (!val) return null;
+        const date = moment(val);
+        if (!date.isValid()) return null;
+        return date;
+      }
     }
   };
   constructor(params) {
@@ -36,6 +45,8 @@ export class Deal extends DataModel {
     }
     super(params);
   }
+
+  getFormattedExpiration = () => this.expiration.format("");
 }
 export const createDeal = params => new Deal(params);
 
