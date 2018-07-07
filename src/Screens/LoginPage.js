@@ -6,7 +6,6 @@ import { M_Form } from "../Molecules";
 import { A_Text, A_Button_Opacity } from "../Atoms";
 import { loginAction, signupAction } from "../redux/actions/customer.actions";
 import { SCREEN_NAMES } from "../AppNavigator";
-import { customerIsAuthenticated } from "../utils";
 
 class LoginPage extends Component {
   constructor(props) {
@@ -41,18 +40,6 @@ class LoginPage extends Component {
       login_form: true
     };
   }
-
-  // componentWillMount = () => {
-  //   if (customerIsAuthenticated(this.props.user)) {
-  //     this.navigateToDashboard(this.props.customer);
-  //   }
-  // };
-
-  // componentWillReceiveProps = next_props => {
-  //   if (customerIsAuthenticated(next_props.user)) {
-  //     this.navigateToDashboard(next_props.customer);
-  //   }
-  // };
 
   login = inputs => {
     const [email, password] = inputs.map(input => input._lastNativeText);

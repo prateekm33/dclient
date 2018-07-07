@@ -45,7 +45,6 @@ class RewardPage extends Component {
       const reward = results[1] || results[0];
       if (!reward) return;
       if (results[1]) reward_joined = true;
-      console.warn("------>>>>", results[0], results[1]);
       this.setState({ reward, vendor: reward.vendor, reward_joined });
     });
   };

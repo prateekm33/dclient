@@ -28,7 +28,7 @@ export const loadDataFromStorage = () => {
 export const initAction = () => dispatch => {
   dispatch({ type: loading_types.INITIALIZING_APP, loading: true });
   PushNotifications.init(device_token => {
-    dispatch(saveUserData({ device_token }));
+    dispatch(saveCustomerData({ device_token }));
   });
   PushNotificationIOS.getDeliveredNotifications(notifications => {
     dispatch(setNotifications(notifications));
