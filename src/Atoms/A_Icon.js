@@ -101,6 +101,12 @@ const A_Icon_Reward = props => (
     Icon={<Image {...props} source={require("../assets/reward_icon.png")} />}
   />
 );
+const A_Icon_Details = props => (
+  <A_Icon
+    {...props}
+    Icon={<Image {...props} source={require("../assets/reward_icon.png")} />}
+  />
+);
 
 export {
   A_Icon_View,
@@ -116,5 +122,6 @@ export {
   A_Icon_Share,
   A_Icon_Close,
   A_Icon_Deal,
-  A_Icon_Reward
+  A_Icon_Reward,
+  A_Icon_Details
 };

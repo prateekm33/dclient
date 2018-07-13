@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "../redux";
 import PropTypes from "prop-types";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
-import { A_Button_Opacity, A_Icon_Deal, A_Icon_Reward } from "../Atoms";
+import { A_Button_Opacity, A_Icon_Deal, A_Icon_Reward, A_View } from "../Atoms";
 
 import { getResponsiveCSSFrom8 } from "../utils";
 import { SCREEN_NAMES, UNAUTH_ROUTES } from "../AppNavigator";
 
 const O_MenuBar = props => {
   return (
-    <View style={props.containerStyle}>
+    <A_View style={props.containerStyle}>
       {props.items.map((Item, idx) => (
         <A_Button_Opacity
           onPress={() => props.onItemSelect(idx, Item)}
@@ -23,7 +23,7 @@ const O_MenuBar = props => {
           <Item idx={idx} />
         </A_Button_Opacity>
       ))}
-    </View>
+    </A_View>
   );
 };
 O_MenuBar.propTypes = {
@@ -35,11 +35,20 @@ O_MenuBar.propTypes = {
 class O_MenuBar_Main_Pre extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      activeIdx: 0,
-      items: this.getInitialItems()
-    };
+    this.state = this.getFreshState();
   }
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.customer.uuid !== this.props.customer.uuid) {
+      this.setState(this.getFreshState());
+    }
+  };
+  getFreshState = () => {
+    return {
+      activeIdx: 0,
+      items: this.getInitialItems(),
+      menu_inactive: true
+    };
+  };
 
   getInitialItems = () => [A_Icon_Deal, A_Icon_Reward];
 
@@ -60,19 +69,34 @@ class O_MenuBar_Main_Pre extends Component {
     if (idx === 0) return this.navigateToDealsPage();
     if (idx === 1) return this.navigateToRewardsPage();
   };
+
+  toggleMenu = () => {
+    this.setState({ menu_inactive: !this.state.menu_inactive });
+  };
   render() {
     const current_route = this.props.navigation.state.routeName;
     if (current_route in UNAUTH_ROUTES) return null;
-    const containerStyle = [style.mainFlavorContainer];
-    containerStyle.push(style.horizontalContainer);
     return (
-      <O_MenuBar
-        activeItem={this.state.activeIdx}
-        items={this.state.items}
-        containerStyle={containerStyle}
-        label="main"
-        onItemSelect={this.onItemSelect}
-      />
+      <A_View
+        style={[
+          style.peekabooContainer,
+          !this.state.menu_inactive && style.activeContainer
+        ]}
+      >
+        <A_Button_Opacity
+          style={style.containerHandleBar}
+          onPress={this.toggleMenu}
+        />
+        {!this.state.menu_inactive && (
+          <O_MenuBar
+            activeItem={this.state.activeIdx}
+            items={this.state.items}
+            containerStyle={[style.mainContainerStyle]}
+            label="main"
+            onItemSelect={this.onItemSelect}
+          />
+        )}
+      </A_View>
     );
   }
 }
@@ -80,32 +104,45 @@ O_MenuBar_Main_Pre.propTypes = {
   vertical: PropTypes.bool
 };
 const O_MenuBar_Main = connect(state => ({
-  navigation: state.navigation
+  navigation: state.navigation,
+  customer: state.customer
 }))(O_MenuBar_Main_Pre);
 
 const style = StyleSheet.create({
-  horizontalContainer: {
-    width: "100%",
-    height: getResponsiveCSSFrom8(50).height,
+  peekabooContainer: {
+    position: "absolute",
     bottom: 0,
+    left: 0,
+    right: 0,
+    height: getResponsiveCSSFrom8(30).width,
+    backgroundColor: "white",
+    borderTopWidth: 0.5,
+    borderTopColor: "#bdbdbd",
+    shadowRadius: getResponsiveCSSFrom8(3).width,
+    shadowOffset: {
+      width: 0,
+      height: getResponsiveCSSFrom8(-2).height
+    },
+    shadowColor: "lightgrey",
+    shadowOpacity: 1
+  },
+
+  containerHandleBar: {
+    width: getResponsiveCSSFrom8(50).width,
+    height: getResponsiveCSSFrom8(10).height,
+    backgroundColor: "grey",
+    marginTop: getResponsiveCSSFrom8(5).height,
     alignSelf: "center",
-    display: "flex",
+    borderRadius: getResponsiveCSSFrom8(5).width,
+    marginBottom: getResponsiveCSSFrom8(10).height
+  },
+  activeContainer: {
+    height: getResponsiveCSSFrom8(80).width
+  },
+  mainContainerStyle: {
     flexDirection: "row",
     flexWrap: "nowrap",
-    paddingBottom: getResponsiveCSSFrom8(50).height,
-    borderTopWidth: 1,
-    borderTopColor: "lightgrey"
-  },
-  menuItem: {
-    flex: 1,
-    alignItems: "center"
-  },
-  activeMenuItem: {
-    borderWidth: 1.5
-  },
-  mainFlavorContainer: {
-    position: "absolute",
-    backgroundColor: "white"
+    justifyContent: "space-between"
   }
 });
 

@@ -5,7 +5,7 @@ import error_types from "../types/error.types";
 
 export const fetchVendorDetailsAction = vendor_uuid => dispatch => {
   dispatch({ type: loading_types.FETCHING_VENDOR_DETAILS, loading: true });
-  return Api.getVendor(vendor_uuid)
+  return Api.getVendors(vendor_uuid)
     .then(vendor => {
       dispatch({ type: loading_types.FETCHING_VENDOR_DETAILS, loading: false });
       return vendor;
@@ -13,6 +13,41 @@ export const fetchVendorDetailsAction = vendor_uuid => dispatch => {
     .catch(error => {
       dispatch({ type: loading_types.FETCHING_VENDOR_DETAILS, loading: false });
       dispatchErrorActionOfType(error_types.FETCHING_VENDOR_DETAILS_ERROR)(
+        error
+      );
+      return false;
+    });
+};
+
+export const fetchAllVendorsAction = (limit, offset) => dispatch => {
+  dispatch({ type: loading_types.FETCHING_ALL_VENDORS, loading: true });
+  return Api.getVendors(null, { limit, offset, type: "all" })
+    .then(vendors => {
+      dispatch({ type: loading_types.FETCHING_ALL_VENDORS, loading: false });
+      return vendors;
+    })
+    .catch(error => {
+      dispatch({ type: loading_types.FETCHING_ALL_VENDORS, loading: false });
+      dispatchErrorActionOfType(error_types.FETCHING_ALL_VENDORS_ERROR)(error);
+      return false;
+    });
+};
+export const fetchFollowingVendorsAction = (limit, offset) => dispatch => {
+  dispatch({ type: loading_types.FETCHING_FOLLOWED_VENDORS, loading: true });
+  return Api.getVendors(null, { limit, offset, type: "following" })
+    .then(vendors => {
+      dispatch({
+        type: loading_types.FETCHING_FOLLOWED_VENDORS,
+        loading: false
+      });
+      return vendors;
+    })
+    .catch(error => {
+      dispatch({
+        type: loading_types.FETCHING_FOLLOWED_VENDORS,
+        loading: false
+      });
+      dispatchErrorActionOfType(error_types.FETCHING_FOLLOWED_VENDORS_ERROR)(
         error
       );
       return false;

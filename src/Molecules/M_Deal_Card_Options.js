@@ -81,7 +81,39 @@ class M_Reward_Card_Options_Pre extends Component {
 }
 const M_Reward_Card_Options = withNavigation(M_Reward_Card_Options_Pre);
 
-export { M_Deal_Card_Options, M_Reward_Card_Options };
+class M_Vendor_Card_Options_Pre extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  viewVendor = () => {
+    this.props.navigation.navigate(SCREEN_NAMES.VendorPage, {
+      vendor: this.props.vendor
+    });
+  };
+
+  followVendor = () => {
+    console.warn("-----TODO...follow vendor functionality");
+  };
+
+  render() {
+    return (
+      <View style={style.cardOptionsContainerStyle}>
+        <A_Icon_View
+          onPress={this.viewVendor}
+          style={style.cardOptionsIconStyle}
+        />
+        <A_Icon_Follow
+          onPress={this.followVendor}
+          style={style.cardOptionsIconStyle}
+        />
+      </View>
+    );
+  }
+}
+const M_Vendor_Card_Options = withNavigation(M_Vendor_Card_Options_Pre);
+
+export { M_Deal_Card_Options, M_Reward_Card_Options, M_Vendor_Card_Options };
 
 const style = StyleSheet.create({
   cardOptionsContainerStyle: { flexDirection: "row", flexWrap: "nowrap" },

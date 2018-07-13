@@ -47,7 +47,8 @@ class Api {
 
   checkResponseForErrors = unprocessedResponse => {
     return unprocessedResponse.json().then(res => {
-      if (!res || res.error) throw res;
+      if (res && res.error) throw res;
+      if (res === false) throw res;
       return res;
     });
   };
@@ -90,9 +91,10 @@ class Api {
     if (!res) return res;
     const customer = res.customer;
     if (!customer) return res;
-    this.customer = createCustomer(customer);
-    this.saveToken(customer.token);
-    customer.is_authenticated = true;
+    if (res.user_token) this.saveToken(res.user_token);
+    if (customer.uuid === res.user_uuid) {
+      this.customer = createCustomer({ ...customer, is_authenticated: true });
+    }
     return res;
   };
 
@@ -340,10 +342,17 @@ class Api {
     return this.post(config.api.notifications.register, { device_token });
   };
 
-  getVendor = vendor_uuid =>
-    this.get(config.api.vendors.root + "/" + vendor_uuid).then(res =>
-      createVendor(res.vendor)
-    );
+  getVendors = (vendor_uuid, { limit, offset, type }) => {
+    limit = +limit || 20;
+    offset = +offset || 0;
+    let url = config.api.vendors.root;
+    if (vendor_uuid) url + "/" + vendor_uuid;
+    else url += `limit=${limit}&offset=${offset}&type=${type}`;
+    return this.get(url).then(res => {
+      if (res.vendor) return createVendor(res.vendor);
+      else if (res.vendors) return res.vendors.map(createVendor);
+    });
+  };
 
   getDeals = ({ limit, offset }) => {
     limit = +limit || 20;

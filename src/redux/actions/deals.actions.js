@@ -118,3 +118,33 @@ export const unSaveDealAction = (deal_uuid, vendor_uuid) => dispatch => {
       return false;
     });
 };
+
+export const fetchVendorDealsAction = vendor => dispatch => {
+  dispatch({ type: loading_types.FETCHING_VENDOR_DEALS, loading: true });
+  return Api.getVendorDeals({ vendor_uuid: vendor.uuid })
+    .then(deals => {
+      dispatch({ type: loading_types.FETCHING_VENDOR_DEALS, loading: false });
+      return deals;
+    })
+    .catch(error => {
+      dispatch({ type: loading_types.FETCHING_VENDOR_DEALS, loading: false });
+      dispatchErrorActionOfType(error_types.FETCHING_VENDOR_DEALS_ERROR)(error);
+      return false;
+    });
+};
+
+export const fetchVendorRewardsAction = vendor => dispatch => {
+  dispatch({ type: loading_types.FETCHING_VENDOR_REWARDS, loading: true });
+  return Api.getVendorRewards({ vendor_uuid: vendor.uuid })
+    .then(rewards => {
+      dispatch({ type: loading_types.FETCHING_VENDOR_REWARDS, loading: false });
+      return rewards;
+    })
+    .catch(error => {
+      dispatch({ type: loading_types.FETCHING_VENDOR_REWARDS, loading: false });
+      dispatchErrorActionOfType(error_types.FETCHING_VENDOR_REWARDS_ERROR)(
+        error
+      );
+      return false;
+    });
+};

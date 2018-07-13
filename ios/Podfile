@@ -27,11 +27,11 @@ target 'dclient' do
   pod 'react-native-maps', path: '../node_modules/react-native-maps' #<- PATH to your node_modules/react-native-maps directory
   pod 'react-native-google-maps', path: '../node_modules/react-native-maps' #<- PATH to your node_modules/react-native-maps directory
   pod 'Google-Maps-iOS-Utils' # Remove this line if you don't want to support GoogleMaps on iOS
-  
+
   target 'dclient-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
-    pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
 
   end
 

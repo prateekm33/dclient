@@ -53,7 +53,9 @@ export const saveCustomerData = customer => {
     device_token: customer.device_token,
     email: customer.email
   };
-  if (customer.token) _customer.token = customer.token;
+
+  if (Api.token) _customer.token = Api.token;
+  // if (employee.token) _customer.token = employee.token;
   AsyncStorage.mergeItem("customer", JSON.stringify(_customer));
   return {
     type: customer_types.SAVE_CUSTOMER_DATA,

@@ -37,7 +37,7 @@ export const initAction = () => dispatch => {
     .then(Api.getCustomer)
     .then(customer => {
       if (customer) {
-        dispatch(saveCustomerData(customer));
+        dispatch(saveCustomerData({ ...customer, is_authenticated: true }));
       }
       dispatch({ type: loading_types.INITIALIZING_APP, loading: false });
       return customer;

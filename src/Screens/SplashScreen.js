@@ -35,6 +35,7 @@ class SplashScreen extends Component {
 }
 const mapStateToProps = state => ({
   loading: state.LOADING_STATES.isLoading(loading_types.INITIALIZING_APP),
-  is_authenticated: customerIsAuthenticated(state.customer)
+  is_authenticated: customerIsAuthenticated(state.customer),
+  customer: state.customer
 });
 export default connect(mapStateToProps)(SplashScreen);

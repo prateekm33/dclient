@@ -1,11 +1,19 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { connect } from "../redux";
-import ScreenContainer from "../Templates/ScreenContainer";
-import { M_Form } from "../Molecules";
-import { A_Text, A_Button_Opacity } from "../Atoms";
+import ScreenContainer from "chemics/Templates/ScreenContainer";
+import { M_Form } from "chemics/Molecules";
+import { A_Text, A_Button_Opacity, A_View } from "chemics/Atoms";
 import { loginAction, signupAction } from "../redux/actions/customer.actions";
 import { SCREEN_NAMES } from "../AppNavigator";
+import {
+  TEAL_LIGHT,
+  TEAL_DARK_ONE,
+  TEAL_DARK_TWO,
+  TEAL_DARK_THREE,
+  TEAL
+} from "../styles/Colors";
+import { getResponsiveCSSFrom8 } from "../utils";
 
 class LoginPage extends Component {
   constructor(props) {
@@ -66,13 +74,21 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <ScreenContainer noHeader>
+      <ScreenContainer noHeader containerStyle={style.screenContainerStyle}>
         {this.state.login_form ? (
           <M_Form
-            title="Account Log In"
+            title="Dineable"
             label="login_form"
             inputs={this.inputs.slice(0, 2)}
             handleSubmit={this.login}
+            titleStyles={style.titleStyles}
+            formContainerStyles={style.formContainerStyles}
+            inputContainerStyles={style.inputContainerStyles}
+            submitButtonStyles={style.submitButtonStyles}
+            submitButtonTextStyles={style.submitButtonTextStyles}
+            inputStyles={style.inputStyles}
+            inputProps={inputProps}
+            button_text="Log In"
           />
         ) : (
           <M_Form
@@ -80,19 +96,24 @@ class LoginPage extends Component {
             label="signup_form"
             inputs={this.inputs}
             handleSubmit={this.signup}
+            titleStyles={style.titleStyles}
+            formContainerStyles={style.formContainerStyles}
+            inputContainerStyles={style.inputContainerStyles}
+            submitButtonStyles={style.submitButtonStyles}
+            submitButtonTextStyles={style.submitButtonTextStyles}
+            inputStyles={style.inputStyles}
+            inputProps={inputProps}
+            button_text="Sign Up"
           />
         )}
-        <View>
-          <A_Text>
-            {this.state.login_form
-              ? "New to Dineable? Welcome!"
-              : "Already have Dineable accout? Great!"}
-          </A_Text>
+        <A_View>
           <A_Button_Opacity
             value={this.state.login_form ? "Sign up!" : "Log in!"}
             onPress={this.toggleForm}
+            buttonTextStyles={style.switchFormButtonTextStyles}
+            style={style.switchFormButtonStyles}
           />
-        </View>
+        </A_View>
       </ScreenContainer>
     );
   }
@@ -101,3 +122,54 @@ class LoginPage extends Component {
 export default connect(state => ({
   customer: state.customer
 }))(LoginPage);
+
+const style = StyleSheet.create({
+  screenContainerStyle: {
+    justifyContent: "center",
+    paddingHorizontal: getResponsiveCSSFrom8(30).width,
+    backgroundColor: TEAL
+  },
+  titleStyles: {
+    fontSize: getResponsiveCSSFrom8(30).height,
+    marginBottom: getResponsiveCSSFrom8(50).height,
+    color: TEAL_DARK_THREE
+  },
+  formContainerStyles: {
+    alignSelf: "center",
+    width: "100%",
+    alignItems: "center"
+  },
+  inputContainerStyles: {},
+  submitButtonStyles: {
+    marginTop: getResponsiveCSSFrom8(20).height,
+    width: getResponsiveCSSFrom8(280).width,
+    backgroundColor: TEAL_DARK_TWO
+  },
+  submitButtonTextStyles: {
+    color: "white"
+  },
+  inputStyles: {
+    textAlign: "center",
+    color: TEAL_DARK_ONE
+  },
+  switchFormContainerStyles: {
+    marginTop: getResponsiveCSSFrom8(20).height,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center"
+  },
+  switchFormContainerTextStyles: {
+    marginRight: getResponsiveCSSFrom8(10).width
+  },
+  switchFormButtonTextStyles: {
+    fontSize: getResponsiveCSSFrom8(20).height
+  },
+  switchFormButtonStyles: {
+    alignItems: "center",
+    width: "100%"
+  }
+});
+
+const inputProps = {
+  placeholderTextColor: TEAL_LIGHT
+};

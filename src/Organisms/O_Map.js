@@ -14,10 +14,10 @@ class O_Map extends Component {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
       },
-      markers: []
+      region_set: false
     };
   }
-  componentWillMount = () => {
+  componentDidMount = () => {
     navigator.geolocation.getCurrentPosition(
       a => {
         const { latitude, longitude } = a.coords;
@@ -25,8 +25,8 @@ class O_Map extends Component {
           region: {
             latitude,
             longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
+            latitudeDelta: 0.3,
+            longitudeDelta: 0.3
           }
         });
       },
@@ -36,7 +36,12 @@ class O_Map extends Component {
     );
   };
 
-  onRegionChange = region => this.setState({ region });
+  onMapReady = () => this.setState({ region_set: true });
+
+  onRegionChange = region => {
+    if (!this.state.region_set) return;
+    this.setState({ region });
+  };
 
   renderMarker = (marker, idx) => {
     if (this.props.renderMarker) return this.props.renderMarker(marker, idx);
@@ -56,6 +61,7 @@ class O_Map extends Component {
   };
 
   render() {
+    console.warn(this.state.region);
     return (
       <View>
         <MapView
@@ -63,12 +69,13 @@ class O_Map extends Component {
           followsUserLocation={true}
           region={this.state.region}
           onRegionChange={this.onRegionChange}
+          onMapReady={this.onMapReady}
           style={{
             width: "100%",
             height: "100%"
           }}
         >
-          {this.state.markers.map(this.renderMarker)}
+          {this.props.markers.map(this.renderMarker)}
         </MapView>
       </View>
     );
@@ -76,9 +83,15 @@ class O_Map extends Component {
 }
 
 function getMapMarkerObj(address, title) {
-  console.warn("----TODO....getMapMarkerObj");
-  // TODO...figure out what this object is supposed to look like based off of GMaps API
-  return null;
+  // console.warn("----TODO....getMapMarkerObj", address, title);
+  return {
+    latlng: {
+      latitude: 37.327797,
+      longitude: -122.047632
+    },
+    title: "house",
+    description: " the crib "
+  };
 }
 
 class O_Map_Deals_Pre extends Component {
@@ -88,6 +101,11 @@ class O_Map_Deals_Pre extends Component {
       markers: this.getInitialMarkers()
     };
   }
+
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.deals !== this.props.deals)
+      this.setState({ markers: this.getDealMarkers(nextProps.deals) });
+  };
 
   getInitialMarkers = () => this.getDealMarkers(this.props.deals);
 
@@ -163,4 +181,49 @@ class O_Map_Rewards_Pre extends Component {
 }
 const O_Map_Rewards = connect(state => ({}))(O_Map_Rewards_Pre);
 
-export { O_Map, O_Map_Deals, O_Map_Rewards };
+class O_Map_Vendors_Pre extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      markers: this.getInitialMarkers()
+    };
+  }
+
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.vendors !== this.props.vendors)
+      this.setState({ markers: this.getVendorMarkers(nextProps.vendors) });
+  };
+
+  getInitialMarkers = () => this.getVendorMarkers(this.props.vendors);
+
+  getVendorMarkers = vendors =>
+    vendors.map(vendor => getMapMarkerObj(vendor.address, vendor.name));
+
+  renderVendorMarker = (marker, idx) => {
+    return (
+      <Marker
+        coordinate={marker.latlng}
+        key={`vendor-marker-${marker.title}-${idx}`}
+      >
+        <M_MapMarkerCallout_Restaurant
+          title={marker.title}
+          description={marker.description}
+        />
+      </Marker>
+    );
+  };
+
+  render() {
+    return (
+      <View style={this.props.mapContainerStyle}>
+        <O_Map
+          markers={this.state.markers}
+          renderMarker={this.renderVendorMarker}
+        />
+      </View>
+    );
+  }
+}
+const O_Map_Vendors = connect(state => ({}))(O_Map_Vendors_Pre);
+
+export { O_Map, O_Map_Deals, O_Map_Rewards, O_Map_Vendors };

@@ -1,6 +1,6 @@
 import DataModel from "./Data.model";
-import { Location } from "./Location.model";
-import { Rating } from "./Rating.model";
+import { Location, createLocation } from "./Location.model";
+import { Rating, createRating } from "./Rating.model";
 import { Deal } from "./Deal.model";
 import phone from "phone";
 
@@ -9,8 +9,9 @@ export class Vendor extends DataModel {
     name: { type: String, default: "" },
     location: {
       type: Location,
-      default: () => new Location()
+      default: val => createLocation(val)
     },
+    address: { type: String, default: "" },
     business_phone: {
       type: String,
       default: "",
@@ -19,7 +20,7 @@ export class Vendor extends DataModel {
     business_email: { type: String, default: "" },
     rating: {
       type: Rating,
-      default: () => new Rating()
+      default: val => createRating(val)
     },
     deals: {
       type: Array,

@@ -11,8 +11,8 @@ export const SCREEN_NAMES = {
   DealsPage: "DealsPage",
   ProfilePage: "ProfilePage",
   RedeemPage: "RedeemPage",
-  RestaurantPage: "RestaurantPage",
-  RestaurantsPage: "RestaurantsPage",
+  VendorPage: "VendorPage",
+  VendorsPage: "VendorsPage",
   RewardPage: "RewardPage",
   RewardsPage: "RewardsPage"
 };
@@ -39,7 +39,7 @@ const Screens = [
   [SCREEN_NAMES.DealsPage, require("./Screens/DealsPage")],
   [SCREEN_NAMES.ProfilePage, require("./Screens/ProfilePage")],
   [SCREEN_NAMES.RedeemPage, require("./Screens/RedeemPage")],
-  [SCREEN_NAMES.RestaurantPage, require("./Screens/RestaurantPage")],
+  [SCREEN_NAMES.VendorPage, require("./Screens/VendorPage")],
   [SCREEN_NAMES.RewardPage, require("./Screens/RewardPage")],
   [SCREEN_NAMES.RewardsPage, require("./Screens/RewardsPage")]
 ];
