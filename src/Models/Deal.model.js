@@ -10,7 +10,7 @@ export class Deal extends DataModel {
     long_desc: { type: String, default: "" },
     vendor: {
       type: Vendor,
-      default: () => new Vendor()
+      default: params => new Vendor(params)
     },
     vendor_uuid: { type: String, default: () => uuid() },
     code: {
@@ -36,17 +36,9 @@ export class Deal extends DataModel {
       }
     }
   };
-  constructor(params) {
-    if (params && params.vendor) {
-      params.vendor =
-        params.vendor instanceof Vendor
-          ? params.vendor
-          : createVendor(params.vendor);
-    }
-    super(params);
-  }
 
-  getFormattedExpiration = () => this.expiration.format("");
+  getFormattedExpiration = format =>
+    this.expiration ? this.expiration.format(format || "MM/DD/YY") : null;
 }
 export const createDeal = params => new Deal(params);
 

@@ -7,23 +7,18 @@ import navigation_types from "./redux/types/navigation.types";
 export const SCREEN_NAMES = {
   SplashScreen: "SplashScreen",
   LoginPage: "LoginPage",
-  DealPage: "DealPage",
+  DealPage: "DealPage", // TODO...back button
   DealsPage: "DealsPage",
   ProfilePage: "ProfilePage",
-  RedeemPage: "RedeemPage",
-  VendorPage: "VendorPage",
+  RedeemPage: "RedeemPage", // TODO...modal
+  VendorPage: "VendorPage", // TODO...back button
   VendorsPage: "VendorsPage",
-  RewardPage: "RewardPage",
+  RewardPage: "RewardPage", // TODO...back button
   RewardsPage: "RewardsPage"
 };
 
 export const INITIAL_ROUTE_NAME = SCREEN_NAMES.SplashScreen;
 export const BACKLESS_ROUTES = {
-  SplashScreen: true,
-  LoginPage: true
-};
-export const BURGERLESS = {};
-export const HEADERLESS_ROUTES = {
   SplashScreen: true,
   LoginPage: true
 };
@@ -35,12 +30,13 @@ export const UNAUTH_ROUTES = {
 const Screens = [
   [SCREEN_NAMES.SplashScreen, require("./Screens/SplashScreen")],
   [SCREEN_NAMES.LoginPage, require("./Screens/LoginPage")],
-  [SCREEN_NAMES.DealPage, require("./Screens/DealPage")],
+  [SCREEN_NAMES.DealPage, require("./Screens/DealPage")], // TODO...back button
   [SCREEN_NAMES.DealsPage, require("./Screens/DealsPage")],
   [SCREEN_NAMES.ProfilePage, require("./Screens/ProfilePage")],
-  [SCREEN_NAMES.RedeemPage, require("./Screens/RedeemPage")],
-  [SCREEN_NAMES.VendorPage, require("./Screens/VendorPage")],
-  [SCREEN_NAMES.RewardPage, require("./Screens/RewardPage")],
+  [SCREEN_NAMES.RedeemPage, require("./Screens/RedeemPage")], // TODO...modal
+  [SCREEN_NAMES.VendorPage, require("./Screens/VendorPage")], // TODO...back button
+  [SCREEN_NAMES.VendorsPage, require("./Screens/VendorsPage")],
+  [SCREEN_NAMES.RewardPage, require("./Screens/RewardPage")], // TODO...back button
   [SCREEN_NAMES.RewardsPage, require("./Screens/RewardsPage")]
 ];
 

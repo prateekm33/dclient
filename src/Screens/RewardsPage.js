@@ -1,19 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "../redux";
-import { View } from "react-native";
-import ScreenContainer from "../Templates/ScreenContainer";
-import { O_Map_Rewards, O_List_Rewards } from "../Organisms";
+import ScreenContainer from "chemics/Templates/ScreenContainer";
+import { O_Map_Rewards } from "../Organisms";
 import {
   A_Icon_All,
   A_Icon_Saved,
   A_Icon_Map,
   A_Icon_List,
-  A_Button
-} from "../Atoms";
+  A_Button,
+  A_View,
+  A_ListContainer
+} from "chemics/Atoms";
+import { M_Card_LoyaltyReward_Mini } from "chemics/Molecules";
 import {
   fetchAllRewardsCardsAction,
   fetchMyRewardsCardsAction
 } from "../redux/actions/rewards.actions";
+import { SCREEN_NAMES } from "../AppNavigator";
+import { getResponsiveCSSFrom8 } from "../../node_modules/chemics/utils";
 
 class RewardsPage extends Component {
   constructor(props) {
@@ -83,16 +87,28 @@ class RewardsPage extends Component {
   showListView = () => this.setState({ map_view: false });
   renderPageOptions = () => {
     return (
-      <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
+      <A_View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
         <A_Icon_Map onPress={this.showMapView} disabled={this.state.map_view} />
         <A_Icon_List
           onPress={this.showListView}
           disabled={!this.state.map_view}
         />
-      </View>
+      </A_View>
     );
   };
 
+  renderReward = ({ item }) => {
+    return (
+      <M_Card_LoyaltyReward_Mini
+        deal={item}
+        onPress={() => {
+          return this.props.navigation.navigate(SCREEN_NAMES.RewardPage, {
+            reward: item
+          });
+        }}
+      />
+    );
+  };
   render() {
     return (
       <ScreenContainer
@@ -102,16 +118,20 @@ class RewardsPage extends Component {
         {this.state.map_view ? (
           <O_Map_Rewards rewards={this.state.rewards} />
         ) : (
-          <View>
-            <O_List_Rewards rewards={this.state.rewards} />
+          <A_View style={{ marginBottom: getResponsiveCSSFrom8(100).height }}>
+            <A_ListContainer
+              data={this.state.rewards}
+              keyExtractor={item => `reward-${item.code}`}
+              renderItem={this.renderReward}
+            />
             <A_Button
               disabled={this.state.all_fetched}
               onPress={this.loadMore}
               value={this.state.all_fetched ? "ALL LOADED" : "LOAD MORE"}
             />
-          </View>
+          </A_View>
         )}
-        <View
+        <A_View
           style={{
             position: "absolute",
             top: 30,
@@ -122,7 +142,7 @@ class RewardsPage extends Component {
         >
           <A_Icon_All onPress={this.showFlavorAll} />
           <A_Icon_Saved onPress={this.showFlavorMine} />
-        </View>
+        </A_View>
       </ScreenContainer>
     );
   }

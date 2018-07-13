@@ -94,7 +94,11 @@ class Api {
     if (res.user_token) this.saveToken(res.user_token);
     if (customer.uuid === res.user_uuid) {
       this.customer = createCustomer({ ...customer, is_authenticated: true });
-    }
+    } else if (!this.customer && res.customer)
+      this.customer = createCustomer({
+        ...res.customer,
+        is_authenticated: true
+      });
     return res;
   };
 

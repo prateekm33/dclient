@@ -26,7 +26,7 @@ export const loginAction = creds => (dispatch, getState) => {
     });
 };
 
-export const signupAction = creds => dispatch => {
+export const signupAction = creds => (dispatch, getState) => {
   dispatch({ type: loading_types.SIGNING_UP_CUSTOMER, loading: true });
   return Api.signupCustomer(creds)
     .then(customer => {

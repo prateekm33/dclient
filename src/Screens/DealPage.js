@@ -19,6 +19,8 @@ import {
   createMyDealAction
 } from "../redux/actions/deals.actions";
 import { MyDeal } from "../Models";
+import { MAIN_SCREEN_NAMES } from "../MainNavigator";
+import { MODAL_SCREEN_NAMES } from "../ModalNavigator";
 
 class DealPage extends Component {
   constructor(props) {
@@ -85,9 +87,15 @@ class DealPage extends Component {
         console.warn("--TODO: DISPLAY STATE ERROR : something went wrong");
         return;
       }
-      this.props.navigation.navigate(SCREEN_NAMES.RedeemPage, {
-        deal: this.state.deal
+
+      this.props.mainNavigation.navigate(MAIN_SCREEN_NAMES.ModalNavigator, {
+        routeName: MODAL_SCREEN_NAMES.RedeemModal,
+        params: { deal: this.state.deal }
       });
+
+      // this.props.navigation.navigate(SCREEN_NAMES.RedeemPage, {
+      //   deal: this.state.deal
+      // });
     });
   };
 

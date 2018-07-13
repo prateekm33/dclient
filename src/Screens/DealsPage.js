@@ -1,19 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "../redux";
-import { View } from "react-native";
-import ScreenContainer from "../Templates/ScreenContainer";
-import { O_Map_Deals, O_List_Deals } from "../Organisms";
+import ScreenContainer from "chemics/Templates/ScreenContainer";
+import { O_Map_Deals } from "../Organisms";
 import {
   A_Icon_All,
   A_Icon_Saved,
   A_Icon_Map,
   A_Icon_List,
-  A_Button
-} from "../Atoms";
+  A_Button_Opacity,
+  A_View,
+  A_ListContainer
+} from "chemics/Atoms";
+import { M_Card_Deal_Mini } from "chemics/Molecules";
 import {
   fetchAllDealsAction,
   fetchSavedDealsAction
 } from "../redux/actions/deals.actions";
+import { SCREEN_NAMES } from "../AppNavigator";
+import { getResponsiveCSSFrom8 } from "../utils";
+import { TEAL_DARK_THREE } from "../../node_modules/chemics/styles/Colors";
 
 class DealsPage extends Component {
   constructor(props) {
@@ -63,21 +68,21 @@ class DealsPage extends Component {
 
   showFlavorAll = () => {
     if (this.state.flavor === "all") return;
-    this.setState({ all_fetched: false, offset: 0, deals: [] }, () => {
-      this.fetchDeals(fetchAllDealsAction).then(res => {
-        if (res.end) return;
-        this.setState({ flavor: "all" });
-      });
-    });
+    this.setState(
+      { all_fetched: false, offset: 0, deals: [], flavor: "all" },
+      () => {
+        this.fetchDeals(fetchAllDealsAction);
+      }
+    );
   };
   showFlavorSaved = () => {
     if (this.state.flavor === "saved") return;
-    this.setState({ all_fetched: false, offset: 0, deals: [] }, () => {
-      this.fetchDeals(fetchSavedDealsAction).then(res => {
-        if (res.end) return;
-        this.setState({ flavor: "saved" });
-      });
-    });
+    this.setState(
+      { all_fetched: false, offset: 0, deals: [], flavor: "saved" },
+      () => {
+        this.fetchDeals(fetchSavedDealsAction);
+      }
+    );
   };
 
   showMapView = () => this.setState({ map_view: true });
@@ -85,34 +90,63 @@ class DealsPage extends Component {
 
   renderPageOptions = () => {
     return (
-      <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
+      <A_View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
         <A_Icon_Map onPress={this.showMapView} disabled={this.state.map_view} />
         <A_Icon_List
           onPress={this.showListView}
           disabled={!this.state.map_view}
         />
-      </View>
+      </A_View>
+    );
+  };
+  renderDeal = ({ item }) => {
+    return (
+      <M_Card_Deal_Mini
+        deal={item}
+        onPress={() => {
+          return this.props.navigation.navigate(SCREEN_NAMES.DealPage, {
+            deal: item
+          });
+        }}
+      />
     );
   };
   render() {
     return (
       <ScreenContainer
         title="Deals"
+        statusBarStyle="dark-content"
         rightHeaderComponent={this.renderPageOptions()}
+        rightHeaderComponentStyle={{}}
+        scrollView={!this.state.map_view}
       >
         {this.state.map_view ? (
           <O_Map_Deals deals={this.state.deals} />
         ) : (
-          <View>
-            <O_List_Deals deals={this.state.deals} />
-            <A_Button
+          <A_View style={{ marginBottom: getResponsiveCSSFrom8(100).height }}>
+            <A_ListContainer
+              data={this.state.deals}
+              keyExtractor={item => `deal-${item.code}`}
+              renderItem={this.renderDeal}
+            />
+            <A_Button_Opacity
               disabled={this.state.all_fetched}
               onPress={this.loadMore}
               value={this.state.all_fetched ? "ALL LOADED" : "LOAD MORE"}
+              style={{
+                backgroundColor: "white",
+                borderWidth: 1,
+                borderColor: TEAL_DARK_THREE
+              }}
+              buttonTextStyles={{
+                color: TEAL_DARK_THREE,
+                textAlign: "center"
+              }}
+              strong
             />
-          </View>
+          </A_View>
         )}
-        <View
+        <A_View
           style={{
             position: "absolute",
             top: 30,
@@ -123,7 +157,7 @@ class DealsPage extends Component {
         >
           <A_Icon_All onPress={this.showFlavorAll} />
           <A_Icon_Saved onPress={this.showFlavorSaved} />
-        </View>
+        </A_View>
       </ScreenContainer>
     );
   }

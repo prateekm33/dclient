@@ -2,7 +2,6 @@ import React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { APP_BACKGROUND_COLOR } from "../styles/defaults";
 import { M_Header_Main } from "../Molecules";
-import { O_MenuBar_Main } from "../Organisms";
 
 export default props => (
   <View style={[style.container, props.containerStyle]}>
@@ -18,7 +17,6 @@ export default props => (
     ) : (
       props.children
     )}
-    <O_MenuBar_Main />
   </View>
 );
 const style = StyleSheet.create({

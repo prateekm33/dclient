@@ -13,6 +13,8 @@ import {
   fetchRewardDetailsAction,
   subscribeToRewardCardAction
 } from "../redux/actions/rewards.actions";
+import { MAIN_SCREEN_NAMES } from "../MainNavigator";
+import { MODAL_SCREEN_NAMES } from "../ModalNavigator";
 
 class RewardPage extends Component {
   constructor(props) {
@@ -86,17 +88,33 @@ class RewardPage extends Component {
   };
 
   redeem = () => {
-    this.props.navigation.navigate(SCREEN_NAMES.RedeemPage, {
-      reward: this.state.reward,
-      reward_type: "reward_redeem",
-      points_to_redeem: this.state.points_to_redeem
+    this.props.mainNavigation.navigate(MAIN_SCREEN_NAMES.ModalNavigator, {
+      routeName: MODAL_SCREEN_NAMES.RedeemModal,
+      params: {
+        reward: this.state.reward,
+        reward_type: "reward_redeem",
+        points_to_redeem: this.state.points_to_redeem
+      }
     });
+
+    // this.props.navigation.navigate(SCREEN_NAMES.RedeemPage, {
+    //   reward: this.state.reward,
+    //   reward_type: "reward_redeem",
+    //   points_to_redeem: this.state.points_to_redeem
+    // });
   };
   earn = () => {
-    this.props.navigation.navigate(SCREEN_NAMES.RedeemPage, {
-      reward: this.state.reward,
-      reward_type: "reward_earn"
+    this.props.mainNavigation.navigate(MAIN_SCREEN_NAMES.ModalNavigator, {
+      routeName: MODAL_SCREEN_NAMES.RedeemModal,
+      params: {
+        reward: this.state.reward,
+        reward_type: "reward_earn"
+      }
     });
+    // this.props.navigation.navigate(SCREEN_NAMES.RedeemPage, {
+    //   reward: this.state.reward,
+    //   reward_type: "reward_earn"
+    // });
   };
 
   setNumPointsToRedeem = points_to_redeem =>
