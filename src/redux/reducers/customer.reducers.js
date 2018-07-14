@@ -26,22 +26,23 @@ export default {
         );
       case customer_types.SAVE_CUSTOMER_DATA:
         return updateCustomer(state, action.customer);
+
       default:
         return state || createCustomer();
     }
   }
 };
 function setSavedDealsToCustomer(customer, deals) {
-  return customer.renew({ favorite_deals: deals });
+  return customer.renew({ saved_deals: deals });
 }
 function addSavedDealToCustomer(customer, deal) {
   return customer.renew({
-    favorite_deals: customer.favorite_deals.concat(deal)
+    saved_deals: customer.saved_deals.concat(deal)
   });
 }
 function removeSavedDealFromCustomer(customer, deal_uuid, vendor_uuid) {
   return customer.renew({
-    favorite_deals: customer.favorite_deals.map(
+    saved_deals: customer.saved_deals.map(
       deal => deal.vendor_uuid !== vendor_uuid || deal.uuid !== deal_uuid
     )
   });

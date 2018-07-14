@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Platform } from "react-native";
 import { connect } from "../redux";
 import ScreenContainer from "chemics/Templates/ScreenContainer";
 import { O_Map_Deals } from "../Organisms";
@@ -114,12 +115,37 @@ class DealsPage extends Component {
   render() {
     return (
       <ScreenContainer
-        title="Deals"
+        title={this.state.flavor === "all" ? "All Deals" : "Saved Deals"}
         statusBarStyle="dark-content"
         rightHeaderComponent={this.renderPageOptions()}
         rightHeaderComponentStyle={{}}
         scrollView={!this.state.map_view}
+        innerContainerStyle={{ padding: 0 }}
       >
+        <A_View
+          style={[
+            {
+              backgroundColor: "white",
+              flexDirection: "row",
+              flexWrap: "nowrap",
+              padding: getResponsiveCSSFrom8(10).width
+            },
+            this.state.map_view && {
+              position: "absolute",
+              ...Platform.select({
+                ios: { zIndex: 1000 },
+                android: { elevation: 1000 }
+              }),
+              borderBottomWidth: 1,
+              borderBottomColor: "lightgrey",
+              borderRightWidth: 1,
+              borderRightColor: "lightgrey"
+            }
+          ]}
+        >
+          <A_Icon_All onPress={this.showFlavorAll} />
+          <A_Icon_Saved onPress={this.showFlavorSaved} />
+        </A_View>
         {this.state.map_view ? (
           <O_Map_Deals deals={this.state.deals} />
         ) : (
@@ -146,24 +172,10 @@ class DealsPage extends Component {
             />
           </A_View>
         )}
-        <A_View
-          style={{
-            position: "absolute",
-            top: 30,
-            backgroundColor: "white",
-            flexDirection: "row",
-            flexWrap: "nowrap"
-          }}
-        >
-          <A_Icon_All onPress={this.showFlavorAll} />
-          <A_Icon_Saved onPress={this.showFlavorSaved} />
-        </A_View>
       </ScreenContainer>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  // savedDeals: state.customer.getFavoriteDeals()
-});
+const mapStateToProps = state => ({});
 export default connect(mapStateToProps)(DealsPage);

@@ -3,7 +3,7 @@ import { connect } from "./redux";
 import { View } from "react-native";
 import { StackNavigator } from "react-navigation";
 import { O_MenuBar_Main } from "chemics/Organisms";
-import { A_Icon_Deal, A_Icon_Reward } from "chemics/Atoms";
+import { A_Icon_Deal, A_Icon_Reward, A_Icon_Profile } from "chemics/Atoms";
 import { SCREEN_NAMES } from "./AppNavigator";
 
 export const MAIN_SCREEN_NAMES = {
@@ -72,6 +72,7 @@ class MenuBarMain_Pre extends Component {
   navigateTo = idx => {
     if (idx === 0) return this.navigateToDealsPage();
     if (idx === 1) return this.navigateToRewardsPage();
+    if (idx === 2) return this.navigateToProfilePage();
   };
   navigateToDealsPage = () => {
     this.props.navigation.resetTo(SCREEN_NAMES.DealsPage);
@@ -79,15 +80,19 @@ class MenuBarMain_Pre extends Component {
   navigateToRewardsPage = () => {
     this.props.navigation.resetTo(SCREEN_NAMES.RewardsPage);
   };
+  navigateToProfilePage = () => {
+    this.props.navigation.resetTo(SCREEN_NAMES.ProfilePage);
+  };
 
   render() {
     if (!this.props.customer || !this.props.customer.is_authenticated)
       return null;
     return (
       <O_MenuBar_Main
-        items={[A_Icon_Deal, A_Icon_Reward]}
+        items={[A_Icon_Deal, A_Icon_Reward, A_Icon_Profile]}
         navigateTo={this.navigateTo}
         shouldGetFreshState={this.shouldGetFreshState}
+        plain={true}
       />
     );
   }

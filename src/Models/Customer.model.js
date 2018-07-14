@@ -12,7 +12,7 @@ export class Customer extends BaseUser {
       default: ""
     },
     device_uuid: { type: String, default: "" },
-    favorite_deals: {
+    saved_deals: {
       type: Array,
       verifyValue: value => {
         return value.map(
@@ -37,7 +37,9 @@ export class Customer extends BaseUser {
     return trimmed;
   }
 
-  getFavoriteDeals = () => this.favorite_deals;
+  fullName = () => (this.first_name || "") + " " + (this.last_name || "");
+
+  getSavedDeals = () => this.saved_deals;
 
   getScannableCustomer = () => {
     /**

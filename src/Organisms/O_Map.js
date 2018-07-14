@@ -61,7 +61,6 @@ class O_Map extends Component {
   };
 
   render() {
-    console.warn(this.state.region);
     return (
       <View>
         <MapView

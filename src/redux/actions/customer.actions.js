@@ -62,3 +62,40 @@ export const saveCustomerData = customer => {
     customer
   };
 };
+
+export const updateCustomerAction = updates => dispatch => {
+  dispatch({ type: loading_types.UPDATING_CUSTOMER, loading: true });
+  return Api.updateCustomer(updates)
+    .then(customer => {
+      dispatch({ type: loading_types.UPDATING_CUSTOMER, loading: false });
+      dispatch({ type: customer_types.SAVE_CUSTOMER_DATA, customer });
+      return customer;
+    })
+    .catch(error => {
+      dispatch({ type: loading_types.UPDATING_CUSTOMER, loading: false });
+      dispatchErrorActionOfType(error_types.UPDATING_CUSTOMER_ERROR)(error);
+      return false;
+    });
+};
+
+export const sendPWChangeEmailAction = () => dispatch => {
+  dispatch({ type: loading_types.SENDING_PW_RECOVERY_EMAIL, loading: true });
+  return Api.changePasswordRequest()
+    .then(() => {
+      dispatch({
+        type: loading_types.SENDING_PW_RECOVERY_EMAIL,
+        loading: false
+      });
+      return true;
+    })
+    .catch(error => {
+      dispatch({
+        type: loading_types.SENDING_PW_RECOVERY_EMAIL,
+        loading: false
+      });
+      dispatchErrorActionOfType(error_types.SENDING_PW_RECOVERY_EMAIL_ERROR)(
+        error
+      );
+      return false;
+    });
+};

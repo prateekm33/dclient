@@ -422,6 +422,11 @@ class Api {
         deal_uuid
     );
 
+  changePasswordRequest = () =>
+    this.post(config.api.customer.password.forgot, {
+      customer: { email: this.customer.email }
+    }).then(() => true);
+
   // TODO...put back in
   // sendFeedback = msg => {
   //   return this.post(config.api.feedback, { message: { text: msg } });
