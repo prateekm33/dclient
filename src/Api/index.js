@@ -305,8 +305,8 @@ class Api {
     else {
       limit = limit || 20;
       offset = offset || 0;
+      url += `?limit=${limit}&offset=${offset}`;
     }
-    url += `?limit=${limit}&offset=${offset}`;
 
     return this.get(url).then(res => {
       if (res.deal)
@@ -315,17 +315,26 @@ class Api {
           vendor: res.deal.data.vendor
         });
       else if (res.deals)
-        return res.deals.map(deal => {
-          return createDeal({
-            ...deal.data.deal,
-            vendor: deal.data.vendor.data
-          });
-        });
+        return {
+          end: res.end,
+          count: res.count,
+          deals: res.deals.map(deal => {
+            return createDeal({
+              ...deal.data.deal,
+              vendor: deal.data.vendor.data
+            });
+          })
+        };
     });
   };
-  getVendorRewards = ({ vendor_uuid, loyalty_reward_uuid }) => {
+  getVendorRewards = ({ vendor_uuid, loyalty_reward_uuid, limit, offset }) => {
     let url = config.api.vendors.rewards + "/" + vendor_uuid;
     if (loyalty_reward_uuid) url += "/" + loyalty_reward_uuid;
+    else {
+      limit = limit || 20;
+      offset = offset || 0;
+      url += `?limit=${limit}&offset=${offset}`;
+    }
     return this.get(url).then(res => {
       if (res.loyalty_reward)
         return createLoyaltyReward({
@@ -333,12 +342,16 @@ class Api {
           vendor: res.loyalty_reward.data.vendor
         });
       else if (res.loyalty_rewards)
-        return res.loyalty_rewards.map(reward =>
-          createLoyaltyReward({
-            ...reward.data.loyalty_reward,
-            vendor: reward.data.vendor
-          })
-        );
+        return {
+          end: res.end,
+          count: res.count,
+          loyalty_rewards: res.loyalty_rewards.map(reward =>
+            createLoyaltyReward({
+              ...reward.data.loyalty_reward,
+              vendor: reward.data.vendor
+            })
+          )
+        };
     });
   };
 
@@ -351,10 +364,15 @@ class Api {
     offset = +offset || 0;
     let url = config.api.vendors.root;
     if (vendor_uuid) url + "/" + vendor_uuid;
-    else url += `limit=${limit}&offset=${offset}&type=${type}`;
+    else url += `?limit=${limit}&offset=${offset}&type=${type}`;
     return this.get(url).then(res => {
       if (res.vendor) return createVendor(res.vendor);
-      else if (res.vendors) return res.vendors.map(createVendor);
+      else if (res.vendors)
+        return {
+          end: res.vendors.end,
+          count: res.vendors.count,
+          vendors: res.vendors.vendors.map(createVendor)
+        };
     });
   };
 
@@ -400,8 +418,10 @@ class Api {
     limit = +limit || 20;
     offset = +offset || 0;
     let url =
-      config.api.customer.deals + "/" + this.customer.uuid + "?is_saved=true&";
-    url += `limit=${limit}&offset=${offset}`;
+      config.api.customer.deals +
+      "/" +
+      this.customer.uuid +
+      `?is_saved=true&limit=${limit}&offset=${offset}`;
     return this.get(url).then(res => {
       return {
         deals: res.deals.map(createMyDeal),

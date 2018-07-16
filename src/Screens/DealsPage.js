@@ -1,3 +1,4 @@
+import { FeatureFlags } from "../../config/DebugConfig";
 import React, { Component } from "react";
 import { Platform } from "react-native";
 import { connect } from "../redux";
@@ -19,14 +20,14 @@ import {
 } from "../redux/actions/deals.actions";
 import { SCREEN_NAMES } from "../AppNavigator";
 import { getResponsiveCSSFrom8 } from "../utils";
-import { TEAL_DARK_THREE } from "../../node_modules/chemics/styles/Colors";
+import { TEAL_DARK_THREE } from "../styles/Colors";
 
 class DealsPage extends Component {
   constructor(props) {
     super(props);
     this.limit = 50;
     this.state = {
-      map_view: true,
+      map_view: false,
       flavor: "all",
       deals: [],
       offset: 0,
@@ -92,11 +93,17 @@ class DealsPage extends Component {
   renderPageOptions = () => {
     return (
       <A_View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
-        <A_Icon_Map onPress={this.showMapView} disabled={this.state.map_view} />
-        <A_Icon_List
-          onPress={this.showListView}
-          disabled={!this.state.map_view}
-        />
+        {!this.state.map_view ? (
+          <A_Icon_Map
+            onPress={this.showMapView}
+            disabled={this.state.map_view}
+          />
+        ) : (
+          <A_Icon_List
+            onPress={this.showListView}
+            disabled={!this.state.map_view}
+          />
+        )}
       </A_View>
     );
   };
@@ -122,34 +129,10 @@ class DealsPage extends Component {
         scrollView={!this.state.map_view}
         innerContainerStyle={{ padding: 0 }}
       >
-        <A_View
-          style={[
-            {
-              backgroundColor: "white",
-              flexDirection: "row",
-              flexWrap: "nowrap",
-              padding: getResponsiveCSSFrom8(10).width
-            },
-            this.state.map_view && {
-              position: "absolute",
-              ...Platform.select({
-                ios: { zIndex: 1000 },
-                android: { elevation: 1000 }
-              }),
-              borderBottomWidth: 1,
-              borderBottomColor: "lightgrey",
-              borderRightWidth: 1,
-              borderRightColor: "lightgrey"
-            }
-          ]}
-        >
-          <A_Icon_All onPress={this.showFlavorAll} />
-          <A_Icon_Saved onPress={this.showFlavorSaved} />
-        </A_View>
         {this.state.map_view ? (
           <O_Map_Deals deals={this.state.deals} />
         ) : (
-          <A_View style={{ marginBottom: getResponsiveCSSFrom8(100).height }}>
+          <A_View>
             <A_ListContainer
               data={this.state.deals}
               keyExtractor={item => `deal-${item.code}`}
@@ -159,19 +142,52 @@ class DealsPage extends Component {
               disabled={this.state.all_fetched}
               onPress={this.loadMore}
               value={this.state.all_fetched ? "ALL LOADED" : "LOAD MORE"}
-              style={{
-                backgroundColor: "white",
-                borderWidth: 1,
-                borderColor: TEAL_DARK_THREE
-              }}
-              buttonTextStyles={{
-                color: TEAL_DARK_THREE,
-                textAlign: "center"
-              }}
-              strong
+              style={[
+                {
+                  backgroundColor: "white",
+                  borderWidth: 1,
+                  borderColor: TEAL_DARK_THREE
+                },
+                this.state.all_fetched && { borderWidth: 0 }
+              ]}
+              buttonTextStyles={[
+                {
+                  color: TEAL_DARK_THREE,
+                  textAlign: "center"
+                },
+                this.state.all_fetched && { color: "grey" }
+              ]}
+              strong={!this.state.all_fetched}
             />
           </A_View>
         )}
+        {FeatureFlags.SaveDeals && (
+          <A_View
+            style={[
+              {
+                backgroundColor: "white",
+                flexDirection: "row",
+                flexWrap: "nowrap",
+                padding: getResponsiveCSSFrom8(10).width
+              },
+              this.state.map_view && {
+                position: "absolute",
+                ...Platform.select({
+                  ios: { zIndex: 1000 },
+                  android: { elevation: 1000 }
+                }),
+                borderBottomWidth: 1,
+                borderBottomColor: "lightgrey",
+                borderRightWidth: 1,
+                borderRightColor: "lightgrey"
+              }
+            ]}
+          >
+            <A_Icon_All onPress={this.showFlavorAll} />
+            <A_Icon_Saved onPress={this.showFlavorSaved} />
+          </A_View>
+        )}
+        <A_View style={{ marginBottom: getResponsiveCSSFrom8(100).height }} />
       </ScreenContainer>
     );
   }

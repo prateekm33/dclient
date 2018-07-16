@@ -6,7 +6,6 @@ import ScreenContainer from "../Templates/ScreenContainer";
 import { O_Vendor_Info, O_RewardPurchaseHistory, O_Modal } from "../Organisms";
 import { A_Icon_Share, A_Text, A_Button, A_Input } from "../Atoms";
 import { M_RewardPointsGraphic } from "../Molecules";
-import { SCREEN_NAMES } from "../AppNavigator";
 import {
   unsubscribeFromRewardCardAction,
   fetchRewardCustomerDetailsAction,

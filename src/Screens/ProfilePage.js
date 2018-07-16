@@ -8,10 +8,7 @@ import {
   sendPWChangeEmailAction
 } from "../redux/actions/customer.actions";
 import { getResponsiveCSSFrom8 } from "../utils";
-import {
-  RED_TWO,
-  TEAL_DARK_THREE
-} from "../../node_modules/chemics/styles/Colors";
+import { RED_TWO, TEAL_DARK_THREE } from "../styles/Colors";
 
 class ProfilePage extends Component {
   constructor(props) {

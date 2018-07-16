@@ -34,6 +34,10 @@ export class Deal extends DataModel {
         if (!date.isValid()) return null;
         return date;
       }
+    },
+    hotness_factor: {
+      type: Number,
+      default: 0
     }
   };
 

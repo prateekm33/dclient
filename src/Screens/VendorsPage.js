@@ -1,26 +1,36 @@
 import { FeatureFlags } from "../../config/DebugConfig";
 import React, { Component } from "react";
-import ScreenContainer from "../Templates/ScreenContainer";
+import { connect } from "../redux";
+import ScreenContainer from "chemics/Templates/ScreenContainer";
 import {
   A_Button,
   A_View,
   A_Icon_All,
   A_Icon_Saved,
   A_Icon_Map,
-  A_Icon_List
-} from "../Atoms";
-import { O_Map_Vendors, O_List_Vendors } from "../Organisms";
+  A_Icon_List,
+  A_ListContainer
+} from "chemics/Atoms";
+import { O_Map_Vendors } from "../Organisms";
+import { M_Card_Vendor_Mini } from "chemics/Molecules";
 import {
   fetchAllVendorsAction,
   fetchFollowingVendorsAction
 } from "../redux/actions/vendor.actions";
+import { TEAL_DARK_THREE } from "../styles/Colors";
+import { getResponsiveCSSFrom8 } from "../utils";
+import { SCREEN_NAMES } from "../AppNavigator";
 
 class VendorsPage extends Component {
   constructor(props) {
     super(props);
+    this.limit = 50;
     this.state = {
       flavor: "all",
-      map_view: true
+      map_view: false,
+      vendors: [],
+      offset: 0,
+      all_fetched: false
     };
   }
 
@@ -59,34 +69,53 @@ class VendorsPage extends Component {
 
   showFlavorAll = () => {
     if (this.state.flavor === "all") return;
-    this.setState({ all_fetched: false, offset: 0, vendors: [] }, () => {
-      this.fetchVendors(fetchAllVendorsAction).then(res => {
-        if (res.end) return;
-        this.setState({ flavor: "all" });
-      });
-    });
+    this.setState(
+      { all_fetched: false, offset: 0, vendors: [], flavor: "all" },
+      () => {
+        this.fetchVendors(fetchAllVendorsAction);
+      }
+    );
   };
   showFlavorFollowing = () => {
     if (this.state.flavor === "following") return;
-    this.setState({ all_fetched: false, offset: 0, vendors: [] }, () => {
-      this.fetchVendors(fetchFollowingVendorsAction).then(res => {
-        if (res.end) return;
-        this.setState({ flavor: "following" });
-      });
-    });
+    this.setState(
+      { all_fetched: false, offset: 0, vendors: [], flavor: "following" },
+      () => {
+        this.fetchVendors(fetchFollowingVendorsAction);
+      }
+    );
   };
 
   showMapView = () => this.setState({ map_view: true });
   showListView = () => this.setState({ map_view: false });
   renderPageOptions = () => {
     return (
-      <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
-        <A_Icon_Map onPress={this.showMapView} disabled={this.state.map_view} />
-        <A_Icon_List
-          onPress={this.showListView}
-          disabled={!this.state.map_view}
-        />
-      </View>
+      <A_View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
+        {!this.state.map_view ? (
+          <A_Icon_Map
+            onPress={this.showMapView}
+            disabled={this.state.map_view}
+          />
+        ) : (
+          <A_Icon_List
+            onPress={this.showListView}
+            disabled={!this.state.map_view}
+          />
+        )}
+      </A_View>
+    );
+  };
+
+  renderVendorListItem = ({ item }) => {
+    return (
+      <M_Card_Vendor_Mini
+        vendor={item}
+        onPress={() => {
+          this.props.navigation.navigate(SCREEN_NAMES.VendorPage, {
+            vendor: item
+          });
+        }}
+      />
     );
   };
 
@@ -95,36 +124,70 @@ class VendorsPage extends Component {
       <ScreenContainer
         title="Restarants"
         rightHeaderComponent={this.renderPageOptions()}
+        scrollView
       >
         {this.state.map_view ? (
           <O_Map_Vendors vendors={this.state.vendors} />
         ) : (
           <A_View>
-            <O_List_Vendors vendors={this.state.vendors} />
+            <A_ListContainer
+              data={this.state.vendors}
+              keyExtractor={vendor => `vendor-${vendor.name}-${vendor.uuid}`}
+              renderItem={this.renderVendorListItem}
+            />
             <A_Button
               disabled={this.state.all_fetched}
               onPress={this.loadMore}
               value={this.state.all_fetched ? "ALL LOADED" : "LOAD MORE"}
+              style={[
+                {
+                  backgroundColor: "white",
+                  borderWidth: 1,
+                  borderColor: TEAL_DARK_THREE
+                },
+                this.state.all_fetched && { borderWidth: 0 }
+              ]}
+              buttonTextStyles={[
+                {
+                  color: TEAL_DARK_THREE,
+                  textAlign: "center"
+                },
+                this.state.all_fetched && { color: "grey" }
+              ]}
+              strong={!this.state.all_fetched}
             />
           </A_View>
         )}
         {FeatureFlags.FollowVendor && (
           <A_View
-            style={{
-              position: "absolute",
-              top: 30,
-              backgroundColor: "white",
-              flexDirection: "row",
-              flexWrap: "nowrap"
-            }}
+            style={[
+              {
+                backgroundColor: "white",
+                flexDirection: "row",
+                flexWrap: "nowrap",
+                padding: getResponsiveCSSFrom8(10).width
+              },
+              this.state.map_view && {
+                position: "absolute",
+                ...Platform.select({
+                  ios: { zIndex: 1000 },
+                  android: { elevation: 1000 }
+                }),
+                borderBottomWidth: 1,
+                borderBottomColor: "lightgrey",
+                borderRightWidth: 1,
+                borderRightColor: "lightgrey"
+              }
+            ]}
           >
             <A_Icon_All onPress={this.showFlavorAll} />
             <A_Icon_Saved onPress={this.showFlavorFollowing} />
           </A_View>
         )}
+        <A_View style={{ marginBottom: getResponsiveCSSFrom8(100).height }} />
       </ScreenContainer>
     );
   }
 }
 
-export default VendorsPage;
+export default connect()(VendorsPage);

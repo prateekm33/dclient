@@ -119,12 +119,16 @@ export const unSaveDealAction = (deal_uuid, vendor_uuid) => dispatch => {
     });
 };
 
-export const fetchVendorDealsAction = vendor => dispatch => {
+export const fetchVendorDealsAction = ({
+  vendor,
+  offset,
+  limit
+}) => dispatch => {
   dispatch({ type: loading_types.FETCHING_VENDOR_DEALS, loading: true });
-  return Api.getVendorDeals({ vendor_uuid: vendor.uuid })
-    .then(deals => {
+  return Api.getVendorDeals({ vendor_uuid: vendor.uuid, offset, limit })
+    .then(res => {
       dispatch({ type: loading_types.FETCHING_VENDOR_DEALS, loading: false });
-      return deals;
+      return res;
     })
     .catch(error => {
       dispatch({ type: loading_types.FETCHING_VENDOR_DEALS, loading: false });
@@ -133,12 +137,16 @@ export const fetchVendorDealsAction = vendor => dispatch => {
     });
 };
 
-export const fetchVendorRewardsAction = vendor => dispatch => {
+export const fetchVendorRewardsAction = ({
+  vendor,
+  limit,
+  offset
+}) => dispatch => {
   dispatch({ type: loading_types.FETCHING_VENDOR_REWARDS, loading: true });
-  return Api.getVendorRewards({ vendor_uuid: vendor.uuid })
-    .then(rewards => {
+  return Api.getVendorRewards({ vendor_uuid: vendor.uuid, limit, offset })
+    .then(res => {
       dispatch({ type: loading_types.FETCHING_VENDOR_REWARDS, loading: false });
-      return rewards;
+      return res;
     })
     .catch(error => {
       dispatch({ type: loading_types.FETCHING_VENDOR_REWARDS, loading: false });

@@ -4,7 +4,8 @@ import {
   M_Card_Deal_Mini,
   M_Card_LoyaltyReward_Mini,
   M_Card_Vendor_Mini
-} from "../Molecules";
+} from "chemics/Molecules";
+import { A_ListContainer } from "chemics/Atoms";
 
 const renderDealListItem = ({ item }) => {
   return <M_Card_Deal_Mini deal={item} />;
@@ -37,10 +38,10 @@ const renderVendorListItem = ({ item }) => {
 };
 const O_List_Vendors = props => {
   return (
-    <FlatList
+    <A_ListContainer
       data={props.vendors}
-      renderItem={renderVendorListItem}
       keyExtractor={item => `vendor-${item.code}-${item.vendor_uuid}`}
+      renderItem={renderVendorListItem}
     />
   );
 };
