@@ -3,7 +3,12 @@ import { connect } from "./redux";
 import { View } from "react-native";
 import { StackNavigator } from "react-navigation";
 import { O_MenuBar_Main } from "chemics/Organisms";
-import { A_Icon_Deal, A_Icon_Profile, A_Icon_Vendors } from "chemics/Atoms";
+import {
+  A_Icon_Deal,
+  A_Icon_Profile,
+  A_Icon_Vendors,
+  A_Icon_My_Rewards
+} from "chemics/Atoms";
 import { SCREEN_NAMES } from "./AppNavigator";
 
 export const MAIN_SCREEN_NAMES = {
@@ -72,13 +77,17 @@ class MenuBarMain_Pre extends Component {
   navigateTo = idx => {
     if (idx === 0) return this.navigateToDealsPage();
     if (idx === 1) return this.navigteToVendorsPage();
-    if (idx === 2) return this.navigateToProfilePage();
+    if (idx === 2) return this.navigateToMyRewardsPage();
+    if (idx === 3) return this.navigateToProfilePage();
   };
   navigteToVendorsPage = () => {
     this.props.navigation.resetTo(SCREEN_NAMES.VendorsPage);
   };
   navigateToDealsPage = () => {
     this.props.navigation.resetTo(SCREEN_NAMES.DealsPage);
+  };
+  navigateToMyRewardsPage = () => {
+    this.props.navigation.resetTo(SCREEN_NAMES.MyRewardsPage);
   };
   navigateToProfilePage = () => {
     this.props.navigation.resetTo(SCREEN_NAMES.ProfilePage);
@@ -89,7 +98,7 @@ class MenuBarMain_Pre extends Component {
       return null;
     return (
       <O_MenuBar_Main
-        items={[A_Icon_Deal, A_Icon_Vendors, A_Icon_Profile]}
+        items={[A_Icon_Deal, A_Icon_Vendors, A_Icon_My_Rewards, A_Icon_Profile]}
         navigateTo={this.navigateTo}
         shouldGetFreshState={this.shouldGetFreshState}
         plain={true}

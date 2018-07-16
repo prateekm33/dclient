@@ -13,7 +13,8 @@ export const SCREEN_NAMES = {
   RedeemPage: "RedeemPage", // TODO...modal
   VendorPage: "VendorPage", // TODO...back button
   VendorsPage: "VendorsPage",
-  RewardPage: "RewardPage"
+  RewardPage: "RewardPage",
+  MyRewardsPage: "MyRewardsPage"
 };
 
 export const INITIAL_ROUTE_NAME = SCREEN_NAMES.SplashScreen;
@@ -35,7 +36,8 @@ const Screens = [
   [SCREEN_NAMES.RedeemPage, require("./Screens/RedeemPage")], // TODO...modal
   [SCREEN_NAMES.VendorPage, require("./Screens/VendorPage")], // TODO...back button
   [SCREEN_NAMES.VendorsPage, require("./Screens/VendorsPage")],
-  [SCREEN_NAMES.RewardPage, require("./Screens/RewardPage")]
+  [SCREEN_NAMES.RewardPage, require("./Screens/RewardPage")],
+  [SCREEN_NAMES.MyRewardsPage, require("./Screens/MyRewardsPage")]
 ];
 
 const SCREENS = Screens.reduce(
