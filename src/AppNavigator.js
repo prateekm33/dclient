@@ -53,7 +53,7 @@ const SCREENS = Screens.reduce(
       };
 
       return (
-        <View>
+        <View style={{ flex: 1 }}>
           <Component.default
             {...props}
             mainNavigation={(props.screenProps || {}).mainNavigation}

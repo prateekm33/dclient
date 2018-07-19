@@ -1,7 +1,7 @@
 import config from "../../config";
 import { FeatureFlags } from "../../config/DebugConfig";
 import React, { Component } from "react";
-import { Platform, Dimensions } from "react-native";
+import { Platform, KeyboardAvoidingView } from "react-native";
 import { connect } from "../redux";
 import ScreenContainer from "chemics/Templates/ScreenContainer";
 import { O_Map_Deals } from "../Organisms";
@@ -20,7 +20,6 @@ import {
   fetchSavedDealsAction,
   searchDealsAction
 } from "../redux/actions/deals.actions";
-import { SCREEN_NAMES } from "../AppNavigator";
 import { getResponsiveCSSFrom8 } from "../utils";
 import { TEAL_DARK_THREE } from "../styles/Colors";
 import { BOTTOM_NAV_HEIGHT } from "../styles/defaults";
@@ -198,118 +197,128 @@ class DealsPage extends Component {
 
   render() {
     return (
-      <A_View>
-        <ScreenContainer
-          title={this.state.flavor === "all" ? "All Deals" : "Saved Deals"}
-          statusBarStyle="dark-content"
-          rightHeaderComponent={this.renderPageOptions()}
-          scrollView={!this.state.map_view}
-          innerContainerStyle={{ padding: 0 }}
-        >
-          {this.state.map_view ? (
-            <O_Map_Deals
-              deals={
-                this.state.search_term
-                  ? this.state.searched_deals
-                  : this.state.deals
-              }
-              mapContainerStyle={{
-                width: "100%",
-                marginBottom:
-                  BOTTOM_NAV_HEIGHT * 2 + getResponsiveCSSFrom8(50).height
-              }}
-              navigateToDeal={this.navigateToDeal}
-            />
-          ) : (
-            <A_View style={{ marginBottom: BOTTOM_NAV_HEIGHT * 2 }}>
-              <A_ListContainer
-                data={
+      <KeyboardAvoidingView
+        enabled
+        behavior="padding"
+        style={{ position: "relative", flex: 1 }}
+      >
+        <A_View style={{ flex: 1 }}>
+          <ScreenContainer
+            title={this.state.flavor === "all" ? "All Deals" : "Saved Deals"}
+            statusBarStyle="dark-content"
+            rightHeaderComponent={this.renderPageOptions()}
+            scrollView={!this.state.map_view}
+            innerContainerStyle={{ padding: 0 }}
+          >
+            {this.state.map_view ? (
+              <O_Map_Deals
+                deals={
                   this.state.search_term
                     ? this.state.searched_deals
                     : this.state.deals
                 }
-                keyExtractor={(item, index) => `deal-${item.code}-${index}`}
-                renderItem={this.renderDeal}
+                mapContainerStyle={{
+                  flex: 1
+                }}
+                navigateToDeal={this.navigateToDeal}
               />
-              <A_Button_Opacity
-                disabled={
-                  this.state.search_term
-                    ? this.state.all_search_fetched
-                    : this.state.all_fetched
-                }
-                onPress={this.loadMore}
-                value={
-                  (this.state.search_term
-                  ? this.state.all_search_fetched
-                  : this.state.all_fetched)
-                    ? "ALL LOADED"
-                    : "LOAD MORE"
-                }
+            ) : (
+              <A_View style={{ marginBottom: BOTTOM_NAV_HEIGHT * 2 }}>
+                <A_ListContainer
+                  data={
+                    this.state.search_term
+                      ? this.state.searched_deals
+                      : this.state.deals
+                  }
+                  keyExtractor={(item, index) => `deal-${item.code}-${index}`}
+                  renderItem={this.renderDeal}
+                />
+                {this.state.deals.length && (
+                  <A_Button_Opacity
+                    disabled={
+                      this.state.search_term
+                        ? this.state.all_search_fetched
+                        : this.state.all_fetched
+                    }
+                    onPress={this.loadMore}
+                    value={
+                      (this.state.search_term
+                      ? this.state.all_search_fetched
+                      : this.state.all_fetched)
+                        ? "ALL LOADED"
+                        : "LOAD MORE"
+                    }
+                    style={[
+                      {
+                        backgroundColor: "white",
+                        borderWidth: 1,
+                        borderColor: TEAL_DARK_THREE
+                      },
+                      (this.state.search_term
+                        ? this.state.all_search_fetched
+                        : this.state.all_fetched) && { borderWidth: 0 }
+                    ]}
+                    buttonTextStyles={[
+                      {
+                        color: TEAL_DARK_THREE,
+                        textAlign: "center"
+                      },
+                      (this.state.search_term
+                        ? this.state.all_search_fetched
+                        : this.state.all_fetched) && { color: "grey" }
+                    ]}
+                    strong={
+                      !(this.state.search_term
+                        ? this.state.all_search_fetched
+                        : this.state.all_fetched)
+                    }
+                  />
+                )}
+              </A_View>
+            )}
+            {FeatureFlags.SaveDeals && (
+              <A_View
                 style={[
                   {
                     backgroundColor: "white",
-                    borderWidth: 1,
-                    borderColor: TEAL_DARK_THREE
+                    flexDirection: "row",
+                    flexWrap: "nowrap",
+                    padding: getResponsiveCSSFrom8(10).width
                   },
-                  (this.state.search_term
-                    ? this.state.all_search_fetched
-                    : this.state.all_fetched) && { borderWidth: 0 }
+                  this.state.map_view && {
+                    position: "absolute",
+                    ...Platform.select({
+                      ios: { zIndex: 1000 },
+                      android: { elevation: 1000 }
+                    }),
+                    borderBottomWidth: 1,
+                    borderBottomColor: "lightgrey",
+                    borderRightWidth: 1,
+                    borderRightColor: "lightgrey"
+                  }
                 ]}
-                buttonTextStyles={[
-                  {
-                    color: TEAL_DARK_THREE,
-                    textAlign: "center"
-                  },
-                  (this.state.search_term
-                    ? this.state.all_search_fetched
-                    : this.state.all_fetched) && { color: "grey" }
-                ]}
-                strong={
-                  !(this.state.search_term
-                    ? this.state.all_search_fetched
-                    : this.state.all_fetched)
-                }
-              />
-            </A_View>
-          )}
-          {FeatureFlags.SaveDeals && (
-            <A_View
-              style={[
-                {
-                  backgroundColor: "white",
-                  flexDirection: "row",
-                  flexWrap: "nowrap",
-                  padding: getResponsiveCSSFrom8(10).width
-                },
-                this.state.map_view && {
-                  position: "absolute",
-                  ...Platform.select({
-                    ios: { zIndex: 1000 },
-                    android: { elevation: 1000 }
-                  }),
-                  borderBottomWidth: 1,
-                  borderBottomColor: "lightgrey",
-                  borderRightWidth: 1,
-                  borderRightColor: "lightgrey"
-                }
-              ]}
-            >
-              <A_Icon_All onPress={this.showFlavorAll} />
-              <A_Icon_Saved onPress={this.showFlavorSaved} />
-            </A_View>
-          )}
-        </ScreenContainer>
-        <M_Searchbar
-          onSearch={this.searchDeals}
-          containerStyles={{
-            position: "absolute",
-            bottom: BOTTOM_NAV_HEIGHT - getResponsiveCSSFrom8(10).height,
-            backgroundColor: "white",
-            borderTopWidth: 0.5,
-            borderTopColor: "#bdbdbd"
-          }}
-        />
-      </A_View>
+              >
+                <A_Icon_All onPress={this.showFlavorAll} />
+                <A_Icon_Saved onPress={this.showFlavorSaved} />
+              </A_View>
+            )}
+          </ScreenContainer>
+          <M_Searchbar
+            onSearch={this.searchDeals}
+            containerStyles={{
+              borderTopWidth: 0.5,
+              borderTopColor: "#bdbdbd",
+              padding: getResponsiveCSSFrom8(10).width,
+              backgroundColor: "white"
+            }}
+            inputStyles={{
+              backgroundColor: "white",
+              borderWidth: 0.6,
+              borderColor: "lightgrey"
+            }}
+          />
+        </A_View>
+      </KeyboardAvoidingView>
     );
   }
 }

@@ -71,27 +71,29 @@ class MyRewardsPage extends Component {
         innerContainerStyle={{ padding: 0 }}
       >
         {this.renderMyRewards()}
-        <A_Button_Opacity
-          disabled={this.state.all_fetched}
-          onPress={this.loadMore}
-          value={this.state.all_fetched ? "ALL LOADED" : "LOAD MORE"}
-          style={[
-            {
-              backgroundColor: "white",
-              borderWidth: 1,
-              borderColor: TEAL_DARK_THREE
-            },
-            this.state.all_fetched && { borderWidth: 0 }
-          ]}
-          buttonTextStyles={[
-            {
-              color: TEAL_DARK_THREE,
-              textAlign: "center"
-            },
-            this.state.all_fetched && { color: "grey" }
-          ]}
-          strong={!this.state.all_fetched}
-        />
+        {this.state.rewards.length && (
+          <A_Button_Opacity
+            disabled={this.state.all_fetched}
+            onPress={this.loadMore}
+            value={this.state.all_fetched ? "ALL LOADED" : "LOAD MORE"}
+            style={[
+              {
+                backgroundColor: "white",
+                borderWidth: 1,
+                borderColor: TEAL_DARK_THREE
+              },
+              this.state.all_fetched && { borderWidth: 0 }
+            ]}
+            buttonTextStyles={[
+              {
+                color: TEAL_DARK_THREE,
+                textAlign: "center"
+              },
+              this.state.all_fetched && { color: "grey" }
+            ]}
+            strong={!this.state.all_fetched}
+          />
+        )}
         <A_View style={{ marginBottom: getResponsiveCSSFrom8(100).height }} />
       </ScreenContainer>
     );

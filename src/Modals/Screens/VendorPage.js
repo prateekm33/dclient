@@ -1,3 +1,4 @@
+import config from "../../../config";
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 import { connect } from "../../redux";
@@ -15,9 +16,8 @@ import {
   fetchVendorDealsAction,
   fetchVendorRewardsAction
 } from "../../redux/actions/deals.actions";
-import { TEAL_DARK_THREE, TEAL } from "../../styles/Colors";
+import { TEAL_DARK_THREE, REALLY_HOT_PINK } from "../../styles/Colors";
 import { getResponsiveCSSFrom8, callPhoneNumber } from "../../utils";
-import { SCREEN_NAMES } from "../../AppNavigator";
 import { getVendorReviewsAction } from "../../redux/actions/reviews.actions";
 import { VENDOR_MODAL_SCREEN_NAMES } from "../VendorModal";
 
@@ -39,6 +39,7 @@ class VendorPage extends Component {
       longitude: this.state.vendor.longitude
     };
     this.tab_headers = [
+      { title: "General", onPress: this.showGeneral },
       { title: "Deals", onPress: this.showDeals },
       { title: "Rewards", onPress: this.showRewards },
       { title: "Reviews", onPress: this.showReviews }
@@ -96,49 +97,126 @@ class VendorPage extends Component {
       reward
     });
   };
+
+  renderGeneral = () => {
+    return (
+      <A_View>
+        <A_View>
+          <A_Text>GLASSDOOR METRICS TODO</A_Text>
+          {/* <O_ReviewMetrics vendor={this.state.vendor}/> */}
+        </A_View>
+        <MapView
+          style={{
+            width: "100%",
+            height: getResponsiveCSSFrom8(150).height
+          }}
+          initialRegion={{
+            latitude: this.state.vendor.latitude,
+            longitude: this.state.vendor.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01
+          }}
+          showsUserLocation={true}
+          loadingEnabled={true}
+        >
+          <Marker
+            coordinate={{
+              longitude: this.state.vendor.longitude,
+              latitude: this.state.vendor.latitude
+            }}
+          />
+        </MapView>
+        {/* <A_Text>GET DIRECTIONS BUTTON TODO</A_Text> */}
+        <A_View
+          style={{
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            justifyContent: "space-between",
+            alignItems: "center"
+          }}
+        >
+          <A_Text strong>Phone</A_Text>
+          <A_Button_Opacity
+            value={this.state.vendor.business_phone}
+            onPress={this.callVendor}
+          />
+        </A_View>
+      </A_View>
+    );
+  };
   renderDeals = () => {
     return (
-      <A_ListContainer
-        data={this.state.deals}
-        renderItem={({ item }) => {
-          return (
-            <M_Card_Deal_Mini
-              deal={item}
-              onPress={() => {
-                this.navigateToDeal(item);
-              }}
-            />
-          );
-        }}
-        keyExtractor={deal => `vendor-deal-${deal.code}`}
-      />
+      <A_View>
+        <A_ListContainer
+          data={this.state.deals}
+          renderItem={({ item }) => {
+            return (
+              <M_Card_Deal_Mini
+                deal={item}
+                onPress={() => {
+                  this.navigateToDeal(item);
+                }}
+                image={
+                  item.thumbnail_url
+                    ? `${config.cloudinary}/${item.thumbnail_url}`
+                    : null
+                }
+                imageStyles={{ width: "100%", height: "100%" }}
+              />
+            );
+          }}
+          keyExtractor={deal => `vendor-deal-${deal.code}`}
+        />
+        {this.state.deals.length && this.renderLoadMoreButton()}
+      </A_View>
     );
   };
   renderRewards = () => {
     return (
-      <A_ListContainer
-        data={this.state.rewards}
-        renderItem={({ item }) => {
-          return (
-            <M_Card_LoyaltyReward_Mini
-              reward={item}
-              onPress={() => {
-                this.navigateToReward(item);
-              }}
-            />
-          );
-        }}
-        keyExtractor={reward => `vendor-reward-${reward.code}`}
-      />
+      <A_View>
+        <A_ListContainer
+          data={this.state.rewards}
+          renderItem={({ item }) => {
+            return (
+              <M_Card_LoyaltyReward_Mini
+                reward={item}
+                image={
+                  item.thumbnail_url
+                    ? `${config.cloudinary}/${item.thumbnail_url}`
+                    : null
+                }
+                imageStyles={{ width: "100%", height: "100%" }}
+                onPress={() => {
+                  this.navigateToReward(item);
+                }}
+              />
+            );
+          }}
+          keyExtractor={reward => `vendor-reward-${reward.code}`}
+        />
+        {this.state.rewards.length && this.renderLoadMoreButton()}
+      </A_View>
     );
   };
   renderInfo = () => <O_Vendor_Info vendor={this.state.vendor} />;
-  renderReviews = () => null;
+  renderReviews = () => (
+    <A_View>
+      <A_ListContainer
+        data={this.state.reviews}
+        renderItem={({ item }) => {
+          return null;
+        }}
+        keyExtractor={(review, idx) => `vendor-review-${idx}`}
+      />
+      {this.state.reviews.length && this.renderLoadMoreButton()}
+    </A_View>
+  );
 
   getActiveTabContent = () => {
-    if (this.state.activeTab === 0) return this.renderDeals();
-    if (this.state.activeTab === 1) return this.renderRewards();
-    if (this.state.activeTab === 2) return this.renderReviews();
+    if (this.state.activeTab === 0) return this.renderGeneral();
+    if (this.state.activeTab === 1) return this.renderDeals();
+    if (this.state.activeTab === 2) return this.renderRewards();
+    if (this.state.activeTab === 3) return this.renderReviews();
   };
 
   setActiveTab = idx => {
@@ -152,15 +230,16 @@ class VendorPage extends Component {
         offset: 0
       },
       () => {
-        if (idx === 0) return this.fetchVendorDeals();
-        if (idx === 1) return this.fetchVendorRewards();
-        if (idx === 2) return this.fetchVendorReviews();
+        if (idx === 1) return this.fetchVendorDeals();
+        if (idx === 2) return this.fetchVendorRewards();
+        if (idx === 3) return this.fetchVendorReviews();
       }
     );
   };
-  showDeals = () => this.setActiveTab(0);
-  showRewards = () => this.setActiveTab(1);
-  showReviews = () => this.setActiveTab(2);
+  showGeneral = () => this.setActiveTab(0);
+  showDeals = () => this.setActiveTab(1);
+  showRewards = () => this.setActiveTab(2);
+  showReviews = () => this.setActiveTab(3);
 
   fetchVendorReviews = () => {
     const limit = 50;
@@ -183,7 +262,6 @@ class VendorPage extends Component {
   };
 
   renderLoadMoreButton = () => {
-    if (this.state.activeTab === 2) return null;
     return (
       <A_Button_Opacity
         disabled={this.state.all_fetched}
@@ -222,60 +300,11 @@ class VendorPage extends Component {
         statusBarStyle="dark-content"
         onClose={this.close}
       >
-        <A_View>
-          <A_View>
-            <A_Text>GLASSDOOR METRICS TODO</A_Text>
-            {/* <O_ReviewMetrics vendor={this.state.vendor}/> */}
-          </A_View>
-          <MapView
-            style={{
-              width: "100%",
-              height: getResponsiveCSSFrom8(150).height
-            }}
-            initialRegion={{
-              latitude: this.state.vendor.latitude,
-              longitude: this.state.vendor.longitude,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01
-            }}
-            showsUserLocation={true}
-            loadingEnabled={true}
-          >
-            <Marker
-              coordinate={{
-                longitude: this.state.vendor.longitude,
-                latitude: this.state.vendor.latitude
-              }}
-            />
-          </MapView>
-          {/* <A_Text>GET DIRECTIONS BUTTON TODO</A_Text> */}
-          <A_View
-            style={{
-              flexDirection: "row",
-              flexWrap: "nowrap",
-              justifyContent: "space-between",
-              alignItems: "center"
-            }}
-          >
-            <A_Text strong>Phone</A_Text>
-            <A_Button_Opacity
-              value={this.state.vendor.business_phone}
-              onPress={this.callVendor}
-            />
-          </A_View>
-        </A_View>
-        <A_View
-          style={{
-            borderBottomWidth: 0.8,
-            borderColor: "lightgrey",
-            marginTop: getResponsiveCSSFrom8(20).height
-          }}
-        />
         <A_View
           style={{
             flexDirection: "row",
             flexWrap: "nowrap",
-            marginVertical: getResponsiveCSSFrom8(20).height
+            marginVertical: getResponsiveCSSFrom8(10).height
           }}
         >
           {this.tab_headers.map((header, idx) => (
@@ -295,7 +324,6 @@ class VendorPage extends Component {
           ))}
         </A_View>
         {this.getActiveTabContent()}
-        {this.renderLoadMoreButton()}
         <A_View style={{ marginBottom: getResponsiveCSSFrom8(100).height }} />
       </ScreenContainer>
     );
@@ -314,6 +342,6 @@ const style = StyleSheet.create({
   },
   activeTabStyles: {},
   activeTabTextStyles: {
-    color: "black"
+    color: REALLY_HOT_PINK
   }
 });

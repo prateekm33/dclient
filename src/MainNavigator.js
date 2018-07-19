@@ -104,6 +104,9 @@ class MenuBarMain_Pre extends Component {
         shouldGetFreshState={this.shouldGetFreshState}
         plain={true}
         activeContainerStyles={{ height: BOTTOM_NAV_HEIGHT }}
+        mainContainerStyles={{
+          position: "relative"
+        }}
       />
     );
   }

@@ -397,8 +397,7 @@ class Api extends BaseApi {
     return this.get(url).then(res => {
       return {
         end: res.end,
-        count: res.count,
-        reviews: [] // TODO....
+        reviews: res.reviews
       };
     });
   };

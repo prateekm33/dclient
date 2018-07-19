@@ -67,21 +67,21 @@ class O_Map extends Component {
 
   render() {
     return (
-      <A_View>
-        <MapView
-          showsUserLocation={true}
-          region={this.state.region}
-          onRegionChange={this.onRegionChange}
-          onMapReady={this.onMapReady}
-          style={{
-            width: "100%",
-            height: "100%"
-          }}
-          loadingEnabled={true}
-        >
-          {this.props.markers.map(this.renderMarker)}
-        </MapView>
-      </A_View>
+      <MapView
+        showsUserLocation={true}
+        region={this.state.region}
+        onRegionChange={this.onRegionChange}
+        onMapReady={this.onMapReady}
+        style={[
+          {
+            flex: 1
+          },
+          this.props.mapStyles
+        ]}
+        loadingEnabled={true}
+      >
+        {this.props.markers.map(this.renderMarker)}
+      </MapView>
     );
   }
 }
@@ -160,10 +160,11 @@ class O_Map_Deals_Pre extends Component {
 
   render() {
     return (
-      <A_View style={this.props.mapContainerStyle}>
+      <A_View style={[{ flex: 1 }, this.props.mapContainerStyle]}>
         <O_Map
           markers={this.state.markers}
           renderMarker={this.renderDealMarker}
+          mapStyles={this.props.mapStyles}
         />
       </A_View>
     );
@@ -204,10 +205,11 @@ class O_Map_Vendors_Pre extends Component {
 
   render() {
     return (
-      <A_View style={this.props.mapContainerStyle}>
+      <A_View style={[{ flex: 1 }, this.props.mapContainerStyle]}>
         <O_Map
           markers={this.state.markers}
           renderMarker={this.renderVendorMarker}
+          mapStyles={this.props.mapStyles}
         />
       </A_View>
     );
