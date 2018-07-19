@@ -5,6 +5,21 @@ import error_types from "../types/error.types";
 import loading_types from "../types/loading.types";
 import { dispatchErrorActionOfType } from ".";
 
+export const logoutAction = () => dispatch => {
+  dispatch({ type: loading_types.LOGGING_OUT_CUSTOMER, loading: true });
+  return Api.logout()
+    .then(done => {
+      dispatch({ type: loading_types.LOGGING_OUT_CUSTOMER, loading: false });
+      dispatch({ type: employee_types.LOGGED_OUT_EMPLOYEE });
+      return done;
+    })
+    .catch(error => {
+      dispatch({ type: loading_types.LOGGING_OUT_CUSTOMER, loading: false });
+      dispatchErrorActionOfType(error_types.LOGGING_OUT_CUSTOMER_ERROR)(error);
+      return false;
+    });
+};
+
 export const loginAction = creds => (dispatch, getState) => {
   dispatch({ type: loading_types.LOGGING_IN_CUSTOMER, loading: true });
   return Api.loginCustomer(creds)

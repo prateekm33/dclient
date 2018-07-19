@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { A_Text, A_Button_Opacity } from "../Atoms";
+import { A_Text, A_Button_Opacity } from "chemics/Atoms";
 
 const M_TabOptions = props => {
   return (

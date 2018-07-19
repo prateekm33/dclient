@@ -3,13 +3,17 @@ import { View, StatusBar } from "react-native";
 import { StackNavigator, NavigationActions } from "react-navigation";
 
 export const MODAL_SCREEN_NAMES = {
-  RedeemModal: "RedeemModal"
+  RedeemModal: "RedeemModal",
+  DealModal: "DealModal",
+  VendorModal: "VendorModal"
 };
 
 export const INITIAL_ROUTE_NAME = null;
 
 const Screens = [
-  [MODAL_SCREEN_NAMES.RedeemModal, require("./Modals/RedeemModal")]
+  [MODAL_SCREEN_NAMES.RedeemModal, require("./Modals/RedeemModal")],
+  [MODAL_SCREEN_NAMES.DealModal, require("./Modals/DealModal")],
+  [MODAL_SCREEN_NAMES.VendorModal, require("./Modals/VendorModal")]
 ];
 
 const SCREENS = Screens.reduce(

@@ -74,7 +74,11 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <ScreenContainer noHeader containerStyle={style.screenContainerStyle}>
+      <ScreenContainer
+        noHeader
+        containerStyle={style.screenContainerStyle}
+        statusBarStyle="dark-content"
+      >
         {this.state.login_form ? (
           <M_Form
             title="Dineable"

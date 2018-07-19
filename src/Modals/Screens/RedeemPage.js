@@ -9,7 +9,8 @@ import { getResponsiveCSSFrom8 } from "../../utils";
 class RedeemPage extends Component {
   constructor(props) {
     super(props);
-    const { deal, reward } = props.screenProps;
+    const _props = props.navigation.state.params || {};
+    const { deal, reward } = _props;
     /**
      * data shape
      *
@@ -37,9 +38,9 @@ class RedeemPage extends Component {
       const { code, uuid, vendor, num_points_redeemed, points } = reward;
       const vendor_uuid = vendor.uuid;
       const customer_uuid = this.props.customer.uuid;
-      data.type = props.navigation.state.params.reward_type.toLowerCase();
+      data.type = _props.reward_type.toLowerCase();
       if (data.type === "reward_redeem")
-        data.points_to_redeem = props.navigation.state.params.points_to_redeem;
+        data.points_to_redeem = _props.points_to_redeem;
       data = {
         ...data,
         code,
@@ -56,27 +57,30 @@ class RedeemPage extends Component {
   close = () => this.props.screenProps.mainNavigation.goBack();
 
   render() {
-    const { deal, reward } = this.props.screenProps;
+    const { deal, reward } = this.props.screenProps.params;
     let help_text = "Present this code to the restaurant.";
     let header_text = "COUPON CODE";
+    let title = "";
     if (deal) {
       help_text = "Present your coupon code to the restaurant.";
       header_text = "COUPON CODE";
+      title = "Redeem Deal";
     } else if (reward) {
       help_text = "Present your rewards card code to the restaurant.";
       header_text = `${reward.vendor.name} LOYALTY REWARDS CARD`;
+      title = "Redeem Points";
     }
+    title = this.props.screenProps.params.title || title;
     return (
       <ScreenContainer
-        noHeader
+        title={title}
         containerStyle={{ padding: getResponsiveCSSFrom8(10).width }}
+        onClose={this.close}
       >
-        <A_Icon_Close onPress={this.close} />
         <View
           style={{
             justifyContent: "space-around",
             alignItems: "center",
-            flex: 1,
             paddingBottom: getResponsiveCSSFrom8(50).height
           }}
         >

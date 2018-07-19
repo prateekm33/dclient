@@ -7,11 +7,8 @@ import navigation_types from "./redux/types/navigation.types";
 export const SCREEN_NAMES = {
   SplashScreen: "SplashScreen",
   LoginPage: "LoginPage",
-  DealPage: "DealPage", // TODO...back button
   DealsPage: "DealsPage",
   ProfilePage: "ProfilePage",
-  RedeemPage: "RedeemPage", // TODO...modal
-  VendorPage: "VendorPage", // TODO...back button
   VendorsPage: "VendorsPage",
   RewardPage: "RewardPage",
   MyRewardsPage: "MyRewardsPage"
@@ -30,11 +27,8 @@ export const UNAUTH_ROUTES = {
 const Screens = [
   [SCREEN_NAMES.SplashScreen, require("./Screens/SplashScreen")],
   [SCREEN_NAMES.LoginPage, require("./Screens/LoginPage")],
-  [SCREEN_NAMES.DealPage, require("./Screens/DealPage")], // TODO...back button
   [SCREEN_NAMES.DealsPage, require("./Screens/DealsPage")],
   [SCREEN_NAMES.ProfilePage, require("./Screens/ProfilePage")],
-  [SCREEN_NAMES.RedeemPage, require("./Screens/RedeemPage")], // TODO...modal
-  [SCREEN_NAMES.VendorPage, require("./Screens/VendorPage")], // TODO...back button
   [SCREEN_NAMES.VendorsPage, require("./Screens/VendorsPage")],
   [SCREEN_NAMES.RewardPage, require("./Screens/RewardPage")],
   [SCREEN_NAMES.MyRewardsPage, require("./Screens/MyRewardsPage")]
@@ -60,7 +54,10 @@ const SCREENS = Screens.reduce(
 
       return (
         <View>
-          <Component.default {...props} />
+          <Component.default
+            {...props}
+            mainNavigation={(props.screenProps || {}).mainNavigation}
+          />
         </View>
       );
     },

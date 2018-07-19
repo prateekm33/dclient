@@ -1,20 +1,19 @@
-import { FeatureFlags } from "../../config/DebugConfig";
+import { FeatureFlags } from "../../../config/DebugConfig";
 import React, { Component } from "react";
 import { View } from "react-native";
-import { connect } from "../redux";
+import { connect } from "../../redux";
 import ScreenContainer from "chemics/Templates/ScreenContainer";
-import { O_Vendor_Info, O_RewardPurchaseHistory } from "../Organisms";
+import { O_Vendor_Info, O_RewardPurchaseHistory } from "../../Organisms";
 import { O_Modal } from "chemics/Organisms";
 import { A_Text, A_Button, A_Input } from "chemics/Atoms";
-import { M_RewardPointsGraphic } from "../Molecules";
+import { M_RewardPointsGraphic } from "../../Molecules";
 import {
   unsubscribeFromRewardCardAction,
   fetchRewardCustomerDetailsAction,
   fetchRewardDetailsAction,
   subscribeToRewardCardAction
-} from "../redux/actions/rewards.actions";
-import { MAIN_SCREEN_NAMES } from "../MainNavigator";
-import { MODAL_SCREEN_NAMES } from "../ModalNavigator";
+} from "../../redux/actions/rewards.actions";
+import { REWARD_MODAL_SCREEN_NAMES } from "../RewardModal";
 
 class RewardPage extends Component {
   constructor(props) {
@@ -22,7 +21,7 @@ class RewardPage extends Component {
     this.state = {
       reward_joined: false,
       reward_saved: false,
-      reward: this.props.navigation.state.params.reward,
+      reward: props.screenProps.params.reward,
       showRedeemModal: false,
       points_to_redeem: null
     };
@@ -88,32 +87,32 @@ class RewardPage extends Component {
   };
 
   redeem = () => {
-    this.props.mainNavigation.navigate(MAIN_SCREEN_NAMES.ModalNavigator, {
-      routeName: MODAL_SCREEN_NAMES.RedeemModal,
-      params: {
-        reward: this.state.reward,
-        reward_type: "reward_redeem",
-        points_to_redeem: this.state.points_to_redeem
-      }
+    this.props.navigation.navigate(REWARD_MODAL_SCREEN_NAMES.RedeemPage, {
+      reward: this.state.reward,
+      reward_type: "reward_redeem",
+      points_to_redeem: this.state.points_to_redeem
     });
   };
   earn = () => {
-    this.props.mainNavigation.navigate(MAIN_SCREEN_NAMES.ModalNavigator, {
-      routeName: MODAL_SCREEN_NAMES.RedeemModal,
-      params: {
-        reward: this.state.reward,
-        reward_type: "reward_earn"
-      }
+    this.props.navigation.navigate(REWARD_MODAL_SCREEN_NAMES.RedeemPage, {
+      reward: this.state.reward,
+      reward_type: "reward_earn"
     });
   };
 
   setNumPointsToRedeem = points_to_redeem =>
     this.setState({ points_to_redeem });
 
+  close = () => this.props.screenProps.mainNavigation.goBack();
+
   render() {
     const reward = this.state.reward;
     return (
-      <ScreenContainer title={`${reward.name}`} statusBarStyle="dark-content">
+      <ScreenContainer
+        title={`${reward.name}`}
+        statusBarStyle="dark-content"
+        onClose={this.close}
+      >
         <View
           style={{
             flexDirection: "row",

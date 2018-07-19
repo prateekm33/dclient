@@ -12,6 +12,8 @@ export class Vendor extends DataModel {
       default: val => createLocation(val)
     },
     address: { type: String, default: "" },
+    latitude: { type: Number, default: 0 },
+    longitude: { type: Number, default: 0 },
     business_phone: {
       type: String,
       default: "",
@@ -40,6 +42,10 @@ export class Vendor extends DataModel {
           hour => (hour instanceof Hour ? hour : new Hour(hour))
         );
       }
+    },
+    cuisines: {
+      type: Array,
+      default: () => []
     }
   };
 }

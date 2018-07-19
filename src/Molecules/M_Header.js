@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
-import { A_Text } from "../Atoms";
+import { A_Text } from "chemics/Atoms";
 import { getResponsiveCSSFrom8 } from "../utils";
 
 const M_Header = props => {

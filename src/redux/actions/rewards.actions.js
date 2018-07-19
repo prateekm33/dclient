@@ -62,7 +62,7 @@ export const fetchRewardCustomerDetailsAction = (
 
 export const fetchMyRewardsCardsAction = (limit, offset) => dispatch => {
   dispatch({ type: loading_types.FETCHING_MY_LOYALTY_REWARDS, loading: true });
-  return Api.getLoyaltyRewards({ limit, offset })
+  return Api.getMyRewardsCards({ limit, offset })
     .then(res => {
       dispatch({
         type: loading_types.FETCHING_MY_LOYALTY_REWARDS,

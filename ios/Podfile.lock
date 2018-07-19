@@ -1,31 +1,6 @@
 PODS:
-  - Google-Maps-iOS-Utils (2.1.0):
-    - Google-Maps-iOS-Utils/Clustering (= 2.1.0)
-    - Google-Maps-iOS-Utils/Geometry (= 2.1.0)
-    - Google-Maps-iOS-Utils/Heatmap (= 2.1.0)
-    - Google-Maps-iOS-Utils/QuadTree (= 2.1.0)
-    - GoogleMaps
-  - Google-Maps-iOS-Utils/Clustering (2.1.0):
-    - Google-Maps-iOS-Utils/QuadTree
-    - GoogleMaps
-  - Google-Maps-iOS-Utils/Geometry (2.1.0):
-    - GoogleMaps
-  - Google-Maps-iOS-Utils/Heatmap (2.1.0):
-    - Google-Maps-iOS-Utils/QuadTree
-    - GoogleMaps
-  - Google-Maps-iOS-Utils/QuadTree (2.1.0):
-    - GoogleMaps
-  - GoogleMaps (2.5.0):
-    - GoogleMaps/Maps (= 2.5.0)
-  - GoogleMaps/Base (2.5.0)
-  - GoogleMaps/Maps (2.5.0):
-    - GoogleMaps/Base
   - React (0.55.4):
     - React/Core (= 0.55.4)
-  - react-native-google-maps (0.21.0):
-    - Google-Maps-iOS-Utils (= 2.1.0)
-    - GoogleMaps (= 2.5.0)
-    - React
   - react-native-maps (0.21.0):
     - React
   - React/Core (0.55.4):
@@ -59,9 +34,6 @@ PODS:
   - yoga (0.55.4.React)
 
 DEPENDENCIES:
-  - Google-Maps-iOS-Utils
-  - GoogleMaps
-  - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - React/Core (from `../node_modules/react-native`)
   - React/RCTActionSheet (from `../node_modules/react-native`)
@@ -79,21 +51,16 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   React:
     :path: ../node_modules/react-native
-  react-native-google-maps:
-    :path: ../node_modules/react-native-maps
   react-native-maps:
     :path: ../node_modules/react-native-maps
   yoga:
     :path: ../node_modules/react-native/ReactCommon/yoga/Yoga.podspec
 
 SPEC CHECKSUMS:
-  Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
-  GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   React: aa2040dbb6f317b95314968021bd2888816e03d5
-  react-native-google-maps: 2cfe3b01f8422c7dae51d8764139fd70f888cfce
   react-native-maps: 066c2afcc89e18726377bcc685315f989ca22449
   yoga: a23273df0088bf7f2bb7e5d7b00044ea57a2a54a
 
-PODFILE CHECKSUM: 24e78484968e591722d0478f56f983b0d210f32f
+PODFILE CHECKSUM: a0b00987d08a032ed0e5d8da2e06f4b615c49d9f
 
 COCOAPODS: 1.4.0

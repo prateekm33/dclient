@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { A_Text } from "../Atoms";
+import { A_Text } from "chemics/Atoms";
 
 const O_RewardPurchaseHistory = props => {
   return (

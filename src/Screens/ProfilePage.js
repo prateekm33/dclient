@@ -1,3 +1,4 @@
+import { FeatureFlags } from "../../config/DebugConfig";
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 import { connect } from "../redux";
@@ -5,10 +6,12 @@ import ScreenContainer from "chemics/Templates/ScreenContainer";
 import { A_View, A_Text, A_Input, A_Button_Opacity } from "chemics/Atoms";
 import {
   updateCustomerAction,
-  sendPWChangeEmailAction
+  sendPWChangeEmailAction,
+  logoutAction
 } from "../redux/actions/customer.actions";
 import { getResponsiveCSSFrom8 } from "../utils";
 import { RED_TWO, TEAL_DARK_THREE } from "../styles/Colors";
+import { SCREEN_NAMES } from "../AppNavigator";
 
 class ProfilePage extends Component {
   constructor(props) {
@@ -34,6 +37,17 @@ class ProfilePage extends Component {
     });
   };
 
+  logout = () => {
+    this.props.dispatch(logoutAction()).then(success => {
+      if (!success) return;
+      this.props.navigation.resetTo(SCREEN_NAMES.SplashScreen);
+    });
+  };
+
+  navigateToHistory = () => {
+    console.warn("-----TODO...");
+  };
+
   render() {
     const customer = this.props.customer;
     return (
@@ -42,6 +56,7 @@ class ProfilePage extends Component {
         scrollView
         containerStyle={style.scrollContainerStyles}
         innerContainerStyle={style.scrollInnerContainerStyles}
+        statusBarStyle="dark-content"
       >
         <A_View style={[style.sectionContainerStyles]}>
           <A_Text style={[style.sectionTitleStyles, style.paddedContentStyles]}>
@@ -59,6 +74,17 @@ class ProfilePage extends Component {
               style={[style.infoDetailStyles]}
             />
           </A_View>
+          {FeatureFlags.PurchaseHistory && (
+            <A_View
+              style={[style.infoDetailLineStyles, style.paddedContentStyles]}
+            >
+              <A_Text style={[style.infoLabelStyles]}>History</A_Text>
+              <A_Button_Opacity
+                style={[style.infoDetailArrowStyles, { borderRadius: 0 }]}
+                onPress={this.navigateToHistory}
+              />
+            </A_View>
+          )}
         </A_View>
         <A_View style={[style.paddedContentStyles]}>
           <A_Button_Opacity
@@ -124,10 +150,11 @@ const style = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "nowrap",
     justifyContent: "space-between",
-    borderWidth: 1,
+    borderTopWidth: 1,
     borderColor: "lightgrey",
     backgroundColor: "white",
-    alignItems: "center"
+    alignItems: "center",
+    height: getResponsiveCSSFrom8(60).height
   },
   sectionTitleStyles: {
     color: "grey",
@@ -145,5 +172,14 @@ const style = StyleSheet.create({
   infoLabelStyles: {
     fontSize: getResponsiveCSSFrom8(20).height
   },
-  paddedContentStyles: { paddingHorizontal: getResponsiveCSSFrom8(10).width }
+  paddedContentStyles: { paddingHorizontal: getResponsiveCSSFrom8(10).width },
+  infoDetailArrowStyles: {
+    width: getResponsiveCSSFrom8(20).width,
+    height: getResponsiveCSSFrom8(20).width,
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderColor: "grey",
+    transform: [{ rotate: "45deg" }],
+    marginRight: getResponsiveCSSFrom8(10).width
+  }
 });

@@ -9,7 +9,6 @@
 #import <React/RCTPushNotificationManager.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-@import GoogleMaps;
 
 @implementation AppDelegate
 
@@ -30,9 +29,6 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  
-  
-  [GMSServices provideAPIKey:@"AIzaSyCk9eJ-y14UnAA1Bac-qdTszNNQ73PG7-g"];
   
   return YES;
 }

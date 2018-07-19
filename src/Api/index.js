@@ -1,5 +1,6 @@
 import { AsyncStorage } from "react-native";
 import config from "../../config";
+import BaseApi from "./base";
 import {
   createVendor,
   createCustomer,
@@ -10,82 +11,22 @@ import {
 } from "../Models";
 import { valExists, logger } from "../utils";
 
-class Api {
-  static headers = {};
+class Api extends BaseApi {
+  static headers = {
+    ...BaseApi.headers
+  };
   constructor(root, options) {
+    super(root, options);
     options = options || {};
     this.root = root;
-    this.headers = { ...Api.headers };
-    this.headers = { ...this.headers, ...(options.headers || {}) };
+    this.headers = { ...Api.headers, ...(options.headers || {}) };
   }
 
-  fetch = (url, options) => {
-    options = options || {};
-    const headers = { ...this.headers, ...(options.headers || {}) };
-    delete options.headers;
-    const requestOptions = {
-      headers,
-      ...options
-    };
-
-    return fetch(config.api.root + url, requestOptions)
-      .then(this.checkResponseForErrors)
-      .then(this.saveTokenAndCustomerFromResponse)
-      .catch(err => {
-        if (err.IS_HASH_ERROR) {
-          logger.warn(
-            `API ERROR : ${options.method || "GET"} | ${config.api.root + url}`,
-            err.message
-          );
-          throw err;
-        } else {
-          console.warn("----backend server down error : ", url, err);
-          throw { message: "Backend server is down." };
-        }
-      });
-  };
-
-  checkResponseForErrors = unprocessedResponse => {
-    return unprocessedResponse.json().then(res => {
-      if (res && res.error) throw res;
-      if (res === false) throw res;
-      return res;
-    });
-  };
-
-  get = (url, options) => {
-    return this.fetch(url, ...(options || {}));
-  };
-
-  post = (url, body, options) => {
-    return this.fetch(url, {
-      method: "post",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify(body)
-    });
-  };
-
-  put = (url, body, options) => {
-    return this.fetch(url, {
-      method: "put",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify(body)
-    });
-  };
-
-  delete = (url, body, options) => {
-    return this.fetch(url, {
-      method: "delete",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify(body)
-    });
-  };
+  fetch(url, options) {
+    return super
+      .fetch(url, options)
+      .then(this.saveTokenAndCustomerFromResponse);
+  }
 
   saveTokenAndCustomerFromResponse = res => {
     if (!res) return res;
@@ -93,12 +34,9 @@ class Api {
     if (!customer) return res;
     if (res.user_token) this.saveToken(res.user_token);
     if (customer.uuid === res.user_uuid) {
-      this.customer = createCustomer({ ...customer, is_authenticated: true });
+      this.customer = createCustomer(customer);
     } else if (!this.customer && res.customer)
-      this.customer = createCustomer({
-        ...res.customer,
-        is_authenticated: true
-      });
+      this.customer = createCustomer(res.customer);
     return res;
   };
 
@@ -113,20 +51,20 @@ class Api {
   logout = () => {
     this.customer = null;
     AsyncStorage.removeItem("customer");
-    return Promise.resolve();
+    return Promise.resolve(true);
     // return this.get(config.api.logout);
   };
 
   loginCustomer = customer => {
     return this.post(config.api.customer.login, { customer })
       .then(this.saveTokenAndCustomerFromResponse)
-      .then(res => createCustomer(res.customer));
+      .then(res => createCustomer({ ...res.customer, is_authenticated: true }));
   };
 
   signupCustomer = customer => {
     return this.post(config.api.customer.root, { customer })
       .then(this.saveTokenAndCustomerFromResponse)
-      .then(res => createCustomer(res.customer));
+      .then(res => createCustomer({ ...res.customer, is_authenticated: true }));
   };
 
   getCustomer = customer => {
@@ -379,20 +317,20 @@ class Api {
   getDeals = ({ limit, offset }) => {
     limit = +limit || 20;
     offset = +offset || 0;
-    return this.get(config.api.deals + `?limit=${limit}&offset=${offset}`).then(
-      res => {
-        return {
-          deals: res.deals.map(deal => {
-            return createDeal({
-              ...deal.data.deal,
-              vendor: deal.data.deal.vendor.data
-            });
-          }),
-          count: res.count,
-          end: res.end
-        };
-      }
-    );
+    return this.get(
+      config.api.deals.root + `?limit=${limit}&offset=${offset}`
+    ).then(res => {
+      return {
+        deals: res.deals.map(deal => {
+          return createDeal({
+            ...deal.data.deal,
+            vendor: deal.data.deal.vendor.data
+          });
+        }),
+        count: res.count,
+        end: res.end
+      };
+    });
   };
 
   getLoyaltyRewards = ({ limit, offset }) => {
@@ -439,7 +377,10 @@ class Api {
         "/" +
         vendor_uuid +
         "/" +
-        deal_uuid
+        deal_uuid,
+      {
+        deal: {}
+      }
     );
 
   changePasswordRequest = () =>
@@ -447,6 +388,37 @@ class Api {
       customer: { email: this.customer.email }
     }).then(() => true);
 
+  getVendorReviews = ({ vendor_uuid, limit, offset }) => {
+    limit = limit || 50;
+    offset = offset || 0;
+    let url =
+      config.api.vendors.reviews +
+      `/${vendor_uuid}?limit=${limit}&offset=${offset}`;
+    return this.get(url).then(res => {
+      return {
+        end: res.end,
+        count: res.count,
+        reviews: [] // TODO....
+      };
+    });
+  };
+
+  searchDeals = ({ search, limit, offset }) => {
+    limit = +limit || 50;
+    offset = +offset || 0;
+    return this.get(
+      config.api.deals.search +
+        `?search=${search}&limit=${limit}&offset=${offset}`
+    ).then(res => res.deals.map(createDeal));
+  };
+  searchVendors = ({ search, limit, offset }) => {
+    limit = +limit || 50;
+    offset = +offset || 0;
+    return this.get(
+      config.api.vendors.search +
+        `?search=${search}&limit=${limit}&offset=${offset}`
+    ).then(res => res.vendors.map(createVendor));
+  };
   // TODO...put back in
   // sendFeedback = msg => {
   //   return this.post(config.api.feedback, { message: { text: msg } });

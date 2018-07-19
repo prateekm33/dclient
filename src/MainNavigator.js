@@ -10,6 +10,7 @@ import {
   A_Icon_My_Rewards
 } from "chemics/Atoms";
 import { SCREEN_NAMES } from "./AppNavigator";
+import { BOTTOM_NAV_HEIGHT } from "./styles/defaults";
 
 export const MAIN_SCREEN_NAMES = {
   AppNavigator: "AppNavigator",
@@ -102,6 +103,7 @@ class MenuBarMain_Pre extends Component {
         navigateTo={this.navigateTo}
         shouldGetFreshState={this.shouldGetFreshState}
         plain={true}
+        activeContainerStyles={{ height: BOTTOM_NAV_HEIGHT }}
       />
     );
   }

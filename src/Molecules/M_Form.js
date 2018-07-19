@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View } from "react-native";
-import { A_Input, A_Button, A_Text } from "../Atoms";
+import { A_Input, A_Button, A_Text } from "chemics/Atoms";
 
 class M_Form extends Component {
   constructor(props) {

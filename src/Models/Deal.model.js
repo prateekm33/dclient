@@ -38,6 +38,14 @@ export class Deal extends DataModel {
     hotness_factor: {
       type: Number,
       default: 0
+    },
+    thumbnail_url: {
+      type: String,
+      default: ""
+    },
+    tags: {
+      type: Array,
+      default: () => []
     }
   };
 

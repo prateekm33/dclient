@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "../redux";
-import { View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import { withNavigation } from "react-navigation";
+import MapView, { Marker, Callout } from "react-native-maps";
+import { A_Button_Opacity, A_View, A_Text } from "chemics/Atoms";
 import { M_MapMarkerCallout_Restaurant } from "../Molecules";
+import { SCREEN_NAMES } from "../AppNavigator";
+import { getResponsiveCSSFrom8 } from "../utils";
 
 class O_Map extends Component {
   constructor(props) {
@@ -14,7 +17,7 @@ class O_Map extends Component {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
       },
-      region_set: false
+      map_ready: false
     };
   }
   componentDidMount = () => {
@@ -36,10 +39,12 @@ class O_Map extends Component {
     );
   };
 
-  onMapReady = () => this.setState({ region_set: true });
+  onMapReady = () => {
+    this.setState({ map_ready: true });
+  };
 
   onRegionChange = region => {
-    if (!this.state.region_set) return;
+    if (!this.state.map_ready) return;
     this.setState({ region });
   };
 
@@ -53,8 +58,8 @@ class O_Map extends Component {
         }-${idx}`}
       >
         <M_MapMarkerCallout_Restaurant
-          title={marker.title}
-          description={marker.description}
+          vendor={marker.data}
+          onPress={this.props.onMarkerPress}
         />
       </Marker>
     );
@@ -62,10 +67,9 @@ class O_Map extends Component {
 
   render() {
     return (
-      <View>
+      <A_View>
         <MapView
           showsUserLocation={true}
-          followsUserLocation={true}
           region={this.state.region}
           onRegionChange={this.onRegionChange}
           onMapReady={this.onMapReady}
@@ -73,29 +77,30 @@ class O_Map extends Component {
             width: "100%",
             height: "100%"
           }}
+          loadingEnabled={true}
         >
           {this.props.markers.map(this.renderMarker)}
         </MapView>
-      </View>
+      </A_View>
     );
   }
 }
 
-function getMapMarkerObj(address, title) {
+function getMapMarkerObj(data) {
   // console.warn("----TODO....getMapMarkerObj", address, title);
   return {
     latlng: {
       latitude: 37.327797,
       longitude: -122.047632
     },
-    title: "house",
-    description: " the crib "
+    data
   };
 }
 
 class O_Map_Deals_Pre extends Component {
   constructor(props) {
     super(props);
+    this.rendered_vendors = {};
     this.state = {
       markers: this.getInitialMarkers()
     };
@@ -108,77 +113,63 @@ class O_Map_Deals_Pre extends Component {
 
   getInitialMarkers = () => this.getDealMarkers(this.props.deals);
 
-  getDealMarkers = deals =>
-    deals.map(deal => getMapMarkerObj(deal.vendor.address, deal.vendor.name));
+  getDealMarkers = deals => {
+    return deals
+      .map(deal => {
+        if (deal.vendor_uuid in this.rendered_vendors) return false;
+        this.rendered_vendors[deal.vendor_uuid] = true;
+        return getMapMarkerObj(deal);
+      })
+      .filter(val => !!val);
+  };
 
   renderDealMarker = (marker, idx) => {
+    const deal = marker.data;
     return (
       <Marker
         coordinate={marker.latlng}
-        key={`deal-marker-${marker.title}-${idx}`}
+        key={`deal-marker-${deal.uuid}-${idx}`}
       >
-        <M_MapMarkerCallout_Restaurant
-          title={marker.title}
-          description={marker.description}
-        />
+        <Callout>
+          <A_Button_Opacity
+            style={[]}
+            onPress={() => this.props.navigateToDeal(deal)}
+          >
+            <A_View>
+              <A_Text
+                strong
+                style={{ fontSize: getResponsiveCSSFrom8(20).height }}
+              >
+                {deal.name}
+              </A_Text>
+              <A_Text
+                strong
+                style={{ fontSize: getResponsiveCSSFrom8(18).height }}
+              >
+                {deal.vendor.name}
+              </A_Text>
+              <A_Text style={{ fontSize: getResponsiveCSSFrom8(15).height }}>
+                Expires on {deal.getFormattedExpiration()}
+              </A_Text>
+            </A_View>
+          </A_Button_Opacity>
+        </Callout>
       </Marker>
     );
   };
 
   render() {
     return (
-      <View style={this.props.mapContainerStyle}>
+      <A_View style={this.props.mapContainerStyle}>
         <O_Map
           markers={this.state.markers}
           renderMarker={this.renderDealMarker}
         />
-      </View>
+      </A_View>
     );
   }
 }
-const O_Map_Deals = connect(state => ({}))(O_Map_Deals_Pre);
-
-class O_Map_Rewards_Pre extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      markers: this.getInitialMarkers()
-    };
-  }
-
-  getInitialMarkers = () => this.getRewardMarkers(this.props.rewards);
-
-  getRewardMarkers = rewards =>
-    rewards.map(reward =>
-      getMapMarkerObj(reward.vendor.address, reward.vendor.name)
-    );
-
-  renderRewardMarker = (marker, idx) => {
-    return (
-      <Marker
-        coordinate={marker.latlng}
-        key={`deal-marker-${marker.title}-${idx}`}
-      >
-        <M_MapMarkerCallout_Restaurant
-          title={marker.title}
-          description={marker.description}
-        />
-      </Marker>
-    );
-  };
-
-  render() {
-    return (
-      <View style={this.props.mapContainerStyle}>
-        <O_Map
-          markers={this.state.markers}
-          renderMarker={this.renderRewardMarker}
-        />
-      </View>
-    );
-  }
-}
-const O_Map_Rewards = connect(state => ({}))(O_Map_Rewards_Pre);
+const O_Map_Deals = O_Map_Deals_Pre;
 
 class O_Map_Vendors_Pre extends Component {
   constructor(props) {
@@ -195,18 +186,17 @@ class O_Map_Vendors_Pre extends Component {
 
   getInitialMarkers = () => this.getVendorMarkers(this.props.vendors);
 
-  getVendorMarkers = vendors =>
-    vendors.map(vendor => getMapMarkerObj(vendor.address, vendor.name));
+  getVendorMarkers = vendors => vendors.map(getMapMarkerObj);
 
   renderVendorMarker = (marker, idx) => {
     return (
       <Marker
         coordinate={marker.latlng}
-        key={`vendor-marker-${marker.title}-${idx}`}
+        key={`vendor-marker-${marker.data.name}-${idx}`}
       >
         <M_MapMarkerCallout_Restaurant
-          title={marker.title}
-          description={marker.description}
+          vendor={marker.data}
+          onPress={this.props.onMarkerPress}
         />
       </Marker>
     );
@@ -214,15 +204,15 @@ class O_Map_Vendors_Pre extends Component {
 
   render() {
     return (
-      <View style={this.props.mapContainerStyle}>
+      <A_View style={this.props.mapContainerStyle}>
         <O_Map
           markers={this.state.markers}
           renderMarker={this.renderVendorMarker}
         />
-      </View>
+      </A_View>
     );
   }
 }
 const O_Map_Vendors = connect(state => ({}))(O_Map_Vendors_Pre);
 
-export { O_Map, O_Map_Deals, O_Map_Rewards, O_Map_Vendors };
+export { O_Map, O_Map_Deals, O_Map_Vendors };

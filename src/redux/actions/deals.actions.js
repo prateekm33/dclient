@@ -156,3 +156,17 @@ export const fetchVendorRewardsAction = ({
       return false;
     });
 };
+
+export const searchDealsAction = ({ search, limit, offset }) => dispatch => {
+  dispatch({ type: loading_types.SEARCHING_DEALS, loading: true });
+  return Api.searchDeals({ search, limit, offset })
+    .then(deals => {
+      dispatch({ type: loading_types.SEARCHING_DEALS, loading: false });
+      return deals;
+    })
+    .catch(error => {
+      dispatch({ type: loading_types.SEARCHING_DEALS, loading: false });
+      dispatchErrorActionOfType(error_types.SEARCHING_DEALS_ERROR)(error);
+      return false;
+    });
+};

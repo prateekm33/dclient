@@ -2,14 +2,18 @@ import React from "react";
 import { View } from "react-native";
 import { StackNavigator } from "react-navigation";
 
-export const REDEEM_MODAL_SCREEN_NAMES = {
-  RedeemPage: "RedeemPage"
+export const VENDOR_MODAL_SCREEN_NAMES = {
+  VendorPage: "VendorPage",
+  DealPage: "DealPage",
+  RewardPage: "RewardPage"
 };
 
-export const INITIAL_ROUTE_NAME = REDEEM_MODAL_SCREEN_NAMES.RedeemPage;
+export const INITIAL_ROUTE_NAME = VENDOR_MODAL_SCREEN_NAMES.VendorPage;
 
 const Screens = [
-  [REDEEM_MODAL_SCREEN_NAMES.RedeemPage, require("./Screens/RedeemPage")]
+  [VENDOR_MODAL_SCREEN_NAMES.VendorPage, require("./Screens/VendorPage")],
+  [VENDOR_MODAL_SCREEN_NAMES.DealPage, require("./Screens/DealPage")],
+  [VENDOR_MODAL_SCREEN_NAMES.RewardPage, require("./Screens/RewardPage")]
 ];
 
 const SCREENS = Screens.reduce(
@@ -31,10 +35,10 @@ const SCREENS = Screens.reduce(
   {}
 );
 
-const RedeemModalNavigator = StackNavigator(SCREENS, {
+const VendorModalNavigator = StackNavigator(SCREENS, {
   navigationOptions: {
     header: null
   },
   initialRouteName: INITIAL_ROUTE_NAME
 });
-export default RedeemModalNavigator;
+export default VendorModalNavigator;

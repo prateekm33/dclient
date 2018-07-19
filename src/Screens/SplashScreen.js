@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { connect } from "../redux";
 
 import { SCREEN_NAMES } from "../AppNavigator";
-import ScreenContainer from "../Templates/ScreenContainer";
-import { A_Text } from "../Atoms";
+import { A_Text, A_View } from "chemics/Atoms";
 
 import loading_types from "../redux/types/loading.types";
 import { initAction } from "../redux/actions";
@@ -27,9 +26,9 @@ class SplashScreen extends Component {
 
   render() {
     return (
-      <ScreenContainer>
+      <A_View>
         <A_Text>splash</A_Text>
-      </ScreenContainer>
+      </A_View>
     );
   }
 }

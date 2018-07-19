@@ -56,7 +56,7 @@ function initClassValidProps(Class, props = {}) {
         this[validProp] = verifiedValue;
       } else throw new Error("Incorrect type assignment");
     } catch (e) {
-      const disable = Class.name === "MyDeal";
+      const disable = false;
       logger.suppress(disable).warn(Class.name + " Model Init Errors");
       logger
         .suppress(disable)

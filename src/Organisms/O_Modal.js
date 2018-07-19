@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View } from "react-native";
-import { A_Icon_Close } from "../Atoms";
+import { A_Icon_Close } from "chemics/Atoms";
 
 export const O_Modal = props => {
   if (!props.show) return null;

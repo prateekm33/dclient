@@ -3,7 +3,12 @@ import { connect } from "../redux";
 import PropTypes from "prop-types";
 import { StyleSheet } from "react-native";
 
-import { A_Button_Opacity, A_Icon_Deal, A_Icon_Reward, A_View } from "../Atoms";
+import {
+  A_Button_Opacity,
+  A_Icon_Deal,
+  A_Icon_Reward,
+  A_View
+} from "chemics/Atoms";
 
 import { getResponsiveCSSFrom8 } from "../utils";
 import { SCREEN_NAMES, UNAUTH_ROUTES } from "../AppNavigator";

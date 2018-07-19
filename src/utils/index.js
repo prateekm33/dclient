@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { Dimensions, Linking } from "react-native";
 import logger from "./logger";
 export { logger };
 
@@ -35,3 +35,7 @@ export const generateQRCode = data => {};
 
 export const customerIsAuthenticated = customer =>
   !!customer && customer.is_authenticated && !!customer.uuid;
+
+export const callPhoneNumber = phone => {
+  Linking.openURL("tel:+" + phone).catch(err => {});
+};

@@ -53,3 +53,23 @@ export const fetchFollowingVendorsAction = (limit, offset) => dispatch => {
       return false;
     });
 };
+
+export const searchVendorsAction = ({ search, limit, offset }) => dispatch => {
+  dispatch({ type: loading_types.SEARCHING_VENDORS, loading: true });
+  return Api.searchVendors({ search, limit, offset })
+    .then(vendors => {
+      dispatch({
+        type: loading_types.SEARCHING_VENDORS,
+        loading: false
+      });
+      return vendors;
+    })
+    .catch(error => {
+      dispatch({
+        type: loading_types.SEARCHING_VENDORS,
+        loading: false
+      });
+      dispatchErrorActionOfType(error_types.SEARCHING_VENDORS_ERROR)(error);
+      return false;
+    });
+};

@@ -1,5 +1,5 @@
 import React from "react";
-import { A_Text } from "../Atoms";
+import { A_Text } from "chemics/Atoms";
 import moment from "moment";
 
 // TODO --- add in format string for moment parsing below
