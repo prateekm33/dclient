@@ -7,7 +7,8 @@ import {
   createDeal,
   createMyLoyaltyRewardCard,
   createLoyaltyReward,
-  createMyDeal
+  createMyDeal,
+  MyDeal
 } from "../Models";
 import { valExists, logger } from "../utils";
 
@@ -113,8 +114,14 @@ class Api extends BaseApi {
       createMyDeal({ ...res.deal.data.deal, vendor: res.deal.data.vendor })
     );
 
-  saveDeal = ({ deal_uuid, vendor_uuid, deal }) =>
-    this.post(
+  saveDeal = ({ deal_uuid, vendor_uuid, deal }) => {
+    let method = "post";
+    let body = { deal: { is_saved: true } };
+    if (deal instanceof MyDeal) {
+      method = "put";
+      body = { updates: { is_saved: true } };
+    }
+    return this[method](
       config.api.customer.deals +
         "/" +
         this.customer.uuid +
@@ -122,10 +129,9 @@ class Api extends BaseApi {
         vendor_uuid +
         "/" +
         deal_uuid,
-      {
-        deal: { is_saved: true }
-      }
+      body
     ).then(res => createMyDeal({ ...deal, ...res.deal }));
+  };
 
   unSaveDeal = ({ deal_uuid, vendor_uuid }) =>
     this.put(

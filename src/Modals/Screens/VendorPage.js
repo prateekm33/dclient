@@ -9,7 +9,8 @@ import {
   A_ListContainer,
   A_Button_Opacity,
   A_Text,
-  A_Text_Email
+  A_Text_Email,
+  A_Icon_Navigate
 } from "chemics/Atoms";
 import { M_Card_Deal_Mini, M_Card_LoyaltyReward_Mini } from "chemics/Molecules";
 import { O_Vendor_Info, O_VendorReviewMetrics } from "../../Organisms";
@@ -22,7 +23,11 @@ import {
   REALLY_HOT_PINK,
   LIGHTGREY_ONE
 } from "../../styles/Colors";
-import { getResponsiveCSSFrom8, callPhoneNumber } from "../../utils";
+import {
+  getResponsiveCSSFrom8,
+  callPhoneNumber,
+  openGoogleMapTo
+} from "../../utils";
 import { VENDOR_MODAL_SCREEN_NAMES } from "../VendorModal";
 import { M_Vendor_Hours } from "../../Molecules";
 
@@ -139,10 +144,13 @@ class VendorPage extends Component {
             />
           </MapView>
         </A_View>
-        {/* <A_Text>GET DIRECTIONS BUTTON TODO</A_Text> */}
         <A_View
           style={[{ backgroundColor: "white" }, style.paddedContentStyles]}
         >
+          <A_View style={[style.infoDetailLineContainerStyles]}>
+            <A_Text style={{ color: "grey" }}>Directions</A_Text>
+            <A_Icon_Navigate onPress={this.getDirections} />
+          </A_View>
           <A_View style={[style.infoDetailLineContainerStyles]}>
             <A_Text style={{ color: "grey" }}>Phone</A_Text>
             <A_Button_Opacity
@@ -273,6 +281,10 @@ class VendorPage extends Component {
   callVendor = () => {
     callPhoneNumber(this.state.vendor.business_phone);
   };
+  getDirections = () => {
+    openGoogleMapTo(this.state.vendor.address);
+  };
+
   render() {
     return (
       <ScreenContainer

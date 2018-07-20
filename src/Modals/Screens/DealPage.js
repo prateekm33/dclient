@@ -56,6 +56,7 @@ class DealPage extends Component {
       const deal = results[1] || results[0];
       if (!deal) return;
       if (results[1]) is_saved = deal.is_saved;
+      console.warn(is_saved);
       this.setState({ deal, vendor: deal.vendor, is_saved });
     });
   };

@@ -39,3 +39,19 @@ export const customerIsAuthenticated = customer =>
 export const callPhoneNumber = phone => {
   Linking.openURL("tel:+" + phone).catch(err => {});
 };
+
+export const openGoogleMapTo = daddr => {
+  navigator.geolocation.getCurrentPosition(
+    a => {
+      const { latitude, longitude } = a.coords;
+      Linking.openURL(
+        `comgooglemaps://?saddr${latitude},${longitude}&daddr=${encodeURI(
+          daddr
+        )}&directionsmode=driving`
+      ).catch(err => {});
+    },
+    () => {
+      console.warn("geolocation current position get error");
+    }
+  );
+};

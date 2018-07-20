@@ -16,14 +16,14 @@ export default {
           action.loyalty_reward_uuid,
           action.vendor_uuid
         );
-      case deal_types.SAVED_DEAL:
-        return addSavedDealToCustomer(customer, action.deal);
-      case deal_types.UNSAVED_DEAL:
-        return removeSavedDealFromCustomer(
-          customer,
-          action.deal_uuid,
-          action.vendor_uuid
-        );
+      // case deal_types.SAVED_DEAL:
+      //   return addSavedDealToCustomer(state, action.deal);
+      // case deal_types.UNSAVED_DEAL:
+      //   return removeSavedDealFromCustomer(
+      //     customer,
+      //     action.deal_uuid,
+      //     action.vendor_uuid
+      //   );
       case customer_types.SAVE_CUSTOMER_DATA:
         return updateCustomer(state, action.customer);
 
