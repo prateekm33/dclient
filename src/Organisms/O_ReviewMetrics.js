@@ -46,7 +46,7 @@ class O_VendorReviewMetrics_Pre extends Component {
 
   renderMetric = ({ review, customer_review }) => {
     // only change the circumference value if you want to change the size of the circles
-    const circumference = getResponsiveCSSFrom8(480).width;
+    const circumference = getResponsiveCSSFrom8(300).width;
     const padding = getResponsiveCSSFrom8(10).width;
     const radius = circumference / (2 * Math.PI);
     const diameter = 2 * radius;
@@ -170,11 +170,14 @@ class O_VendorReviewMetrics_Pre extends Component {
     }
     return (
       <A_View
-        style={{
-          flexDirection: "row",
-          flexWrap: "wrap",
-          justifyContent: "center"
-        }}
+        style={[
+          {
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "center"
+          },
+          this.props.containerStyles
+        ]}
       >
         {nodes}
       </A_View>

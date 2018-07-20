@@ -8,7 +8,8 @@ import {
   A_View,
   A_ListContainer,
   A_Button_Opacity,
-  A_Text
+  A_Text,
+  A_Text_Email
 } from "chemics/Atoms";
 import { M_Card_Deal_Mini, M_Card_LoyaltyReward_Mini } from "chemics/Molecules";
 import { O_Vendor_Info, O_VendorReviewMetrics } from "../../Organisms";
@@ -16,9 +17,14 @@ import {
   fetchVendorDealsAction,
   fetchVendorRewardsAction
 } from "../../redux/actions/deals.actions";
-import { TEAL_DARK_THREE, REALLY_HOT_PINK } from "../../styles/Colors";
+import {
+  TEAL_DARK_THREE,
+  REALLY_HOT_PINK,
+  LIGHTGREY_ONE
+} from "../../styles/Colors";
 import { getResponsiveCSSFrom8, callPhoneNumber } from "../../utils";
 import { VENDOR_MODAL_SCREEN_NAMES } from "../VendorModal";
+import { M_Vendor_Hours } from "../../Molecules";
 
 class VendorPage extends Component {
   constructor(props) {
@@ -98,44 +104,58 @@ class VendorPage extends Component {
   renderGeneral = () => {
     return (
       <A_View>
-        <A_View>
-          <O_VendorReviewMetrics vendor={this.state.vendor} />
-        </A_View>
-        <MapView
-          style={{
-            width: "100%",
-            height: getResponsiveCSSFrom8(150).height
+        <O_VendorReviewMetrics
+          vendor={this.state.vendor}
+          containerStyles={{
+            backgroundColor: "white"
           }}
-          initialRegion={{
-            latitude: this.state.vendor.latitude,
-            longitude: this.state.vendor.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01
-          }}
-          showsUserLocation={true}
-          loadingEnabled={true}
-        >
-          <Marker
-            coordinate={{
-              longitude: this.state.vendor.longitude,
-              latitude: this.state.vendor.latitude
-            }}
-          />
-        </MapView>
-        {/* <A_Text>GET DIRECTIONS BUTTON TODO</A_Text> */}
+        />
         <A_View
           style={{
-            flexDirection: "row",
-            flexWrap: "nowrap",
-            justifyContent: "space-between",
-            alignItems: "center"
+            paddingVertical: getResponsiveCSSFrom8(10).width,
+            backgroundColor: LIGHTGREY_ONE,
+            width: "100%"
           }}
         >
-          <A_Text strong>Phone</A_Text>
-          <A_Button_Opacity
-            value={this.state.vendor.business_phone}
-            onPress={this.callVendor}
-          />
+          <MapView
+            style={{
+              width: "100%",
+              height: getResponsiveCSSFrom8(150).height
+            }}
+            initialRegion={{
+              latitude: this.state.vendor.latitude,
+              longitude: this.state.vendor.longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01
+            }}
+            showsUserLocation={true}
+            loadingEnabled={true}
+          >
+            <Marker
+              coordinate={{
+                longitude: this.state.vendor.longitude,
+                latitude: this.state.vendor.latitude
+              }}
+            />
+          </MapView>
+        </A_View>
+        {/* <A_Text>GET DIRECTIONS BUTTON TODO</A_Text> */}
+        <A_View
+          style={[{ backgroundColor: "white" }, style.paddedContentStyles]}
+        >
+          <A_View style={[style.infoDetailLineContainerStyles]}>
+            <A_Text style={{ color: "grey" }}>Phone</A_Text>
+            <A_Button_Opacity
+              value={this.state.vendor.formattedPhoneNumber()}
+              onPress={this.callVendor}
+              strong
+            />
+          </A_View>
+          <A_View style={[style.infoDetailLineContainerStyles]}>
+            <A_Text style={{ color: "grey" }}>Email</A_Text>
+            <A_Text_Email>{this.state.vendor.business_email}</A_Text_Email>
+          </A_View>
+          <M_Vendor_Hours hours={this.state.vendor.hours} />
         </A_View>
       </A_View>
     );
@@ -260,18 +280,27 @@ class VendorPage extends Component {
         scrollView
         statusBarStyle="dark-content"
         onClose={this.close}
+        innerContainerStyle={{ padding: 0 }}
+        containerStyle={{
+          backgroundColor: LIGHTGREY_ONE
+        }}
       >
         <A_View
-          style={{
-            flexDirection: "row",
-            flexWrap: "nowrap",
-            marginVertical: getResponsiveCSSFrom8(10).height
-          }}
+          style={[
+            {
+              flexDirection: "row",
+              flexWrap: "nowrap",
+              marginBottom: getResponsiveCSSFrom8(5).height,
+              borderBottomWidth: 1,
+              borderColor: LIGHTGREY_ONE,
+              backgroundColor: "white"
+            },
+            style.paddedContentStyles
+          ]}
         >
           {this.tab_headers.map((header, idx) => (
             <A_Button_Opacity
               value={header.title}
-              strong={this.state.activeTab === idx}
               onPress={header.onPress}
               style={[
                 style.tabOptionContainerStyles,
@@ -285,7 +314,7 @@ class VendorPage extends Component {
           ))}
         </A_View>
         {this.getActiveTabContent()}
-        <A_View style={{ marginBottom: getResponsiveCSSFrom8(100).height }} />
+        <A_View style={{ marginBottom: getResponsiveCSSFrom8(30).height }} />
       </ScreenContainer>
     );
   }
@@ -304,6 +333,15 @@ const style = StyleSheet.create({
   activeTabStyles: {},
   activeTabTextStyles: {
     color: REALLY_HOT_PINK
+  },
+  infoDetailLineContainerStyles: {
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  paddedContentStyles: {
+    paddingHorizontal: getResponsiveCSSFrom8(10).width
   }
 });
 

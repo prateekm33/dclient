@@ -7,10 +7,10 @@ import phone from "phone";
 export class Vendor extends DataModel {
   static validProperties = {
     name: { type: String, default: "" },
-    location: {
-      type: Location,
-      default: val => createLocation(val)
-    },
+    // location: {
+    //   type: Location,
+    //   default: val => createLocation(val)
+    // },
     address: { type: String, default: "" },
     latitude: { type: Number, default: 0 },
     longitude: { type: Number, default: 0 },
@@ -47,6 +47,13 @@ export class Vendor extends DataModel {
       type: Array,
       default: () => []
     }
+  };
+
+  formattedPhoneNumber = () => {
+    if (!this.business_phone) return "";
+    let temp = this.business_phone.split("+1")[1];
+    let phone = "";
+    return `(${temp.substr(0, 3)}) ${temp.substr(3, 3)}-${temp.substr(6, 4)}`;
   };
 }
 

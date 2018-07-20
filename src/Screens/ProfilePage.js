@@ -17,19 +17,44 @@ class ProfilePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: props.customer.email
+      email: props.customer.email,
+      first_name: props.customer.first_name,
+      last_name: props.customer.last_name,
+      changes_made: false
     };
   }
 
   savePersonalInfo = () => {
-    const { email } = this.state;
+    const { email, first_name, last_name } = this.state;
     const updates = {
-      email
+      email,
+      last_name,
+      first_name
     };
     this.props.dispatch(updateCustomerAction(updates));
   };
 
+  getChangesMade = () => {
+    if (
+      this.state.first_name !== this.props.customer.first_name ||
+      this.state.last_name !== this.props.customer.last_name
+    ) {
+      this.setState({ changes_made: true });
+    } else this.setState({ changes_made: false });
+  };
   changeEmail = email => this.setState({ email });
+  changeFirstName = first_name => {
+    const newState = { first_name };
+    this.setState(newState, () => {
+      this.getChangesMade();
+    });
+  };
+  changeLastName = last_name => {
+    const newState = { last_name };
+    this.setState(newState, () => {
+      this.getChangesMade();
+    });
+  };
 
   sendPWChangeEmail = () => {
     this.props.dispatch(sendPWChangeEmailAction()).then(sent => {
@@ -59,9 +84,63 @@ class ProfilePage extends Component {
         statusBarStyle="dark-content"
       >
         <A_View style={[style.sectionContainerStyles]}>
-          <A_Text style={[style.sectionTitleStyles, style.paddedContentStyles]}>
-            GENERAL
+          <A_View
+            style={[
+              {
+                flexDirection: "row",
+                flexWrap: "nowrap",
+                justifyContent: "space-between",
+                alignItems: "center",
+                height: getResponsiveCSSFrom8(30).height
+              },
+              style.paddedContentStyles
+            ]}
+          >
+            <A_Text style={[style.sectionTitleStyles]}>GENERAL</A_Text>
+            {this.state.changes_made && (
+              <A_Button_Opacity
+                value="Save"
+                onPress={this.savePersonalInfo}
+                style={{}}
+                buttonTextStyles={[{ color: "blue" }]}
+                strong
+              />
+            )}
+          </A_View>
+          <A_Text
+            style={[
+              {
+                color: "grey",
+                fontSize: getResponsiveCSSFrom8(15).height,
+                marginBottom: getResponsiveCSSFrom8(10).height
+              },
+              style.paddedContentStyles
+            ]}
+          >
+            Email remains fixed as the one used during signup.
           </A_Text>
+          <A_View
+            style={[style.infoDetailLineStyles, style.paddedContentStyles]}
+          >
+            <A_Text style={[style.infoLabelStyles]}>First name</A_Text>
+            <A_Input
+              placeholder="First name"
+              defaultValue={customer.first_name}
+              onChangeText={this.changeFirstName}
+              style={[style.infoDetailStyles]}
+            />
+          </A_View>
+          <A_View
+            style={[style.infoDetailLineStyles, style.paddedContentStyles]}
+          >
+            <A_Text style={[style.infoLabelStyles]}>Last name</A_Text>
+            <A_Input
+              placeholder="Last name"
+              defaultValue={customer.last_name}
+              onChangeText={this.changeLastName}
+              style={[style.infoDetailStyles]}
+            />
+          </A_View>
           <A_View
             style={[style.infoDetailLineStyles, style.paddedContentStyles]}
           >
@@ -157,9 +236,9 @@ const style = StyleSheet.create({
     height: getResponsiveCSSFrom8(60).height
   },
   sectionTitleStyles: {
-    color: "grey",
-    fontSize: getResponsiveCSSFrom8(20).height,
-    marginBottom: getResponsiveCSSFrom8(5).height
+    color: "grey"
+    // fontSize: getResponsiveCSSFrom8(20).height,
+    // marginBottom: getResponsiveCSSFrom8(5).height
   },
   sectionContainerStyles: {
     marginVertical: getResponsiveCSSFrom8(40).height

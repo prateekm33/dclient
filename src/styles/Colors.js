@@ -7,3 +7,4 @@ export const ERROR_RED = "red";
 export const RED_ONE = "#5d0303";
 export const RED_TWO = "#CC2B22";
 export const REALLY_HOT_PINK = "#bb2887";
+export const LIGHTGREY_ONE = "#ececec";
