@@ -22,6 +22,10 @@ export class LoyaltyReward extends DataModel {
         if (date.isValid()) return date;
         return null;
       }
+    },
+    tags: {
+      type: Array,
+      default: () => []
     }
   };
 

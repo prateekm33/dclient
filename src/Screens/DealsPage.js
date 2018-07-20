@@ -316,6 +316,7 @@ class DealsPage extends Component {
               borderWidth: 0.6,
               borderColor: "lightgrey"
             }}
+            close={() => this.searchDeals("")}
           />
         </A_View>
       </KeyboardAvoidingView>

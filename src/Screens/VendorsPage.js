@@ -330,7 +330,7 @@ class VendorsPage extends Component {
             )}
           </ScreenContainer>
           <M_Searchbar
-            onSearch={this.searchDeals}
+            onSearch={this.searchVendors}
             containerStyles={{
               borderTopWidth: 0.5,
               borderTopColor: "#bdbdbd",
@@ -342,6 +342,7 @@ class VendorsPage extends Component {
               borderWidth: 0.6,
               borderColor: "lightgrey"
             }}
+            close={() => this.searchVendors("")}
           />
         </A_View>
       </KeyboardAvoidingView>

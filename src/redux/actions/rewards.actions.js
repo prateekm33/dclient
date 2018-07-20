@@ -182,3 +182,23 @@ export const subscribeToRewardCardAction = (
       return false;
     });
 };
+
+export const searchRewardsAction = ({ search, limit, offset }) => dispatch => {
+  dispatch({ type: loading_types.SEARCHING_REWARDS, loading: true });
+  return Api.searchRewards({ search, limit, offset })
+    .then(vendors => {
+      dispatch({
+        type: loading_types.SEARCHING_REWARDS,
+        loading: false
+      });
+      return vendors;
+    })
+    .catch(error => {
+      dispatch({
+        type: loading_types.SEARCHING_REWARDS,
+        loading: false
+      });
+      dispatchErrorActionOfType(error_types.SEARCHING_REWARDS_ERROR)(error);
+      return false;
+    });
+};

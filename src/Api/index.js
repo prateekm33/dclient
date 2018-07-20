@@ -412,7 +412,7 @@ class Api extends BaseApi {
     limit = +limit || 50;
     offset = +offset || 0;
     return this.get(
-      config.api.deals.search +
+      config.api.search.deals +
         `?search=${search}&limit=${limit}&offset=${offset}`
     ).then(res => res.deals.map(createDeal));
   };
@@ -420,7 +420,7 @@ class Api extends BaseApi {
     limit = +limit || 50;
     offset = +offset || 0;
     return this.get(
-      config.api.vendors.search +
+      config.api.search.vendors +
         `?search=${search}&limit=${limit}&offset=${offset}`
     ).then(res => res.vendors.map(createVendor));
   };
@@ -438,6 +438,15 @@ class Api extends BaseApi {
         "/" +
         this.customer.uuid
     ).then(res => res.review_metrics);
+  };
+
+  searchRewards = ({ search, limit, offset }) => {
+    limit = +limit || 50;
+    offset = +offset || 0;
+    return this.get(
+      config.api.search.rewards +
+        `?search=${search}&limit=${limit}&offset=${offset}`
+    ).then(res => res.vendors.map(createVendor));
   };
   // TODO...put back in
   // sendFeedback = msg => {

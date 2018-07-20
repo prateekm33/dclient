@@ -107,8 +107,9 @@ class O_Map_Deals_Pre extends Component {
   }
 
   componentWillReceiveProps = nextProps => {
-    if (nextProps.deals !== this.props.deals)
+    if (nextProps.deals !== this.props.deals) {
       this.setState({ markers: this.getDealMarkers(nextProps.deals) });
+    }
   };
 
   getInitialMarkers = () => this.getDealMarkers(this.props.deals);
@@ -116,9 +117,11 @@ class O_Map_Deals_Pre extends Component {
   getDealMarkers = deals => {
     return deals
       .map(deal => {
-        if (deal.vendor_uuid in this.rendered_vendors) return false;
-        this.rendered_vendors[deal.vendor_uuid] = true;
-        return getMapMarkerObj(deal);
+        if (deal.vendor_uuid in this.rendered_vendors)
+          return this.rendered_vendors[deal.vendor_uuid];
+        const marker = getMapMarkerObj(deal);
+        this.rendered_vendors[deal.vendor_uuid] = marker;
+        return marker;
       })
       .filter(val => !!val);
   };
