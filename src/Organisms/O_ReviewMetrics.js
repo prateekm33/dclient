@@ -11,6 +11,13 @@ import { getResponsiveCSSFrom8 } from "../../node_modules/chemics/utils";
 class O_VendorReviewMetrics_Pre extends Component {
   constructor(props) {
     super(props);
+    this.hierarchy = [
+      "food_quality",
+      "service_quality",
+      "cleanliness",
+      "date_factor",
+      "spice_factor"
+    ];
     this.state = {
       reviews: {
         cleanliness: { title: "cleanliness", value: 1 },
@@ -30,18 +37,18 @@ class O_VendorReviewMetrics_Pre extends Component {
   }
 
   componentDidMount = () => {
-    this.props
-      .dispatch(fetchVendorReviewMetricsAction(this.props.vendor.uuid))
-      .then(reviews => {
-        if (!reviews) return;
-        this.setState({ reviews });
-      });
-    this.props
-      .dispatch(fetchCustomerVendorReviewMetricsAction(this.props.vendor.uuid))
-      .then(reviews => {
-        if (!reviews) return;
-        this.setState({ customer_reviews: reviews });
-      });
+    // this.props
+    //   .dispatch(fetchVendorReviewMetricsAction(this.props.vendor.uuid))
+    //   .then(reviews => {
+    //     if (!reviews) return;
+    //     this.setState({ reviews });
+    //   });
+    // this.props
+    //   .dispatch(fetchCustomerVendorReviewMetricsAction(this.props.vendor.uuid))
+    //   .then(reviews => {
+    //     if (!reviews) return;
+    //     this.setState({ customer_reviews: reviews });
+    //   });
   };
 
   renderMetric = ({ review, customer_review }) => {
@@ -66,7 +73,7 @@ class O_VendorReviewMetrics_Pre extends Component {
         stroke_color = "orange";
         break;
       case 0.6:
-        stroke_color = "#FFEE58";
+        stroke_color = "gold"; //"#FFEE58";
         break;
       case 0.8:
         stroke_color = "blue";
@@ -94,7 +101,7 @@ class O_VendorReviewMetrics_Pre extends Component {
           height={box_height}
         >
           <Path
-            strokeWidth={3}
+            strokeWidth={1}
             stroke="#f5f0f0"
             strokeLinecap="round"
             fill="none"
@@ -104,6 +111,7 @@ class O_VendorReviewMetrics_Pre extends Component {
           <Path
             strokeWidth={3}
             stroke={stroke_color}
+            strokeOpacity={0.5}
             strokeLinecap="round"
             fill="none"
             strokeDasharray={`${stroke_length}, ${circumference}`}
@@ -159,15 +167,12 @@ class O_VendorReviewMetrics_Pre extends Component {
   };
 
   render() {
-    const nodes = [];
-    for (let r in this.state.reviews) {
-      nodes.push(
-        this.renderMetric({
-          review: this.state.reviews[r],
-          customer_review: this.state.customer_reviews[r]
-        })
-      );
-    }
+    const nodes = this.hierarchy.map(metric => {
+      return this.renderMetric({
+        review: this.state.reviews[metric],
+        customer_review: this.state.customer_reviews[metric]
+      });
+    });
     return (
       <A_View
         style={[

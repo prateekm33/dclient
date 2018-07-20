@@ -50,7 +50,9 @@ class LoginPage extends Component {
   }
 
   login = inputs => {
-    const [email, password] = inputs.map(input => input._lastNativeText);
+    const [email, password] = inputs.map(
+      input => (input ? input._lastNativeText : "")
+    );
     const credentials = { email, password };
     this.props
       .dispatch(loginAction(credentials))
@@ -58,7 +60,9 @@ class LoginPage extends Component {
   };
 
   signup = inputs => {
-    const [email, password] = inputs.map(input => input._lastNativeText);
+    const [email, password] = inputs.map(
+      input => (input ? input._lastNativeText : "")
+    );
     const credentials = { email, password };
     this.props
       .dispatch(signupAction(credentials))
@@ -78,6 +82,9 @@ class LoginPage extends Component {
         noHeader
         containerStyle={style.screenContainerStyle}
         statusBarStyle="dark-content"
+        innerContainerStyle={{
+          justifyContent: "center"
+        }}
       >
         {this.state.login_form ? (
           <M_Form
@@ -96,7 +103,7 @@ class LoginPage extends Component {
           />
         ) : (
           <M_Form
-            title="New Account Form"
+            title="Create an Account"
             label="signup_form"
             inputs={this.inputs}
             handleSubmit={this.signup}
@@ -110,7 +117,7 @@ class LoginPage extends Component {
             button_text="Sign Up"
           />
         )}
-        <A_View>
+        <A_View style={{ marginTop: getResponsiveCSSFrom8(20).height }}>
           <A_Button_Opacity
             value={this.state.login_form ? "Sign up!" : "Log in!"}
             onPress={this.toggleForm}
@@ -129,7 +136,6 @@ export default connect(state => ({
 
 const style = StyleSheet.create({
   screenContainerStyle: {
-    justifyContent: "center",
     paddingHorizontal: getResponsiveCSSFrom8(30).width,
     backgroundColor: TEAL
   },
@@ -154,7 +160,9 @@ const style = StyleSheet.create({
   },
   inputStyles: {
     textAlign: "center",
-    color: TEAL_DARK_ONE
+    color: TEAL_DARK_ONE,
+    paddingVertical: getResponsiveCSSFrom8(20).height,
+    fontSize: getResponsiveCSSFrom8(20).height
   },
   switchFormContainerStyles: {
     marginTop: getResponsiveCSSFrom8(20).height,

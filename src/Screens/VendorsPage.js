@@ -23,7 +23,6 @@ import {
 } from "../redux/actions/vendor.actions";
 import { TEAL_DARK_THREE, REALLY_HOT_PINK } from "../styles/Colors";
 import { getResponsiveCSSFrom8 } from "../utils";
-import { SCREEN_NAMES } from "../AppNavigator";
 import { BOTTOM_NAV_HEIGHT } from "../styles/defaults";
 import { MAIN_SCREEN_NAMES } from "../MainNavigator";
 import { MODAL_SCREEN_NAMES } from "../ModalNavigator";
@@ -34,7 +33,7 @@ class VendorsPage extends Component {
     this.limit = 50;
     this.state = {
       flavor: "all",
-      map_view: false,
+      map_view: true,
       vendors: [],
       offset: 0,
       all_fetched: false,

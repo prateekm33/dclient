@@ -170,7 +170,15 @@ class VendorPage extends Component {
   };
   renderDeals = () => {
     return (
-      <A_View>
+      <A_View
+        style={[
+          {
+            backgroundColor: "white",
+            paddingBottom: getResponsiveCSSFrom8(20).height
+          },
+          style.paddedContentStyles
+        ]}
+      >
         <A_ListContainer
           data={this.state.deals}
           renderItem={({ item }) => {
@@ -197,7 +205,15 @@ class VendorPage extends Component {
   };
   renderRewards = () => {
     return (
-      <A_View>
+      <A_View
+        style={[
+          {
+            backgroundColor: "white",
+            paddingBottom: getResponsiveCSSFrom8(20).height
+          },
+          style.paddedContentStyles
+        ]}
+      >
         <A_ListContainer
           data={this.state.rewards}
           renderItem={({ item }) => {

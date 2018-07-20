@@ -11,7 +11,7 @@ const default_reducers = {
     switch (action.type) {
       case navigation_types.SET_CURRENT_NAVIGATION:
         return action.navigation;
-      case customer_types.CUSTOMER_LOGGED_OUT:
+      case customer_types.LOGGED_OUT_CUSTOMER:
         return null;
       default:
         return state || null;

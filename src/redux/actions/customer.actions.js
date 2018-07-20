@@ -10,7 +10,7 @@ export const logoutAction = () => dispatch => {
   return Api.logout()
     .then(done => {
       dispatch({ type: loading_types.LOGGING_OUT_CUSTOMER, loading: false });
-      dispatch({ type: employee_types.LOGGED_OUT_EMPLOYEE });
+      dispatch({ type: customer_types.LOGGED_OUT_CUSTOMER });
       return done;
     })
     .catch(error => {
@@ -70,7 +70,6 @@ export const saveCustomerData = customer => {
   };
 
   if (Api.token) _customer.token = Api.token;
-  // if (employee.token) _customer.token = employee.token;
   AsyncStorage.mergeItem("customer", JSON.stringify(_customer));
   return {
     type: customer_types.SAVE_CUSTOMER_DATA,

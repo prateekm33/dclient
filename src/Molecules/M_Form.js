@@ -21,7 +21,7 @@ class M_Form extends Component {
     const newState = { errors: this.state.errors };
     inputs.forEach((input, idx) => {
       newState.errors[idx] = newState.errors[idx] || {};
-      const value = input._lastNativeText;
+      const value = input ? input._lastNativeText : "";
       if (this.props.inputs[idx].required) {
         if (!value) {
           newState.errors[idx].required = "Required.";

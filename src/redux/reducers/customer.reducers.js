@@ -26,7 +26,8 @@ export default {
       //   );
       case customer_types.SAVE_CUSTOMER_DATA:
         return updateCustomer(state, action.customer);
-
+      case customer_types.LOGGED_OUT_CUSTOMER:
+        return createCustomer();
       default:
         return state || createCustomer();
     }
