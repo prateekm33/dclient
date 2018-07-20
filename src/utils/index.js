@@ -48,10 +48,12 @@ export const openGoogleMapTo = daddr => {
         `comgooglemaps://?saddr${latitude},${longitude}&daddr=${encodeURI(
           daddr
         )}&directionsmode=driving`
-      ).catch(err => {});
+      ).catch(err => {
+        Linking.openURL(`http://maps.apple.com/?daddr=${daddr}`);
+      });
     },
     () => {
-      console.warn("geolocation current position get error");
+      Linking.openURL(`http://maps.apple.com/?daddr=${daddr}`);
     }
   );
 };
