@@ -392,7 +392,7 @@ class Api extends BaseApi {
     limit = limit || 50;
     offset = offset || 0;
     let url =
-      config.api.vendors.reviews +
+      config.api.reviews.vendor +
       `/${vendor_uuid}?limit=${limit}&offset=${offset}`;
     return this.get(url).then(res => {
       return {
@@ -417,6 +417,21 @@ class Api extends BaseApi {
       config.api.vendors.search +
         `?search=${search}&limit=${limit}&offset=${offset}`
     ).then(res => res.vendors.map(createVendor));
+  };
+
+  getVendorReviewMetrics = ({ vendor_uuid }) => {
+    return this.get(config.api.reviews.vendor + "/metrics/" + vendor_uuid).then(
+      res => res.review_metrics
+    );
+  };
+  getCustomerVendorReviewMetrics = ({ vendor_uuid }) => {
+    return this.get(
+      config.api.reviews.vendor +
+        "/metrics/" +
+        vendor_uuid +
+        "/" +
+        this.customer.uuid
+    ).then(res => res.review_metrics);
   };
   // TODO...put back in
   // sendFeedback = msg => {

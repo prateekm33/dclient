@@ -11,14 +11,13 @@ import {
   A_Text
 } from "chemics/Atoms";
 import { M_Card_Deal_Mini, M_Card_LoyaltyReward_Mini } from "chemics/Molecules";
-import { O_Vendor_Info } from "../../Organisms";
+import { O_Vendor_Info, O_VendorReviewMetrics } from "../../Organisms";
 import {
   fetchVendorDealsAction,
   fetchVendorRewardsAction
 } from "../../redux/actions/deals.actions";
 import { TEAL_DARK_THREE, REALLY_HOT_PINK } from "../../styles/Colors";
 import { getResponsiveCSSFrom8, callPhoneNumber } from "../../utils";
-import { getVendorReviewsAction } from "../../redux/actions/reviews.actions";
 import { VENDOR_MODAL_SCREEN_NAMES } from "../VendorModal";
 
 class VendorPage extends Component {
@@ -31,8 +30,7 @@ class VendorPage extends Component {
       rewards: [],
       all_fetched: false,
       offset: 0,
-      activeTab: 0,
-      reviews: []
+      activeTab: 0
     };
     this.map_marker = {
       latitude: this.state.vendor.latitude,
@@ -41,8 +39,7 @@ class VendorPage extends Component {
     this.tab_headers = [
       { title: "General", onPress: this.showGeneral },
       { title: "Deals", onPress: this.showDeals },
-      { title: "Rewards", onPress: this.showRewards },
-      { title: "Reviews", onPress: this.showReviews }
+      { title: "Rewards", onPress: this.showRewards }
     ];
   }
 
@@ -102,8 +99,7 @@ class VendorPage extends Component {
     return (
       <A_View>
         <A_View>
-          <A_Text>GLASSDOOR METRICS TODO</A_Text>
-          {/* <O_ReviewMetrics vendor={this.state.vendor}/> */}
+          <O_VendorReviewMetrics vendor={this.state.vendor} />
         </A_View>
         <MapView
           style={{
@@ -199,24 +195,11 @@ class VendorPage extends Component {
     );
   };
   renderInfo = () => <O_Vendor_Info vendor={this.state.vendor} />;
-  renderReviews = () => (
-    <A_View>
-      <A_ListContainer
-        data={this.state.reviews}
-        renderItem={({ item }) => {
-          return null;
-        }}
-        keyExtractor={(review, idx) => `vendor-review-${idx}`}
-      />
-      {this.state.reviews.length && this.renderLoadMoreButton()}
-    </A_View>
-  );
 
   getActiveTabContent = () => {
     if (this.state.activeTab === 0) return this.renderGeneral();
     if (this.state.activeTab === 1) return this.renderDeals();
     if (this.state.activeTab === 2) return this.renderRewards();
-    if (this.state.activeTab === 3) return this.renderReviews();
   };
 
   setActiveTab = idx => {
@@ -232,34 +215,12 @@ class VendorPage extends Component {
       () => {
         if (idx === 1) return this.fetchVendorDeals();
         if (idx === 2) return this.fetchVendorRewards();
-        if (idx === 3) return this.fetchVendorReviews();
       }
     );
   };
   showGeneral = () => this.setActiveTab(0);
   showDeals = () => this.setActiveTab(1);
   showRewards = () => this.setActiveTab(2);
-  showReviews = () => this.setActiveTab(3);
-
-  fetchVendorReviews = () => {
-    const limit = 50;
-    const offset = this.state.offset;
-    this.props
-      .dispatch(
-        getVendorReviewsAction({
-          vendor_uuid: this.state.vendor.uuid,
-          limit,
-          offset
-        })
-      )
-      .then(res => {
-        if (!res || res.end) return this.setState({ all_fetched: true });
-        this.setState({
-          offset: this.state.offset + limit,
-          reviews: this.state.reviews.concat(res.reviews)
-        });
-      });
-  };
 
   renderLoadMoreButton = () => {
     return (
@@ -334,7 +295,7 @@ export default connect()(VendorPage);
 
 const style = StyleSheet.create({
   tabHeaderTextStyles: {
-    color: "grey",
+    color: "lightgrey",
     fontSize: getResponsiveCSSFrom8(20).height
   },
   tabOptionContainerStyles: {
@@ -345,3 +306,25 @@ const style = StyleSheet.create({
     color: REALLY_HOT_PINK
   }
 });
+
+/**
+ * fetchVendorReviews = () => {
+    const limit = 50;
+    const offset = this.state.offset;
+    this.props
+      .dispatch(
+        getVendorReviewsAction({
+          vendor_uuid: this.state.vendor.uuid,
+          limit,
+          offset
+        })
+      )
+      .then(res => {
+        if (!res || res.end) return this.setState({ all_fetched: true });
+        this.setState({
+          offset: this.state.offset + limit,
+          reviews: this.state.reviews.concat(res.reviews)
+        });
+      });
+  };
+ */
