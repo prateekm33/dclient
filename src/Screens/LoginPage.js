@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, KeyboardAvoidingView } from "react-native";
 import { connect } from "../redux";
 import ScreenContainer from "chemics/Templates/ScreenContainer";
 import { M_Form } from "chemics/Molecules";
@@ -78,54 +78,60 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <ScreenContainer
-        noHeader
-        containerStyle={style.screenContainerStyle}
-        statusBarStyle="dark-content"
-        innerContainerStyle={{
-          justifyContent: "center"
-        }}
+      <KeyboardAvoidingView
+        enabled
+        behavior="padding"
+        style={{ position: "relative", flex: 1 }}
       >
-        {this.state.login_form ? (
-          <M_Form
-            title="Dineable"
-            label="login_form"
-            inputs={this.inputs.slice(0, 2)}
-            handleSubmit={this.login}
-            titleStyles={style.titleStyles}
-            formContainerStyles={style.formContainerStyles}
-            inputContainerStyles={style.inputContainerStyles}
-            submitButtonStyles={style.submitButtonStyles}
-            submitButtonTextStyles={style.submitButtonTextStyles}
-            inputStyles={style.inputStyles}
-            inputProps={inputProps}
-            button_text="Log In"
-          />
-        ) : (
-          <M_Form
-            title="Create an Account"
-            label="signup_form"
-            inputs={this.inputs}
-            handleSubmit={this.signup}
-            titleStyles={style.titleStyles}
-            formContainerStyles={style.formContainerStyles}
-            inputContainerStyles={style.inputContainerStyles}
-            submitButtonStyles={style.submitButtonStyles}
-            submitButtonTextStyles={style.submitButtonTextStyles}
-            inputStyles={style.inputStyles}
-            inputProps={inputProps}
-            button_text="Sign Up"
-          />
-        )}
-        <A_View style={{ marginTop: getResponsiveCSSFrom8(20).height }}>
-          <A_Button_Opacity
-            value={this.state.login_form ? "Sign up!" : "Log in!"}
-            onPress={this.toggleForm}
-            buttonTextStyles={style.switchFormButtonTextStyles}
-            style={style.switchFormButtonStyles}
-          />
-        </A_View>
-      </ScreenContainer>
+        <ScreenContainer
+          noHeader
+          containerStyle={style.screenContainerStyle}
+          statusBarStyle="dark-content"
+          innerContainerStyle={{
+            justifyContent: "center"
+          }}
+        >
+          {this.state.login_form ? (
+            <M_Form
+              title="Dineable"
+              label="login_form"
+              inputs={this.inputs.slice(0, 2)}
+              handleSubmit={this.login}
+              titleStyles={style.titleStyles}
+              formContainerStyles={style.formContainerStyles}
+              inputContainerStyles={style.inputContainerStyles}
+              submitButtonStyles={style.submitButtonStyles}
+              submitButtonTextStyles={style.submitButtonTextStyles}
+              inputStyles={style.inputStyles}
+              inputProps={inputProps}
+              button_text="Log In"
+            />
+          ) : (
+            <M_Form
+              title="Create an Account"
+              label="signup_form"
+              inputs={this.inputs}
+              handleSubmit={this.signup}
+              titleStyles={style.titleStyles}
+              formContainerStyles={style.formContainerStyles}
+              inputContainerStyles={style.inputContainerStyles}
+              submitButtonStyles={style.submitButtonStyles}
+              submitButtonTextStyles={style.submitButtonTextStyles}
+              inputStyles={style.inputStyles}
+              inputProps={inputProps}
+              button_text="Sign Up"
+            />
+          )}
+          <A_View style={{ marginTop: getResponsiveCSSFrom8(20).height }}>
+            <A_Button_Opacity
+              value={this.state.login_form ? "Sign up!" : "Log in!"}
+              onPress={this.toggleForm}
+              buttonTextStyles={style.switchFormButtonTextStyles}
+              style={style.switchFormButtonStyles}
+            />
+          </A_View>
+        </ScreenContainer>
+      </KeyboardAvoidingView>
     );
   }
 }

@@ -1,6 +1,6 @@
 import { FeatureFlags } from "../../config/DebugConfig";
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, KeyboardAvoidingView } from "react-native";
 import { connect } from "../redux";
 import ScreenContainer from "chemics/Templates/ScreenContainer";
 import { A_View, A_Text, A_Input, A_Button_Opacity } from "chemics/Atoms";
@@ -76,128 +76,134 @@ class ProfilePage extends Component {
   render() {
     const customer = this.props.customer;
     return (
-      <ScreenContainer
-        title="Profile"
-        scrollView
-        containerStyle={style.scrollContainerStyles}
-        innerContainerStyle={style.scrollInnerContainerStyles}
-        statusBarStyle="dark-content"
+      <KeyboardAvoidingView
+        enabled
+        behavior="padding"
+        style={{ position: "relative", flex: 1 }}
       >
-        <A_View style={[style.sectionContainerStyles]}>
-          <A_View
-            style={[
-              {
-                flexDirection: "row",
-                flexWrap: "nowrap",
-                justifyContent: "space-between",
-                alignItems: "center",
-                height: getResponsiveCSSFrom8(30).height
-              },
-              style.paddedContentStyles
-            ]}
-          >
-            <A_Text style={[style.sectionTitleStyles]}>GENERAL</A_Text>
-            {this.state.changes_made && (
-              <A_Button_Opacity
-                value="Save"
-                onPress={this.savePersonalInfo}
-                style={{}}
-                buttonTextStyles={[{ color: "blue" }]}
-                strong
-              />
-            )}
-          </A_View>
-          <A_Text
-            style={[
-              {
-                color: "grey",
-                fontSize: getResponsiveCSSFrom8(15).height,
-                marginBottom: getResponsiveCSSFrom8(10).height
-              },
-              style.paddedContentStyles
-            ]}
-          >
-            Email remains fixed as the one used during signup.
-          </A_Text>
-          <A_View
-            style={[style.infoDetailLineStyles, style.paddedContentStyles]}
-          >
-            <A_Text style={[style.infoLabelStyles]}>First name</A_Text>
-            <A_Input
-              placeholder="First name"
-              defaultValue={customer.first_name}
-              onChangeText={this.changeFirstName}
-              style={[style.infoDetailStyles]}
-            />
-          </A_View>
-          <A_View
-            style={[style.infoDetailLineStyles, style.paddedContentStyles]}
-          >
-            <A_Text style={[style.infoLabelStyles]}>Last name</A_Text>
-            <A_Input
-              placeholder="Last name"
-              defaultValue={customer.last_name}
-              onChangeText={this.changeLastName}
-              style={[style.infoDetailStyles]}
-            />
-          </A_View>
-          <A_View
-            style={[style.infoDetailLineStyles, style.paddedContentStyles]}
-          >
-            <A_Text style={[style.infoLabelStyles]}>Email</A_Text>
-            <A_Input
-              placeholder="Email"
-              defaultValue={customer.email}
-              onChangeText={this.changeEmail}
-              editable={false}
-              style={[style.infoDetailStyles]}
-            />
-          </A_View>
-          {FeatureFlags.PurchaseHistory && (
+        <ScreenContainer
+          title="Profile"
+          scrollView
+          containerStyle={style.scrollContainerStyles}
+          innerContainerStyle={style.scrollInnerContainerStyles}
+          statusBarStyle="dark-content"
+        >
+          <A_View style={[style.sectionContainerStyles]}>
+            <A_View
+              style={[
+                {
+                  flexDirection: "row",
+                  flexWrap: "nowrap",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  height: getResponsiveCSSFrom8(30).height
+                },
+                style.paddedContentStyles
+              ]}
+            >
+              <A_Text style={[style.sectionTitleStyles]}>GENERAL</A_Text>
+              {this.state.changes_made && (
+                <A_Button_Opacity
+                  value="Save"
+                  onPress={this.savePersonalInfo}
+                  style={{}}
+                  buttonTextStyles={[{ color: "blue" }]}
+                  strong
+                />
+              )}
+            </A_View>
+            <A_Text
+              style={[
+                {
+                  color: "grey",
+                  fontSize: getResponsiveCSSFrom8(15).height,
+                  marginBottom: getResponsiveCSSFrom8(10).height
+                },
+                style.paddedContentStyles
+              ]}
+            >
+              Email remains fixed as the one used during signup.
+            </A_Text>
             <A_View
               style={[style.infoDetailLineStyles, style.paddedContentStyles]}
             >
-              <A_Text style={[style.infoLabelStyles]}>History</A_Text>
-              <A_Button_Opacity
-                style={[style.infoDetailArrowStyles, { borderRadius: 0 }]}
-                onPress={this.navigateToHistory}
+              <A_Text style={[style.infoLabelStyles]}>First name</A_Text>
+              <A_Input
+                placeholder="First name"
+                defaultValue={customer.first_name}
+                onChangeText={this.changeFirstName}
+                style={[style.infoDetailStyles]}
               />
             </A_View>
-          )}
-        </A_View>
-        <A_View style={[style.paddedContentStyles]}>
-          <A_Button_Opacity
-            strong
-            disabled={this.state.pwEmailSent}
-            onPress={this.sendPWChangeEmail}
-            value={
-              this.state.pwEmailSent
-                ? "Check email for recovery link"
-                : "Change Password"
-            }
-            style={{
-              borderWidth: 1,
-              borderColor: TEAL_DARK_THREE,
-              marginBottom: getResponsiveCSSFrom8(20).height
-            }}
-            buttonTextStyles={{ textAlign: "center", color: TEAL_DARK_THREE }}
-          />
-          {/* <A_Button_Opacity
+            <A_View
+              style={[style.infoDetailLineStyles, style.paddedContentStyles]}
+            >
+              <A_Text style={[style.infoLabelStyles]}>Last name</A_Text>
+              <A_Input
+                placeholder="Last name"
+                defaultValue={customer.last_name}
+                onChangeText={this.changeLastName}
+                style={[style.infoDetailStyles]}
+              />
+            </A_View>
+            <A_View
+              style={[style.infoDetailLineStyles, style.paddedContentStyles]}
+            >
+              <A_Text style={[style.infoLabelStyles]}>Email</A_Text>
+              <A_Input
+                placeholder="Email"
+                defaultValue={customer.email}
+                onChangeText={this.changeEmail}
+                editable={false}
+                style={[style.infoDetailStyles]}
+              />
+            </A_View>
+            {FeatureFlags.PurchaseHistory && (
+              <A_View
+                style={[style.infoDetailLineStyles, style.paddedContentStyles]}
+              >
+                <A_Text style={[style.infoLabelStyles]}>History</A_Text>
+                <A_Button_Opacity
+                  style={[style.infoDetailArrowStyles, { borderRadius: 0 }]}
+                  onPress={this.navigateToHistory}
+                />
+              </A_View>
+            )}
+          </A_View>
+          <A_View style={[style.paddedContentStyles]}>
+            <A_Button_Opacity
+              strong
+              disabled={this.state.pwEmailSent}
+              onPress={this.sendPWChangeEmail}
+              value={
+                this.state.pwEmailSent
+                  ? "Check email for recovery link"
+                  : "Change Password"
+              }
+              style={{
+                borderWidth: 1,
+                borderColor: TEAL_DARK_THREE,
+                marginBottom: getResponsiveCSSFrom8(20).height
+              }}
+              buttonTextStyles={{ textAlign: "center", color: TEAL_DARK_THREE }}
+            />
+            {/* <A_Button_Opacity
             strong
             value="SAVE"
             onPress={this.savePersonalInfo}
             style={[style.saveButtonStyles]}
             buttonTextStyles={style.saveButtonTextStyles}
           /> */}
-          <A_Button_Opacity
-            onPress={this.logout}
-            value="LOGOUT"
-            style={style.logoutButtonStyles}
-            buttonTextStyles={style.logoutButtonTextStyles}
-            strong
-          />
-        </A_View>
-      </ScreenContainer>
+            <A_Button_Opacity
+              onPress={this.logout}
+              value="LOGOUT"
+              style={style.logoutButtonStyles}
+              buttonTextStyles={style.logoutButtonTextStyles}
+              strong
+            />
+          </A_View>
+        </ScreenContainer>
+      </KeyboardAvoidingView>
     );
   }
 }
