@@ -2,16 +2,8 @@ import config from "../../../config";
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 import { connect } from "../../redux";
-import MapView, { Marker } from "react-native-maps";
 import ScreenContainer from "chemics/Templates/ScreenContainer";
-import {
-  A_View,
-  A_ListContainer,
-  A_Button_Opacity,
-  A_Text,
-  A_Text_Email,
-  A_Icon_Navigate
-} from "chemics/Atoms";
+import { A_View, A_ListContainer, A_Button_Opacity } from "chemics/Atoms";
 import { M_Card_Deal_Mini, M_Card_LoyaltyReward_Mini } from "chemics/Molecules";
 import { O_Vendor_Info, O_VendorReviewMetrics } from "../../Organisms";
 import {
@@ -23,11 +15,7 @@ import {
   REALLY_HOT_PINK,
   LIGHTGREY_ONE
 } from "../../styles/Colors";
-import {
-  getResponsiveCSSFrom8,
-  callPhoneNumber,
-  openGoogleMapTo
-} from "../../utils";
+import { getResponsiveCSSFrom8, callPhoneNumber, openMapTo } from "../../utils";
 import { VENDOR_MODAL_SCREEN_NAMES } from "../VendorModal";
 import { M_Vendor_Hours } from "../../Molecules";
 
@@ -115,7 +103,8 @@ class VendorPage extends Component {
             backgroundColor: "white"
           }}
         />
-        <A_View
+        <O_Vendor_Info vendor={this.state.vendor} />
+        {/* <A_View
           style={{
             paddingVertical: getResponsiveCSSFrom8(10).width,
             backgroundColor: LIGHTGREY_ONE,
@@ -164,7 +153,7 @@ class VendorPage extends Component {
             <A_Text_Email>{this.state.vendor.business_email}</A_Text_Email>
           </A_View>
           <M_Vendor_Hours hours={this.state.vendor.hours} />
-        </A_View>
+        </A_View> */}
       </A_View>
     );
   };
@@ -298,7 +287,7 @@ class VendorPage extends Component {
     callPhoneNumber(this.state.vendor.business_phone);
   };
   getDirections = () => {
-    openGoogleMapTo(this.state.vendor.address);
+    openMapTo(this.state.vendor.address);
   };
 
   render() {

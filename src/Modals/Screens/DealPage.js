@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-import { View } from "react-native";
 import { connect } from "../../redux";
 import ScreenContainer from "chemics/Templates/ScreenContainer";
 import {
   A_Text,
   A_Icon_Saved,
   A_Icon_Save,
-  A_Button,
   A_Image,
-  A_View
+  A_View,
+  A_Button_Opacity
 } from "chemics/Atoms";
 import { O_Vendor_Info } from "../../Organisms";
 import {
@@ -19,9 +18,9 @@ import {
   createMyDealAction
 } from "../../redux/actions/deals.actions";
 import { MyDeal } from "../../Models";
-import { BOTTOM_NAV_HEIGHT } from "../../styles/defaults";
 import { getResponsiveCSSFrom8 } from "../../utils";
 import { DEAL_MODAL_SCREEN_NAMES } from "../DealModal";
+import { LIGHTGREY_ONE } from "../../styles/Colors";
 
 class DealPage extends Component {
   constructor(props) {
@@ -108,43 +107,92 @@ class DealPage extends Component {
 
   close = () => this.props.screenProps.mainNavigation.goBack();
 
+  renderRowOne = () => {
+    return (
+      <A_View
+        style={[
+          {
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            justifyContent: "space-between",
+            alignItems: "center"
+          }
+        ]}
+      >
+        <A_Text
+          strong
+          style={[{ fontSize: getResponsiveCSSFrom8(24).height, flex: 1 }]}
+        >
+          {this.state.deal.name}
+        </A_Text>
+        <A_View
+          style={{
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            justifyContent: "flex-end",
+            flex: 1
+          }}
+        >
+          <A_Button_Opacity onPress={this.redeem} value="Redeem" />
+          {this.state.is_saved ? (
+            <A_Icon_Saved onPress={this.unsave} />
+          ) : (
+            <A_Icon_Save onPress={this.save} />
+          )}
+        </A_View>
+      </A_View>
+    );
+  };
+
+  renderDesc = () => {
+    return <A_Text style={[]}>{this.state.deal.long_desc}</A_Text>;
+  };
+
+  renderInfo = () => {
+    return <O_Vendor_Info vendor={this.state.vendor} />;
+  };
+
   render() {
     const { deal } = this.state;
     return (
       <ScreenContainer
         title={`Deal #${deal.code}`}
         statusBarStyle="dark-content"
-        scrollView
+        containerStyle={{
+          backgroundColor: LIGHTGREY_ONE
+        }}
+        innerContainerStyle={{ padding: 0 }}
         onClose={this.close}
+        scrollView
       >
-        <View
-          style={{
-            flexDirection: "row",
-            flexWrap: "nowrap",
-            justifyContent: "flex-end",
-            width: "100%"
-          }}
-        >
-          <A_Button onPress={this.redeem} value="Redeem" />
-          {this.state.is_saved ? (
-            <A_Icon_Saved onPress={this.unsave} />
-          ) : (
-            <A_Icon_Save onPress={this.save} />
-          )}
-          {/* <A_Icon_Share onPress={this.share} /> */}
-        </View>
         <A_Image
           source={{ uri: deal.thumbnail_url }}
-          style={{ width: "100%", height: getResponsiveCSSFrom8(200).height }}
-        />
-        <A_Text strong>{deal.name}</A_Text>
-        <A_Text>{deal.long_desc}</A_Text>
-        <O_Vendor_Info vendor={this.state.vendor} />
-        <A_View
           style={{
-            marginBottom: BOTTOM_NAV_HEIGHT
+            width: "100%",
+            height: getResponsiveCSSFrom8(150).height
           }}
         />
+        <A_View
+          style={[
+            {
+              backgroundColor: LIGHTGREY_ONE
+            }
+          ]}
+        >
+          <A_View
+            style={[
+              {
+                backgroundColor: "white",
+                padding: getResponsiveCSSFrom8(10).width
+              }
+            ]}
+          >
+            {this.renderRowOne()}
+            {this.renderDesc()}
+          </A_View>
+          {this.renderInfo()}
+        </A_View>
+        <A_View style={{ marginBottom: getResponsiveCSSFrom8(30).height }} />
       </ScreenContainer>
     );
   }

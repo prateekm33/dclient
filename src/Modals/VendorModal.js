@@ -5,7 +5,8 @@ import { StackNavigator } from "react-navigation";
 export const VENDOR_MODAL_SCREEN_NAMES = {
   VendorPage: "VendorPage",
   DealPage: "DealPage",
-  RewardPage: "RewardPage"
+  RewardPage: "RewardPage",
+  RedeemPage: "RedeemPage"
 };
 
 export const INITIAL_ROUTE_NAME = VENDOR_MODAL_SCREEN_NAMES.VendorPage;
@@ -13,7 +14,8 @@ export const INITIAL_ROUTE_NAME = VENDOR_MODAL_SCREEN_NAMES.VendorPage;
 const Screens = [
   [VENDOR_MODAL_SCREEN_NAMES.VendorPage, require("./Screens/VendorPage")],
   [VENDOR_MODAL_SCREEN_NAMES.DealPage, require("./Screens/DealPage")],
-  [VENDOR_MODAL_SCREEN_NAMES.RewardPage, require("./Screens/RewardPage")]
+  [VENDOR_MODAL_SCREEN_NAMES.RewardPage, require("./Screens/RewardPage")],
+  [VENDOR_MODAL_SCREEN_NAMES.RedeemPage, require("./Screens/RedeemPage")]
 ];
 
 const SCREENS = Screens.reduce(

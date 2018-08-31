@@ -40,7 +40,7 @@ export const callPhoneNumber = phone => {
   Linking.openURL("tel:+" + phone).catch(err => {});
 };
 
-export const openGoogleMapTo = daddr => {
+export const openMapTo = daddr => {
   navigator.geolocation.getCurrentPosition(
     a => {
       const { latitude, longitude } = a.coords;

@@ -10,7 +10,7 @@ import {
   logoutAction
 } from "../redux/actions/customer.actions";
 import { getResponsiveCSSFrom8 } from "../utils";
-import { RED_TWO, TEAL_DARK_THREE } from "../styles/Colors";
+import { RED_TWO, TEAL_DARK_THREE, LIGHTGREY_ONE } from "../styles/Colors";
 import { SCREEN_NAMES } from "../AppNavigator";
 
 class ProfilePage extends Component {
@@ -249,7 +249,7 @@ const style = StyleSheet.create({
   sectionContainerStyles: {
     marginVertical: getResponsiveCSSFrom8(40).height
   },
-  scrollContainerStyles: { backgroundColor: "rgba(255,255,255,0.6)" },
+  scrollContainerStyles: { backgroundColor: LIGHTGREY_ONE },
   scrollInnerContainerStyles: { padding: 0 },
   infoDetailStyles: {
     fontSize: getResponsiveCSSFrom8(18).height

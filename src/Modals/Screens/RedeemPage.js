@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "../../redux";
 import { View } from "react-native";
 import ScreenContainer from "chemics/Templates/ScreenContainer";
-import { A_Icon_Close, A_Text } from "chemics/Atoms";
+import { A_Text, A_View } from "chemics/Atoms";
 import QRCode from "react-native-qrcode-svg";
 import { getResponsiveCSSFrom8 } from "../../utils";
 
@@ -78,16 +78,24 @@ class RedeemPage extends Component {
         onClose={this.close}
       >
         <View
-          style={{
-            justifyContent: "space-around",
-            alignItems: "center",
-            paddingBottom: getResponsiveCSSFrom8(50).height
-          }}
+          style={[
+            {
+              justifyContent: "center",
+              alignItems: "center",
+              paddingBottom: getResponsiveCSSFrom8(50).height
+            }
+          ]}
         >
           <A_Text style={{ fontSize: getResponsiveCSSFrom8(25).height }} strong>
             {header_text}
           </A_Text>
-          <QRCode value={JSON.stringify(this.data)} size={200} />
+          <A_View
+            style={{
+              marginVertical: getResponsiveCSSFrom8(20).height
+            }}
+          >
+            <QRCode value={JSON.stringify(this.data)} size={200} />
+          </A_View>
           <A_Text
             style={{
               fontSize: getResponsiveCSSFrom8(25).height,
